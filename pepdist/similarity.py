@@ -6,6 +6,8 @@ import gc
 import _pickle as cPickle
 
 
+
+
 class Trie():
     """ A trie/prefix-tree data structure.
 
@@ -36,10 +38,13 @@ class Trie():
                     self.alphabet.add(char)
                 if char not in node.children:
                     new_node = TrieNode(char, i+1)
+                    new_node.add_maxdepth(len(word))
                     node.children[char] = new_node
                     node = new_node
                 else:
-                    node = node.children[char]
+                    new_node = node.children[char]
+                    new_node.add_maxdepth(len(word))
+                    node = new_node
             node.word_finished = True
 
     def find_word(self, word: str) -> bool:
@@ -73,7 +78,6 @@ class Trie():
             word: str,
             score: dict = blosum62,
             k=1,
-            normed = True,
             weights = None):
         """ Computes the nearest neighbour of a given strings
 
@@ -103,24 +107,7 @@ class Trie():
         results = []
 
         # Check for equal alphabet
-        score_alphabet = set()
-        for key in score:
-            key1, key2 = key
-            score_alphabet.add(key1)
-            score_alphabet.add(key2)
-
-        if not self.alphabet.issubset(score_alphabet):
-            warnings.warn(
-                "The Scoring matrix don't has the same alphabet as the Trie. Characters that are not mapped are scored with 0. The following substitution is problematic:" +
-                str(
-                    self.alphabet.symmetric_difference(score_alphabet)))
-
-        word_alphabet = set(list(word))
-        if not word_alphabet.issubset(score_alphabet):
-            warnings.warn(
-                "The query word don't has the same alphabet as the Scoring Matrix. Chacters that are not mapped are scored with 0. The following chars are problematic: " +
-                str(
-                    word_alphabet.symmetric_difference(score_alphabet)))
+        
                     
         # Set the weights if not specified
         if weights == None:
@@ -166,8 +153,8 @@ class Trie():
                 length = node.depth
                 index = length - 1
                 
-                if length > word_length:
-                    # The word is to long
+                if length > word_length or not word_length in node.maxdepth:
+                    # The word is to long or no equal length words are in this branch
                     continue
                 
                 prefix[index] = char
@@ -226,6 +213,28 @@ class Trie():
         self.alphabet = trie.alphabet
         gc.enable()
         
+    def _check_scoring_matrix(self, score:dict):
+    # TODO fertig machen!
+        score_alphabet = set()
+        for key1, key2 in score:
+            if not (key2, key1) in score:
+                raise ValueError("The scoring matrix have to be symmetric, this is not the case for: "
+            score_alphabet.add(key1)
+            score_alphabet.add(key2)
+
+        if not self.alphabet.issubset(score_alphabet):
+            warnings.warn(
+                "The Scoring matrix don't has the same alphabet as the Trie. Characters that are not mapped are scored with 0. The following substitution is problematic:" +
+                str(
+                    self.alphabet.symmetric_difference(score_alphabet)))
+
+        word_alphabet = set(list(word))
+        if not word_alphabet.issubset(score_alphabet):
+            warnings.warn(
+                "The query word don't has the same alphabet as the Scoring Matrix. Chacters that are not mapped are scored with 0. The following chars are problematic: " +
+                str(
+                    word_alphabet.symmetric_difference(score_alphabet)))
+        
       
 def load_trie(path):
     gc.disable()
@@ -235,6 +244,8 @@ def load_trie(path):
     gc.enable()  
     
     return trie
+    
+
 
 
 class TrieNode(object):
@@ -257,7 +268,11 @@ class TrieNode(object):
         self.char = char
         self.depth = depth
         self.children = {}
+        self.maxdepth = set()
         self.word_finished = False
+        
+    def add_maxdepth(self, depth:int):
+        self.maxdepth.add(depth)
 
     def __str__(self):
         return self.char
