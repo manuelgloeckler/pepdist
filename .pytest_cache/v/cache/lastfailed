@@ -1,0 +1,13 @@
+{
+  "pepdist/tests/test_distance.py::test_get_index": true,
+  "pepdist/tests/test_distance.py::test_get_index[get_random_index0]": true,
+  "pepdist/tests/test_distance.py::test_get_index[get_random_index1]": true,
+  "pepdist/tests/test_distance.py::test_get_index[get_random_index2]": true,
+  "pepdist/tests/test_distance.py::test_get_index[get_random_index3]": true,
+  "pepdist/tests/test_distance.py::test_get_index[get_random_index4]": true,
+  "pepdist/tests/test_distance.py::test_get_index[get_random_index5]": true,
+  "pepdist/tests/test_distance.py::test_get_index[get_random_index6]": true,
+  "pepdist/tests/test_distance.py::test_get_index[get_random_index7]": true,
+  "pepdist/tests/test_distance.py::test_get_index[get_random_index8]": true,
+  "pepdist/tests/test_distance.py::test_get_index[get_random_index9]": true
+}

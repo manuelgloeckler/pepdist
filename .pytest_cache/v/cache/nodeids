@@ -1,0 +1,17 @@
+[
+  "pepdist/tests/test_distance.py::test_get_index[x0]",
+  "pepdist/tests/test_distance.py::test_get_index[x1]",
+  "pepdist/tests/test_distance.py::test_get_index[x2]",
+  "pepdist/tests/test_distance.py::test_get_index[x3]",
+  "pepdist/tests/test_distance.py::test_get_index[x4]",
+  "pepdist/tests/test_distance.py::test_get_index[x5]",
+  "pepdist/tests/test_distance.py::test_get_index[x6]",
+  "pepdist/tests/test_distance.py::test_get_index[x7]",
+  "pepdist/tests/test_distance.py::test_get_index[x8]",
+  "pepdist/tests/test_distance.py::test_get_index[x9]",
+  "pepdist/tests/test_distance.py::test_seq",
+  "pepdist/tests/test_similarity.py::test_trie_creation",
+  "pepdist/tests/test_similarity.py::test_add_find_word",
+  "pepdist/tests/test_similarity.py::test_nearest_neighbour",
+  "pepdist/tests/test_similarity.py::test_k_nearest_neighbour"
+]
