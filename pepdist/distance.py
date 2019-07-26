@@ -1,6 +1,11 @@
+"""@package distance
+This module contains a locally sensitiv hashing class for fast nearest neighbour computation.
+Additionaly it contains functions to represent a peptide/sequence as a feature vector 
+based on AAindex or other metrics.
+"""
+
 import numpy as np
 import os
-from modlamp.core import BaseDescriptor
 from scipy.stats import norm
 
 immu_indices = [
@@ -116,7 +121,7 @@ class Aaindex():
         return item in aaindex_dic
 
     def __iter__(self):
-        return iter(aaindex_dic.items())
+        return iter(aaindex_dic.keys())
 
     def make_positive(self, index):
         """ Turns an a index of real numbers to a index of positve real numbers """
@@ -126,7 +131,7 @@ class Aaindex():
 
         return positive_index
 
-    def normalize(self, index):
+    def max_normalize(self, index):
         """ Normalize a index of real numbers to a normalized index between [0,1] """
         pos_index = self.make_positive(index)
         normalized_index = {}
@@ -135,68 +140,15 @@ class Aaindex():
             normalized_index[i] = pos_index[i] / maximum
 
         return normalized_index
+        
+    def z_normalize(self, index):
+        mean = np.mean(index.values())
+        sigma = np.std(index.values())
+        normalized_index = {}
+        for i in index:
+            normalized_index[i] = (index[i] - mean)/sigma
+        return normalized_index
 
-
-def translate(word: str, indices):
-    """ Translate a string to feature vectors
-        Parameters:
-            word (str): A sequence as string
-            indices (list): A List of dictionary which represent a aaindex
-        Returns:
-            numpy ndarray of feature vectors
-    """
-    vec = []
-    for index in indices:
-        for char in word:
-            vec.append(index[char])
-    return np.ndarray(
-        (int(
-            len(vec) /
-            len(word)),
-            len(word)),
-        buffer=np.array(vec))
-
-
-class Seq():
-    """ Sequence object
-    
-    Attributes
-    ----------
-    seq : str
-        String of the sequence
-    descriptor : np.ndarray
-        Descriptive feature vectors
-    """
-
-    def __init__(self, seq, descriptor):
-        """ Initialisation 
-        Parameters
-        ----------
-        seq : str
-            String of the sequence
-        descriptor : np.ndarray
-            Descriptive feature vectors
-        """
-        self.seq = seq
-        self.descriptor = descriptor
-
-    def __str__(self):
-        return self.seq
-
-    def __eq__(self, other):
-        return self.seq == other
-
-    def __add__(self, other):
-        return self.descriptor + other
-
-    def __sub__(self, other):
-        return self.descriptor - other
-
-    def __mul__(self, other):
-        return self.descriptor * other
-
-    def __iter__(self):
-        return (self.seq, self.descriptor)
         
      
 
@@ -216,17 +168,52 @@ def naive_nearest_neighbour(data, inp_vec):
 
     return (min_match, min_dist)
     
-class AaindexDescriptor(BaseDescriptor):
-    """ The modLAMP PeptideDescriptor was expanted to allow Aaindex scales. """
-    def __init__(self, seqs):
-        super(AaindexDescriptor, self).__init__(seqs)
-        self.indices = []
+class descriptor():
+    """  """
+    def __init__(self, seqs, indices=[]):
+        self.sequences = seqs
+        self.descriptors = []
+        self.indices = indices
+        self.calculate_all()
         
     def __len__(self):
         return len(self.sequences)
+        
+    def addSeqs(self, seqs):
+        self.sequences.extend(seqs)
+        self.calculate_all()
     
-    def calculate_aaindex(indices):
-        pass
+    def addIndex(self, index):
+        self.indices.append(index)
+        self.calculate_all()
+    
+    def calculate_all(self):
+        """ """
+        for index in indices:
+            for i in range(len(sequences)):
+                self.descriptors[i] = translate(self.sequences, self.indices)
+        
+        
+    def translate(self, word: str, indices):
+        """ Translate a string to feature vectors
+            Parameters:
+                word (str): A sequence as string
+                indices (list): A List of dictionary which represent a aaindex
+            Returns:
+                numpy ndarray of feature vectors
+        """
+        vec = []
+        for index in indices:
+            for char in word:
+                vec.append(index[char])
+        return np.ndarray(
+            (int(
+                len(vec) /
+                len(word)),
+                len(word)),
+            buffer=np.array(vec))
+            
+            
         
 
 
@@ -315,7 +302,6 @@ class LSH:
             k_dot_products,
             bin_width,
             inp_dimensions):
-        self.labels = []
         self.num_projections = num_projections
         self.k_dot_products = k_dot_products
         self.bin_width = bin_width
@@ -329,7 +315,6 @@ class LSH:
                     self.inp_dimensions))
 
     def __setitem__(self, inp_vec, label):
-        labels.append(label)
         for table in self.hash_tables:
             table[inp_vec] = label
 

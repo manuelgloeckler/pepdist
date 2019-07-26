@@ -1,9 +1,89 @@
 import numpy as np
 from multiprocess import Pool
-from pepdist import blosum62
 import warnings
 import gc
 import _pickle as cPickle
+from Bio.SubsMat import MatrixInfo
+
+
+class MatrixScore():
+    def __init__(self):
+        self.matrices = {}
+        matrices = MatrixInfo.available_matrices
+        for matrix in matrices:
+            self.matrices[matrix] = vars(MatrixInfo)[matrix]
+
+    def sym(self, matrix: dict, subst=False):
+        if subst:
+            new_matrix = {}
+            for k, v in matrix.items():
+                if k[0] == k[1]:
+                    new_matrix[k] = v
+                else:
+                    new_matrix[k] = v / 2
+                    new_matrix[tuple(reversed(k))] = v / 2
+        else:
+            new_matrix = {}
+            for k, v in matrix.items():
+                new_matrix[k] = v
+                new_matrix[tuple(reversed(k))] = v
+            return new_matrix
+
+    def positivize(self, matrix: dict):
+        new_matrix = {}
+        matrix_min = min(matrix.values())
+        for k, v in matrix.items():
+            new_matrix[k] = v + abs(matrix_min)
+        return new_matrix
+
+    def max_normalize(self, matrix: dict):
+        new_matrix = {}
+        matrix_max = max(matrix.values())
+        for k, v in matrix.items():
+            new_matrix[k] = v / matrix_max
+        return new_matrix
+
+    def distance_transformation(self, matrix: dict):
+        new_matrix = {}
+        for k, v in matrix.items():
+            new_matrix[k] = (1 - v)
+        return new_matrix
+
+    def get(self, matrix: str, method=sym):
+        # symetric matrices are needed
+        return method(self, self.matrices[matrix])
+
+
+matrices = MatrixScore()
+blosum62 = matrices.get("blosum62")
+
+
+def blosum_score(word1, word2, matrix=blosum62):
+    score = 0
+    for i in range(min(len(word1), len(word2))):
+        key = (word1[i], word2[i])
+        score += matrix[key]
+    return score
+
+
+def blosum_similarity(seq1, seq2, matrix=blosum62):
+    bl_ab = blossum_score(seq1, seq2, matrix=blosum62)
+    bl_aa = blossum_score(seq1, seq1, matrix=blosum62)
+    bl_bb = blossum_score(seq2, seq2, matrix=blosum62)
+
+    return bl_ab / np.sqrt(bl_aa * bl_bb)
+    
+    
+def naive_nearest_neighbour(data, word, score=blosum62):
+    max_match = ""
+    max_score = -np.inf
+    for seq in data:
+        score = blosum_similarity(word,seq, score)
+        if score > max_score:
+            max_score = score
+            max_match = seq
+       
+    return (max_match, max_score)
 
 
 
@@ -26,10 +106,12 @@ class Trie():
     def __init__(self):
         self.root = TrieNode("", 0)
         self.alphabet = set()
+        self.lengths = set()
 
     def add(self, words: list):
         """ Adds given words into the Trie """
         for word in words:
+            self.lengths.add(len(word))
             node = self.root
             for i in range(len(word)):
                 char = word[i]
@@ -106,7 +188,7 @@ class Trie():
         word_length = len(word)
         results = []
 
-        # Check for equal alphabet
+        self._check_scoring_matrix(score)
         
                     
         # Set the weights if not specified
@@ -190,6 +272,30 @@ class Trie():
                 else:
                     results.append((best, -np.sqrt(abs(bounds.pop()))))
         return results
+    """    
+    def k_nearest_subwords(
+            self,
+            word: str,
+            score: dict = blosum62,
+            k=1):
+            
+        spaced_seeds_leq = [[1]*len(word)]
+        for length in [7,8,9]:
+            if length < len(word):
+                for i in range(len(word)-length+1):
+                    seed_start = [0]*i
+                    seed_mid = [1]*length
+                    seed_end = [0]*(len(word)-length-i)
+                    seed_mid.extend(seed_end)
+                    spaced_seeds_leq.append(seed_start.extend(seed_mid))
+            if length > len(word):
+                pass
+        results = []      
+        for spaced_seed in spaced_seeds_leq:
+            results.extend(self.k_nearest_neighbour(word, score=score, k=k, weights=spaced_seed))
+            
+        return results
+        """
         
     def compute_neighbours(self, words, cpus = 2):
         pool = Pool(cpus)
@@ -212,8 +318,10 @@ class Trie():
         self.root = trie.root
         self.alphabet = trie.alphabet
         gc.enable()
-        
+     
     def _check_scoring_matrix(self, score:dict):
+        pass
+    """
     # TODO fertig machen!
         score_alphabet = set()
         for key1, key2 in score:
@@ -234,7 +342,8 @@ class Trie():
                 "The query word don't has the same alphabet as the Scoring Matrix. Chacters that are not mapped are scored with 0. The following chars are problematic: " +
                 str(
                     word_alphabet.symmetric_difference(score_alphabet)))
-        
+    """       
+      
       
 def load_trie(path):
     gc.disable()
