@@ -1,6 +1,4 @@
 pepdist
 --------
 
-To use, simply do::
-
-    >>> import funniest
+To use, simply do:

@@ -1,5 +1,5 @@
 
-from .similarity import MatrixScore
+from .similarity import ScoringMatrices
 from .similarity import blosum62
 from .similarity import blosum_score
 from .similarity import blosum_similarity

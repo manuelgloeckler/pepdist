@@ -29,7 +29,7 @@ def test_seq(get_test_data):
         assert seq.seq == word
         assert np.array_equal(seq.descriptor,randvec)
         
-def test_hash_table(get_test_data)
+def test_hash_table(get_test_data):
     pass
  
         

@@ -69,6 +69,7 @@ class Aaindex():
         for distance computation.
 
         """
+        global key
         path = os.path.dirname(os.path.abspath(
             __file__)) + "/aaindex/aaindex1.txt"
         with open(path) as aaindex1:
@@ -76,10 +77,10 @@ class Aaindex():
             for line in aaindex1:
                 dic = {}
                 # line starting with "H" contains the ID
-                if (line[0] == "H"):
+                if line[0] == "H":
                     key = line[2:len(line) - 1]
                 # line starting with "I" contains the index.
-                if (line[0] == "I"):
+                if line[0] == "I":
                     key1 = ("A", "R", "N", "D", "C", "Q", "E", "G", "H", "I")
                     key2 = ("L", "K", "M", "F", "P", "S", "T", "W", "Y", "V")
                     line1 = aaindex1.readline().split()
@@ -88,13 +89,13 @@ class Aaindex():
                     # the dictionary.
                     na = False
                     for i in range(len(line1)):
-                        if (line1[i] != "NA"):
+                        if line1[i] != "NA":
                             dic[key1[i]] = float(line1[i].strip())
                         else:
                             na = True
                             continue
                     for i in range(len(line2)):
-                        if (line2[i] != "NA"):
+                        if line2[i] != "NA":
                             dic[key2[i]] = float(line2[i].strip())
                         else:
                             na = True
@@ -118,10 +119,10 @@ class Aaindex():
         
 
     def __contains__(self, item):
-        return item in aaindex_dic
+        return item in self.aaindex_dic
 
     def __iter__(self):
-        return iter(aaindex_dic.keys())
+        return iter(self.aaindex_dic.keys())
 
     def make_positive(self, index):
         """ Turns an a index of real numbers to a index of positve real numbers """
@@ -189,9 +190,9 @@ class descriptor():
     
     def calculate_all(self):
         """ """
-        for index in indices:
-            for i in range(len(sequences)):
-                self.descriptors[i] = translate(self.sequences, self.indices)
+        for index in self.indices:
+            for i in range(len(self.sequences)):
+                self.descriptors[i] = self.translate(self.sequences, self.indices)
         
         
     def translate(self, word: str, indices):
@@ -338,7 +339,7 @@ class LSH:
         """ Find the nearest_neighbour by hashing the inp_vec and find the nearest neighbour in the
             corresponding bin."""
         hash_bin = self.__getitem__(inp_vec)
-        if hash_bin == []:
+        if not hash_bin:
             hash_bin = [item for sublist in self.hash_tables[0].hash_table.values() for item in sublist]
         min_dist = np.inf
         min_match = ""

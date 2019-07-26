@@ -6,14 +6,28 @@ import _pickle as cPickle
 from Bio.SubsMat import MatrixInfo
 
 
-class MatrixScore():
+class ScoringMatrices():
+    """ Scoring Matrices from Biopython
+
+        Scoring matrices are represented as dictionaries. Additionally
+        some transforming/normalizing functions are implemented
+
+    Attributes
+    ----------
+    matrices : dict
+        dictionary of scoring matrices, which have their name as key.
+
+    """
+
     def __init__(self):
         self.matrices = {}
         matrices = MatrixInfo.available_matrices
         for matrix in matrices:
             self.matrices[matrix] = vars(MatrixInfo)[matrix]
 
-    def sym(self, matrix: dict, subst=False):
+    def symmetrize(self, matrix: dict, subst=False):
+        """ Substitution matrices in biopython are not symmetric.
+        This function makes them symmetric."""
         if subst:
             new_matrix = {}
             for k, v in matrix.items():
@@ -30,13 +44,19 @@ class MatrixScore():
             return new_matrix
 
     def positivize(self, matrix: dict):
+        """ This function lineary transforms the scores to values greater/equal zero."""
         new_matrix = {}
         matrix_min = min(matrix.values())
+        if matrix_min >= 0:
+            return matrix
+
         for k, v in matrix.items():
             new_matrix[k] = v + abs(matrix_min)
         return new_matrix
 
     def max_normalize(self, matrix: dict):
+        """ Normalization by dividing throught the maximum."""
+        matrix = self.positivize(matrix)
         new_matrix = {}
         matrix_max = max(matrix.values())
         for k, v in matrix.items():
@@ -44,21 +64,24 @@ class MatrixScore():
         return new_matrix
 
     def distance_transformation(self, matrix: dict):
+
         new_matrix = {}
         for k, v in matrix.items():
             new_matrix[k] = (1 - v)
         return new_matrix
 
-    def get(self, matrix: str, method=sym):
+    def get(self, matrix: str, method=symmetrize):
         # symetric matrices are needed
         return method(self, self.matrices[matrix])
 
 
-matrices = MatrixScore()
-blosum62 = matrices.get("blosum62")
+_matrices = ScoringMatrices()
+blosum62 = _matrices.get("blosum62")
+""" Blossum 62 Substitution matrix as standard value."""
 
 
-def blosum_score(word1, word2, matrix=blosum62):
+def score(word1, word2, matrix=blosum62):
+    """ Computes the score between two words by the given scoring matrix"""
     score = 0
     for i in range(min(len(word1), len(word2))):
         key = (word1[i], word2[i])
@@ -66,26 +89,26 @@ def blosum_score(word1, word2, matrix=blosum62):
     return score
 
 
-def blosum_similarity(seq1, seq2, matrix=blosum62):
-    bl_ab = blossum_score(seq1, seq2, matrix=blosum62)
-    bl_aa = blossum_score(seq1, seq1, matrix=blosum62)
-    bl_bb = blossum_score(seq2, seq2, matrix=blosum62)
+def squared_root_similarity(word1, word2, matrix=blosum62):
+    """ Computes the squared root normalized score of thwo words"""
+    bl_ab = score(word1, word2, matrix=blosum62)
+    bl_aa = score(word1, word1, matrix=blosum62)
+    bl_bb = score(word2, word2, matrix=blosum62)
 
     return bl_ab / np.sqrt(bl_aa * bl_bb)
-    
-    
-def naive_nearest_neighbour(data, word, score=blosum62):
+
+
+def naive_nearest_neighbour(data, word, matrix=blosum62):
+    """ Computes the nearest neighbor in a naive fashion"""
     max_match = ""
     max_score = -np.inf
     for seq in data:
-        score = blosum_similarity(word,seq, score)
-        if score > max_score:
-            max_score = score
+        matrix = squared_root_similarity(word, seq, matrix)
+        if matrix > max_score:
+            max_score = matrix
             max_match = seq
-       
+
     return (max_match, max_score)
-
-
 
 
 class Trie():
@@ -100,6 +123,8 @@ class Trie():
         root of the Trie
     alphabet : Set
         Set of the characters used in the Trie.
+    lengths : Set
+        Set of word lengths saved in the Trie.
 
     """
 
@@ -119,7 +144,7 @@ class Trie():
                 if char not in self.alphabet:
                     self.alphabet.add(char)
                 if char not in node.children:
-                    new_node = TrieNode(char, i+1)
+                    new_node = TrieNode(char, i + 1)
                     new_node.add_maxdepth(len(word))
                     node.children[char] = new_node
                     node = new_node
@@ -136,7 +161,7 @@ class Trie():
             if char in node.children:
                 node = node.children[char]
             else:
-                                # The word is not present in the Trie
+                # The word is not present in the Trie
                 return False
         return node.word_finished
 
@@ -148,33 +173,30 @@ class Trie():
             if char in node.children:
                 node = node.children[char]
             else:
-                                # The rest of the word is not present in the
-                                # Trie
+                # The rest of the word is not present in the
+                # Trie
                 return prefix
             prefix += char
         return prefix
-    
 
     def k_nearest_neighbour(
             self,
             word: str,
             score: dict = blosum62,
             k=1,
-            weights = None):
+            weights=None):
         """ Computes the nearest neighbour of a given strings
 
         Attributes
         ----------
-        trie : Trie
-                    The Trie which represent the dataset to search
         word : str
                     The query word
         score (dict):
                     Scoring matrix, standard is blosum62 substitution matrix
-        maxlen : int
-                    Length of the corresponding strings
-            k : int
+        k : int
                     Number of nearest neighbours to find
+        weights : list
+                    list of integers, that weight the position of the corresponding word.
 
         Returns
         -------
@@ -189,11 +211,10 @@ class Trie():
         results = []
 
         self._check_scoring_matrix(score)
-        
-                    
+
         # Set the weights if not specified
-        if weights == None:
-            weights = [1]*(word_length+1)
+        if weights is None:
+            weights = [1] * (word_length + 1)
 
         # Compute minimum match score
         min_score = np.inf
@@ -202,17 +223,15 @@ class Trie():
                 s = score[(k1, k2)]
                 if s < min_score:
                     min_score = s
-                   
-        min_scores = list(map(lambda x: sum(min_score  * np.array(weights[x+1:])), list(range(word_length))))
 
-
-
+        min_scores = list(map(lambda x: sum(min_score * np.array(weights[x + 1:])), list(range(word_length))))
 
         # Score of the query word
         self_score = [0] * (word_length + 1)
         for i in range(word_length):
             self_score[i + 1] = self_score[i] + \
-                weights[word_length - 1 - i] * score[word[word_length - 1 - i], word[word_length - 1 - i]]
+                                weights[word_length - 1 - i] * score[
+                                    word[word_length - 1 - i], word[word_length - 1 - i]]
 
         bounds = [-np.inf] * k
 
@@ -226,7 +245,7 @@ class Trie():
             bound = bounds.pop()
             best = ""
             nodes = list(root.children.items())
-            prefix = [""] * (word_length)
+            prefix = [""] * word_length
             sc = [0] * (word_length + 1)
             s = [0] * (word_length + 1)
 
@@ -234,17 +253,18 @@ class Trie():
                 char, node = nodes.pop()
                 length = node.depth
                 index = length - 1
-                
-                if length > word_length or not word_length in node.maxdepth:
+
+                if length > word_length or  word_length not in node.maxdepth:
                     # The word is to long or no equal length words are in this branch
                     continue
-                
+
                 prefix[index] = char
                 sc[length] = sc[index] + weights[index] * score[(char, word[index])]
                 s[length] = s[index] + weights[index] * score[(char, char)]
-                
-                if (sc[length] + self_score[word_length - length])**2 / ((s[length] +
-                                                                          min_scores[index]) * self_score[word_length]) < bound:
+
+                if (sc[length] + self_score[word_length - length]) ** 2 / ((s[length] +
+                                                                            min_scores[index]) * self_score[
+                                                                               word_length]) < bound:
                     continue
                 if length == word_length and node.word_finished:
                     # Already found
@@ -252,10 +272,10 @@ class Trie():
                         continue
 
                     if sc[length] < 0:
-                        scc = -sc[length]**2 / \
-                            (s[length] * self_score[word_length])
+                        scc = -sc[length] ** 2 / \
+                              (s[length] * self_score[word_length])
                     else:
-                        scc = sc[length]**2 / (s[length] * self_score[word_length])
+                        scc = sc[length] ** 2 / (s[length] * self_score[word_length])
 
                     if scc >= bound:
                         bound = scc
@@ -272,6 +292,7 @@ class Trie():
                 else:
                     results.append((best, -np.sqrt(abs(bounds.pop()))))
         return results
+
     """    
     def k_nearest_subwords(
             self,
@@ -296,21 +317,26 @@ class Trie():
             
         return results
         """
-        
-    def compute_neighbours(self, words, cpus = 2):
+
+    def compute_neighbours(self, words, score, k=1, weights=None, cpus=2):
+        """ Computes nearest neighbours in a multiprocessing way. """
         pool = Pool(cpus)
-        result = pool.map(self.k_nearest_neighbour, peptides)
+        result = pool.map(lambda x: self.k_nearest_neighbour(x, score, k, weights), words)
         pool.close()
         pool.join()
-            
+
         return result
-            
+
     def save_trie(self, path):
+        """ Saves the Trie structere"""
         file = open(path, "wb")
         cPickle.dump(self, file, protocol=-1)
         file.close()
-            
+
     def load_trie(self, path):
+        """ Loades a Trie structure"""
+        # Garbage Collector slows down the loading significant and is
+        # therefore excluded.
         gc.disable()
         file = open(path, "rb")
         trie = cPickle.load(file)
@@ -318,9 +344,10 @@ class Trie():
         self.root = trie.root
         self.alphabet = trie.alphabet
         gc.enable()
-     
-    def _check_scoring_matrix(self, score:dict):
+
+    def _check_scoring_matrix(self, score: dict):
         pass
+
     """
     # TODO fertig machen!
         score_alphabet = set()
@@ -342,19 +369,18 @@ class Trie():
                 "The query word don't has the same alphabet as the Scoring Matrix. Chacters that are not mapped are scored with 0. The following chars are problematic: " +
                 str(
                     word_alphabet.symmetric_difference(score_alphabet)))
-    """       
-      
-      
+    """
+
+
 def load_trie(path):
+    """ Loads a trie file and returns a Trie object."""
     gc.disable()
     file = open(path, "rb")
     trie = cPickle.load(file)
     file.close()
-    gc.enable()  
-    
-    return trie
-    
+    gc.enable()
 
+    return trie
 
 
 class TrieNode(object):
@@ -373,14 +399,14 @@ class TrieNode(object):
                 End of a word, represent's a leaf in the Tree
     """
 
-    def __init__(self, char: str, depth:int):
+    def __init__(self, char: str, depth: int):
         self.char = char
         self.depth = depth
         self.children = {}
         self.maxdepth = set()
         self.word_finished = False
-        
-    def add_maxdepth(self, depth:int):
+
+    def add_maxdepth(self, depth: int):
         self.maxdepth.add(depth)
 
     def __str__(self):
