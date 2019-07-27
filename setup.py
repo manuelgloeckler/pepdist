@@ -17,7 +17,8 @@ setup(name='pepdist',
           'numpy',
 		  'pandas',
 		  'scipy',
-          'multiprocess'
+          'multiprocess',
+          'seaborn'
       ],
       setup_requires=['pytest-runner'],
       tests_require=['pytest'],
