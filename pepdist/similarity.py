@@ -343,6 +343,7 @@ class Trie():
         file.close()
         self.root = trie.root
         self.alphabet = trie.alphabet
+        self.lengths = trie.lengths
         gc.enable()
 
     def _check_scoring_matrix(self, score: dict):
@@ -414,17 +415,16 @@ class TrieNode(object):
 
 def kmer_count(k, word, count=False):
     f = {}
-    for protein in proteins:
-        for x in range(len(protein)+1-k):
-            kmer = protein[x:x+k]
-            f[kmer] = f.get(kmer, 0) + 1
+    for x in range(len(word)+1-k):
+        kmer = word[x:x+k]
+        f[kmer] = f.get(kmer, 0) + 1
     if not count:
         return list(f.keys())
     else:
         f
 
 
-class kmerTrie():
+class kmerTrie(Trie):
     """ A trie/prefix-tree data structure.
 
         A prefix tree is a tree, where strings can be added
@@ -441,64 +441,48 @@ class kmerTrie():
 
     """
 
-    def __init__(self, kmers):
-        self.root = TrieNode("", 0)
+    def __init__(self, kmer_length):
+        self.root = kmerTrieNode("", 0)
         self.alphabet = set()
         self.lengths = set()
-        self.kmers = list()
+        self.kmer_length = kmer_length
 
     def add(self, words: list):
         """ Adds given words into the Trie """
         for word in words:
             self.lengths.add(len(word))
-            node = self.root
-            for i in range(len(word)):
-                char = word[i]
-                # Adds new letters to alphabet
-                if char not in self.alphabet:
-                    self.alphabet.add(char)
-                if char not in node.children:
-                    new_node = TrieNode(char, i + 1)
-                    new_node.add_maxdepth(len(word))
-                    node.children[char] = new_node
-                    node = new_node
-                else:
-                    new_node = node.children[char]
-                    new_node.add_maxdepth(len(word))
-                    node = new_node
-            node.word_finished = True
+            kmers = [word]
+            for k in self.kmer_length:
+                kmers.extend(kmer_count(k,word))
 
-    def find_word(self, word: str) -> bool:
-        """ Returns true if the word is in the Trie """
-        node = self.root
-        for char in word:
-            if char in node.children:
-                node = node.children[char]
-            else:
-                # The word is not present in the Trie
-                return False
-        return node.word_finished
+            for kmer in kmers:
+                if self.find_word(kmer):
+                    continue
 
-    def get_prefix(self, word: str) -> str:
-        """ Returns the common prefix of the word with the Trie """
-        node = self.root
-        prefix = ""
-        for char in word:
-            if char in node.children:
-                node = node.children[char]
-            else:
-                # The rest of the word is not present in the
-                # Trie
-                return prefix
-            prefix += char
-        return prefix
+                node = self.root
+                for i in range(len(kmer)):
+                    char = kmer[i]
+                    # Adds new letters to alphabet
+                    if char not in self.alphabet:
+                        self.alphabet.add(char)
+                    if char not in node.children:
+                        new_node = kmerTrieNode(char, i + 1)
+                        new_node.add_maxdepth(len(word))
+                        node.children[char] = new_node
+                        node = new_node
+                    else:
+                        new_node = node.children[char]
+                        new_node.add_maxdepth(len(word))
+                        node = new_node
+                node.word_finished = True
+                node.sequences.append(word)
+
 
     def k_nearest_neighbour(
             self,
             word: str,
             score: dict = blosum62,
-            k=1,
-            weights=None):
+            k=1):
         """ Computes the nearest neighbour of a given strings
 
         Attributes
@@ -509,8 +493,6 @@ class kmerTrie():
                     Scoring matrix, standard is blosum62 substitution matrix
         k : int
                     Number of nearest neighbours to find
-        weights : list
-                    list of integers, that weight the position of the corresponding word.
 
         Returns
         -------
@@ -521,14 +503,15 @@ class kmerTrie():
 
         """
         root = self.root
-        word_length = len(word)
         results = []
+
+        kmers = [word]
+        if k < len(word):
+            for k in self.kmer_length:
+                kmers.extend(kmer_count(k, word))
 
         self._check_scoring_matrix(score)
 
-        # Set the weights if not specified
-        if weights is None:
-            weights = [1] * (word_length + 1)
 
         # Compute minimum match score
         min_score = np.inf
@@ -537,115 +520,92 @@ class kmerTrie():
                 s = score[(k1, k2)]
                 if s < min_score:
                     min_score = s
-
-        min_scores = list(map(lambda x: sum(min_score * np.array(weights[x + 1:])), list(range(word_length))))
-
-        # Score of the query word
-        self_score = [0] * (word_length + 1)
-        for i in range(word_length):
-            self_score[i + 1] = self_score[i] + \
-                                weights[word_length - 1 - i] * score[
-                                    word[word_length - 1 - i], word[word_length - 1 - i]]
-
         bounds = [-np.inf] * k
 
         for i in range(k):
+            for kmer in kmers:
+                word_length = len(kmer)
+                weights = [1]*word_length
+                temp_results = []
 
-            # Trie Search for equal strings is fast
-            if self.find_word(word) and all(v == 1 for v in weights):
-                results.append((word, 1.0))
-                continue
+                min_scores = list(map(lambda x: sum(min_score * np.array(weights[x + 1:])), list(range(word_length))))
 
-            bound = bounds.pop()
-            best = ""
-            nodes = list(root.children.items())
-            prefix = [""] * word_length
-            sc = [0] * (word_length + 1)
-            s = [0] * (word_length + 1)
+                # Score of the query word
+                self_score = [0] * (word_length + 1)
+                for i in range(word_length):
+                    self_score[i + 1] = self_score[i] + \
+                                        weights[word_length - 1 - i] * score[
+                                            kmer[word_length - 1 - i], kmer[word_length - 1 - i]]
 
-            while not nodes == []:
-                char, node = nodes.pop()
-                length = node.depth
-                index = length - 1
 
-                if length > word_length or word_length not in node.maxdepth:
-                    # The word is to long or no equal length words are in this branch
+                # Trie Search for equal strings is fast
+                if self.find_word(kmer) and all(v == 1 for v in weights):
+                    temp_results.append((word, 1.0))
                     continue
 
-                prefix[index] = char
-                sc[length] = sc[index] + weights[index] * score[(char, word[index])]
-                s[length] = s[index] + weights[index] * score[(char, char)]
+                bound = bounds.pop()
+                best = ""
+                best_word_origin = ""
+                nodes = list(root.children.items())
+                prefix = [""] * word_length
+                sc = [0] * (word_length + 1)
+                s = [0] * (word_length + 1)
 
-                if (sc[length] + self_score[word_length - length]) ** 2 / ((s[length] +
-                                                                            min_scores[index]) * self_score[
-                                                                               word_length]) < bound:
-                    continue
-                if length == word_length and node.word_finished:
-                    # Already found
-                    if "".join(prefix) in list(map(lambda x: x[0], results)):
+                while not nodes == []:
+                    char, node = nodes.pop()
+                    length = node.depth
+                    index = length - 1
+
+                    if length > word_length or word_length not in node.maxdepth:
+                        # The word is to long or no equal length words are in this branch
                         continue
 
-                    if sc[length] < 0:
-                        scc = -sc[length] ** 2 / \
-                              (s[length] * self_score[word_length])
-                    else:
-                        scc = sc[length] ** 2 / (s[length] * self_score[word_length])
+                    prefix[index] = char
+                    sc[length] = sc[index] + weights[index] * score[(char, kmer[index])]
+                    s[length] = s[index] + weights[index] * score[(char, char)]
 
-                    if scc >= bound:
-                        bound = scc
-                        bounds.append(scc)
-                        best = "".join(prefix)
+                    if (sc[length] + self_score[word_length - length]) ** 2 / ((s[length] +
+                                                                                min_scores[index]) * self_score[
+                                                                                   word_length]) < bound:
                         continue
-                nodes.extend(node.children.items())
+                    if length == word_length and node.word_finished:
+                        # Already found
+                        if "".join(prefix) in list(map(lambda x: x[0], results)):
+                            continue
 
-            if bound > 0:
-                results.append((best, np.sqrt(bounds.pop())))
-            else:
-                if bound == -np.inf:
-                    results.append(("", -1))
+                        if sc[length] < 0:
+                            scc = -sc[length] ** 2 / \
+                                  (s[length] * self_score[word_length])
+                        else:
+                            scc = sc[length] ** 2 / (s[length] * self_score[word_length])
+
+                        if scc >= bound:
+                            bound = scc
+                            bounds.append(scc)
+                            best = "".join(prefix)
+                            best_word_origin = node.sequences
+                            continue
+                    nodes.extend(node.children.items())
+
+                if bound > 0:
+                    results.append((best, np.sqrt(bounds.pop())))
                 else:
-                    results.append((best, -np.sqrt(abs(bounds.pop()))))
+                    if bound == -np.inf:
+                        temp_results.append(("", -1, best_word_origin))
+                    else:
+                        temp_results.append((best, -np.sqrt(abs(bounds.pop())), best_word_origin))
+            results.append(max(temp_results,key=lambda item:item[1]))
         return results
 
-    """    
-    def k_nearest_subwords(
-            self,
-            word: str,
-            score: dict = blosum62,
-            k=1):
 
-        spaced_seeds_leq = [[1]*len(word)]
-        for length in [7,8,9]:
-            if length < len(word):
-                for i in range(len(word)-length+1):
-                    seed_start = [0]*i
-                    seed_mid = [1]*length
-                    seed_end = [0]*(len(word)-length-i)
-                    seed_mid.extend(seed_end)
-                    spaced_seeds_leq.append(seed_start.extend(seed_mid))
-            if length > len(word):
-                pass
-        results = []      
-        for spaced_seed in spaced_seeds_leq:
-            results.extend(self.k_nearest_neighbour(word, score=score, k=k, weights=spaced_seed))
-
-        return results
-        """
-
-    def compute_neighbours(self, words, score, k=1, weights=None, cpus=2):
+    def compute_neighbours(self, words, score, k=1, cpus=2):
         """ Computes nearest neighbours in a multiprocessing way. """
         pool = Pool(cpus)
-        result = pool.map(lambda x: self.k_nearest_neighbour(x, score, k, weights), words)
+        result = pool.map(lambda x: self.k_nearest_neighbour(x, score, k), words)
         pool.close()
         pool.join()
 
         return result
-
-    def save_trie(self, path):
-        """ Saves the Trie structere"""
-        file = open(path, "wb")
-        cPickle.dump(self, file, protocol=-1)
-        file.close()
 
     def load_trie(self, path):
         """ Loades a Trie structure"""
@@ -657,6 +617,8 @@ class kmerTrie():
         file.close()
         self.root = trie.root
         self.alphabet = trie.alphabet
+        self.lengths = trie.lengths
+        self.kmer_length = trie.kmer_length
         gc.enable()
 
     def _check_scoring_matrix(self, score: dict):
@@ -688,7 +650,7 @@ class kmerTrie():
 
 
 
-class SubwordTrieNode(TrieNode):
+class kmerTrieNode(TrieNode):
     """ A node of a Trie
 
     Attributes
@@ -705,14 +667,11 @@ class SubwordTrieNode(TrieNode):
     """
 
     def __init__(self, char: str, depth: int):
-        super.__init__(char, depth)
-        self.sequences = set()
+        super().__init__(char, depth)
+        self.sequences = []
 
     def add_maxdepth(self, depth: int):
         self.maxdepth.add(depth)
-
-    def add_sequence(self, sequence: str):
-        self.sequences.add(sequence)
 
     def __str__(self):
         return self.char
