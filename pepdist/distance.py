@@ -193,8 +193,7 @@ class descriptor():
         for index in self.indices:
             for i in range(len(self.sequences)):
                 self.descriptors[i] = self.translate(self.sequences, self.indices)
-        
-        
+
     def translate(self, word: str, indices):
         """ Translate a string to feature vectors
             Parameters:
