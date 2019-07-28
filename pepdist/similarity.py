@@ -4,6 +4,7 @@ import warnings
 import gc
 import _pickle as cPickle
 from Bio.SubsMat import MatrixInfo
+import copy
 
 
 class ScoringMatrices():
@@ -467,12 +468,12 @@ class kmerTrie(Trie):
                         self.alphabet.add(char)
                     if char not in node.children:
                         new_node = kmerTrieNode(char, i + 1)
-                        new_node.add_maxdepth(len(word))
+                        new_node.add_maxdepth(len(kmer))
                         node.children[char] = new_node
                         node = new_node
                     else:
                         new_node = node.children[char]
-                        new_node.add_maxdepth(len(word))
+                        new_node.add_maxdepth(len(kmer))
                         node = new_node
                 node.word_finished = True
                 node.sequences.append(word)
@@ -506,9 +507,10 @@ class kmerTrie(Trie):
         results = []
 
         kmers = [word]
-        if k < len(word):
-            for k in self.kmer_length:
-                kmers.extend(kmer_count(k, word))
+        for k_len in self.kmer_length:
+            if k_len < len(word):
+                kmers.extend(kmer_count(k_len, word))
+        kmers = list(set(kmers))
 
         self._check_scoring_matrix(score)
 
@@ -520,32 +522,33 @@ class kmerTrie(Trie):
                 s = score[(k1, k2)]
                 if s < min_score:
                     min_score = s
-        bounds = [-np.inf] * k
+        temp_results = []
+        for kmer in kmers:
+            word_length = len(kmer)
+            weights = [1]*word_length
 
-        for i in range(k):
-            for kmer in kmers:
-                word_length = len(kmer)
-                weights = [1]*word_length
-                temp_results = []
+            min_scores = list(map(lambda x: sum(min_score * np.array(weights[x + 1:])), list(range(word_length))))
 
-                min_scores = list(map(lambda x: sum(min_score * np.array(weights[x + 1:])), list(range(word_length))))
-
-                # Score of the query word
-                self_score = [0] * (word_length + 1)
-                for i in range(word_length):
-                    self_score[i + 1] = self_score[i] + \
-                                        weights[word_length - 1 - i] * score[
-                                            kmer[word_length - 1 - i], kmer[word_length - 1 - i]]
+            # Score of the query word
+            self_score = [0] * (word_length + 1)
+            for i in range(word_length):
+                self_score[i + 1] = self_score[i] + \
+                                    weights[word_length - 1 - i] * score[
+                                        kmer[word_length - 1 - i], kmer[word_length - 1 - i]]
 
 
-                # Trie Search for equal strings is fast
-                if self.find_word(kmer) and all(v == 1 for v in weights):
-                    temp_results.append((word, 1.0))
-                    continue
+            # Trie Search for equal strings is fast
+            if self.find_word(kmer) and all(v == 1 for v in weights):
+                temp_results.append((word, 1.0, self.__get_last_node(word).sequences))
+                continue
+
+            bounds = [-np.inf] * k
+
+            for i in range(k):
 
                 bound = bounds.pop()
                 best = ""
-                best_word_origin = ""
+                best_word_origin = []
                 nodes = list(root.children.items())
                 prefix = [""] * word_length
                 sc = [0] * (word_length + 1)
@@ -570,7 +573,9 @@ class kmerTrie(Trie):
                         continue
                     if length == word_length and node.word_finished:
                         # Already found
-                        if "".join(prefix) in list(map(lambda x: x[0], results)):
+                        if "".join(prefix) in list(map(lambda x: x[0], temp_results)):
+                            #for temp_result in temp_results:
+                            #    temp_result[2].extend([seq for seq in node.sequences if seq not in temp_result[2]])
                             continue
 
                         if sc[length] < 0:
@@ -583,18 +588,33 @@ class kmerTrie(Trie):
                             bound = scc
                             bounds.append(scc)
                             best = "".join(prefix)
-                            best_word_origin = node.sequences
+                            # here have to be a copy
+                            best_word_origin = copy.deepcopy(node.sequences)
                             continue
                     nodes.extend(node.children.items())
 
                 if bound > 0:
-                    results.append((best, np.sqrt(bounds.pop())))
+                    temp_results.append((best, np.sqrt(bounds.pop()), best_word_origin))
                 else:
                     if bound == -np.inf:
-                        temp_results.append(("", -1, best_word_origin))
+                        temp_results.append(("", -1, []))
                     else:
                         temp_results.append((best, -np.sqrt(abs(bounds.pop())), best_word_origin))
-            results.append(max(temp_results,key=lambda item:item[1]))
+        for i in range(k):
+            if temp_results == []:
+                results.append(('', -1, []))
+                continue
+            max_score = max(temp_results, key=lambda item:item[1])
+
+            for res in temp_results:
+                if res[0] == max_score[0]:
+                    for seq in res[2]:
+                        if seq not in max_score[2]:
+                            max_score[2].append(seq)
+                    temp_results.remove(res)
+
+            results.append(max_score)
+
         return results
 
 
@@ -620,6 +640,17 @@ class kmerTrie(Trie):
         self.lengths = trie.lengths
         self.kmer_length = trie.kmer_length
         gc.enable()
+
+    def __get_last_node(self, word: str):
+        """ Returns true if the word is in the Trie """
+        node = self.root
+        for char in word:
+            if char in node.children:
+                node = node.children[char]
+            else:
+                # The word is not present in the Trie
+                return kmerTrieNode("", 0)
+        return node
 
     def _check_scoring_matrix(self, score: dict):
         pass
