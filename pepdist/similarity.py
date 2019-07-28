@@ -457,9 +457,6 @@ class kmerTrie(Trie):
                 kmers.extend(kmer_count(k,word))
 
             for kmer in kmers:
-                if self.find_word(kmer):
-                    continue
-
                 node = self.root
                 for i in range(len(kmer)):
                     char = kmer[i]
@@ -574,9 +571,11 @@ class kmerTrie(Trie):
                     if length == word_length and node.word_finished:
                         # Already found
                         if "".join(prefix) in list(map(lambda x: x[0], temp_results)):
-                            #for temp_result in temp_results:
-                            #    temp_result[2].extend([seq for seq in node.sequences if seq not in temp_result[2]])
+                            for temp_result in temp_results:
+                                if temp_result[0] == "".join(prefix):
+                                   temp_result[2].extend([seq for seq in node.sequences if seq not in temp_result[2]])
                             continue
+
 
                         if sc[length] < 0:
                             scc = -sc[length] ** 2 / \
@@ -606,14 +605,15 @@ class kmerTrie(Trie):
                 continue
             max_score = max(temp_results, key=lambda item:item[1])
 
-            for res in temp_results:
-                if res[0] == max_score[0]:
-                    for seq in res[2]:
-                        if seq not in max_score[2]:
-                            max_score[2].append(seq)
-                    temp_results.remove(res)
+            #for res in temp_results:
+                #if res[0] == max_score[0]:
+                    #for seq in res[2]:
+                    #    if seq not in max_score[2]:
+                    #        max_score[2].append(seq)
+                    #temp_results.remove(res)
 
             results.append(max_score)
+            temp_results.remove(max_score)
 
         return results
 

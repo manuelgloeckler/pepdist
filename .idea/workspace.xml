@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="9d4ee645-506a-47ce-8548-5b48114309c8" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pepdist/distance.py" beforeDir="false" afterPath="$PROJECT_DIR$/pepdist/distance.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pepdist/plotting.py" beforeDir="false" afterPath="$PROJECT_DIR$/pepdist/plotting.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pepdist/similarity.py" beforeDir="false" afterPath="$PROJECT_DIR$/pepdist/similarity.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -67,7 +65,14 @@
       <option name="project" value="LOCAL" />
       <updated>1564243603809</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="kmer Trie origin sequences bug">
+      <created>1564338363938</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1564338363954</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -86,20 +91,26 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Comments" />
     <MESSAGE value="kmerTrie, k &gt; 2 bug ..." />
-    <option name="LAST_COMMIT_MESSAGE" value="kmerTrie, k &gt; 2 bug ..." />
+    <MESSAGE value="kmer Trie origin sequences bug" />
+    <option name="LAST_COMMIT_MESSAGE" value="kmer Trie origin sequences bug" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/pepdist/similarity.py</url>
-          <line>595</line>
+          <line>594</line>
           <option name="timeStamp" value="7" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/pepdist/similarity.py</url>
           <line>458</line>
           <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/pepdist/similarity.py</url>
+          <line>570</line>
+          <option name="timeStamp" value="9" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
