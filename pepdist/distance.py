@@ -109,14 +109,12 @@ class Aaindex():
         return len(self.aaindex_dic)
 
     def __getitem__(self, key):
-        try: 
+        try:
             value = self.aaindex_dic[key]
         except KeyError as e:
             raise KeyError("The ID " + str(e) + " is not in the AAIndex or contains NA values") from e
-        
+
         return value
-        
-        
 
     def __contains__(self, item):
         return item in self.aaindex_dic
@@ -124,34 +122,34 @@ class Aaindex():
     def __iter__(self):
         return iter(self.aaindex_dic.keys())
 
-    def make_positive(self, index):
-        """ Turns an a index of real numbers to a index of positve real numbers """
-        positive_index = {}
-        for i in index:
-            positive_index[i] = index[i] + abs(min(index.values()))
 
-        return positive_index
+def positivize(index):
+    """ Turns an a index of real numbers to a index of positve real numbers """
+    positive_index = {}
+    for i in index:
+        positive_index[i] = index[i] + abs(min(index.values()))
 
-    def max_normalize(self, index):
-        """ Normalize a index of real numbers to a normalized index between [0,1] """
-        pos_index = self.make_positive(index)
-        normalized_index = {}
-        maximum = max(pos_index.values())
-        for i in index:
-            normalized_index[i] = pos_index[i] / maximum
+    return positive_index
 
-        return normalized_index
-        
-    def z_normalize(self, index):
-        mean = np.mean(index.values())
-        sigma = np.std(index.values())
-        normalized_index = {}
-        for i in index:
-            normalized_index[i] = (index[i] - mean)/sigma
-        return normalized_index
 
-        
-     
+def max_normalize(index):
+    """ Normalize a index of real numbers to a normalized index between [0,1] """
+    pos_index = positivize(index)
+    normalized_index = {}
+    maximum = max(pos_index.values())
+    for i in index:
+        normalized_index[i] = pos_index[i] / maximum
+
+    return normalized_index
+
+
+def z_normalize(index):
+    mean = np.mean(index.values())
+    sigma = np.std(index.values())
+    normalized_index = {}
+    for i in index:
+        normalized_index[i] = (index[i] - mean) / sigma
+    return normalized_index
 
 
 def naive_nearest_neighbour(data, inp_vec):
@@ -168,33 +166,46 @@ def naive_nearest_neighbour(data, inp_vec):
             min_match = seq.seq
 
     return (min_match, min_dist)
-    
+
+
+
 class descriptor():
     """  """
-    def __init__(self, seqs, indices=[]):
+
+    def __init__(self, seqs, indices=[], norm_method=lambda x: x):
         self.sequences = seqs
         self.descriptors = []
-        self.indices = indices
+        self.__indices = indices
+        self.__norm_method = norm_method
+
+        self.normalize_all()
         self.calculate_all()
-        
+
     def __len__(self):
         return len(self.sequences)
-        
-    def addSeqs(self, seqs):
+
+    def add_seqs(self, seqs):
         self.sequences.extend(seqs)
         self.calculate_all()
-    
-    def addIndex(self, index):
+
+    def add_index(self, index):
         self.indices.append(index)
         self.calculate_all()
-    
+
+    def change_norm_method(self, norm_method):
+        self.__norm_method = norm_method
+        self.normalize_all()
+
+    def normalize_all(self):
+        """ """
+        for i in range(self.indices):
+            self.indices[i] = self.norm_method(self.indices[i])
+
     def calculate_all(self):
         """ """
-        for index in self.indices:
-            for i in range(len(self.sequences)):
-                self.descriptors[i] = self.translate(self.sequences, self.indices)
-        
-        
+        for i in range(len(self.sequences)):
+            self.descriptors[i] = self.translate(self.sequences, self.indices)
+
     def translate(self, word: str, indices):
         """ Translate a string to feature vectors
             Parameters:
@@ -211,11 +222,8 @@ class descriptor():
             (int(
                 len(vec) /
                 len(word)),
-                len(word)),
+             len(word)),
             buffer=np.array(vec))
-            
-            
-        
 
 
 class HashTable:
@@ -264,16 +272,16 @@ class HashTable:
 
     def __setitem__(self, inp_vec, label):
         hash_value = self.generate_hash(inp_vec)
-        self.hash_table[hash_value] = self.hash_table\
-            .get(hash_value, list()) + [label]
+        self.hash_table[hash_value] = self.hash_table \
+                                          .get(hash_value, list()) + [label]
 
     def __getitem__(self, inp_vec):
         hash_value = self.generate_hash(inp_vec)
         return self.hash_table.get(hash_value, [])
-        
+
     def values(self):
         return self.hash_table.values()
-    
+
     def keys(self):
         return self.hash_table.keys()
 
@@ -324,16 +332,13 @@ class LSH:
         for table in self.hash_tables:
             results.extend(table[inp_vec])
         return list(results)
-        
+
     def add(self, inp_vecs, labels):
         if len(inp_vecs) != len(labels):
             raise SystemExit("Length of descriptors and labels is not the same!")
         else:
             for i in range(len(inp_vecs)):
                 self.__setitem__(self, inp_vecs[i], labels[i])
-        
-        
-    
 
     def nearest_neighbour(self, inp_vec):
         """ Find the nearest_neighbour by hashing the inp_vec and find the nearest neighbour in the
@@ -350,29 +355,29 @@ class LSH:
                 min_match = seq.seq
 
         return (min_match, min_dist)
-        
+
     def p1(self):
         """ Probability that two points with ||p-q|| < bin_width Fall into the same bucket """
-        return 1-2*norm.cdf(-self.bin_width) - \
-               2/(np.sqrt(2*np.pi)*self.bin_width) *\
-               (1-np.exp(-(self.bin_width**2/2)))
-               
-    def p2(self, scale = 2):
-        """ Probability that two points ||p-q|| > scale * bin_width Fall into the same bucket."""
-        return 1-2*norm.cdf(-self.bin_width/scale) - \
-               2/(np.sqrt(2*np.pi)*self.bin_width/scale) *\
-               (1-np.exp(-(self.bin_width**2/(2*scale**2))))     
+        return 1 - 2 * norm.cdf(-self.bin_width) - \
+               2 / (np.sqrt(2 * np.pi) * self.bin_width) * \
+               (1 - np.exp(-(self.bin_width ** 2 / 2)))
 
-    def compute_num_projections(self, fail_prob = 0.01):
+    def p2(self, scale=2):
+        """ Probability that two points ||p-q|| > scale * bin_width Fall into the same bucket."""
+        return 1 - 2 * norm.cdf(-self.bin_width / scale) - \
+               2 / (np.sqrt(2 * np.pi) * self.bin_width / scale) * \
+               (1 - np.exp(-(self.bin_width ** 2 / (2 * scale ** 2))))
+
+    def compute_num_projections(self, fail_prob=0.01):
         """ L needed to have a probability smaller than fail_prob that nearest neighbor is not in the same bucket. """
-        return np.ceil(np.log(fail_prob)/np.log(1-self.p1()**self.k_dot_products))
-        
+        return np.ceil(np.log(fail_prob) / np.log(1 - self.p1() ** self.k_dot_products))
+
     def mean_buckets(self):
         buckets = 0
         for hash_table in self.hash_tables:
             buckets += len(hash_table.values())
-        return int(buckets/self.num_projections) 
-        
+        return int(buckets / self.num_projections)
+
     def mean_bucket_size(self):
         bucket_size = 0
         for hash_table in self.hash_tables:
@@ -380,11 +385,8 @@ class LSH:
             num_buckets = len(list(hash_table.values()))
             for buckets in list(hash_table.values()):
                 hash_bucket_sizes += len(buckets)
-            bucket_size += hash_bucket_sizes/num_buckets
-        return int(bucket_size/self.num_projections)
-        
-        
+            bucket_size += hash_bucket_sizes / num_buckets
+        return int(bucket_size / self.num_projections)
+
     def train_LSH(self, data, query_sample):
         pass
-        
-    

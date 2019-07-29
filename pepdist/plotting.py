@@ -3,16 +3,6 @@ import seaborn as sns
 import scipy
 import numpy as np
 
-
-def hist(immu, non_immu, ax=plt, density=1, bins=20):
-    """Histogram of two datasets """
-    ax.hist([immu, non_immu], color=['dodgerblue', 'orange'], edgecolor='black',
-            bins=bins, density=density, label=["Immunogenic", "Non-Immunogenic"])
-    ax.legend()
-    ax.xlabel('Score')
-    ax.ylabel('Normalized Frequencys')
-
-
 def remove_equals(scores, exact=1.0):
     """ Removes equal matches  """
     while True:
@@ -21,6 +11,17 @@ def remove_equals(scores, exact=1.0):
         except BaseException:
             break
     return scores
+
+def hist(immu, non_immu, ax=plt, density=1, bins=20):
+    """Histogram of two datasets """
+    ax.hist([immu, non_immu], color=['dodgerblue', 'orange'], edgecolor='black',
+            bins=bins, density=density, label=["Immunogenic", "Non-Immunogenic"])
+    ax.legend()
+    ax.xlabel('Score')
+    if density == 1:
+        ax.ylabel('Normalized Frequencies')
+    else:
+        ax.ylabel('Frequencies')
 
 
 def distplot(immu, non_immu, ax=plt, equals=False):

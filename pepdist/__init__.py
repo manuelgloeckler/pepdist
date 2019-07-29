@@ -2,6 +2,8 @@
 from .similarity import ScoringMatrices
 from .similarity import blosum62
 from .similarity import Trie
+from .similarity import kmerTrie
+from .similarity import kmer_count
 
 from .plotting import hist
 from .plotting import distplot
