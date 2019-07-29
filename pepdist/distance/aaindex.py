@@ -63,10 +63,10 @@ class Aaindex():
         for distance computation.
 
         """
-        global key
-        path = os.path.dirname(os.path.abspath(
-            __file__)) + "/aaindex/aaindex1.txt"
-        with open(path) as aaindex1:
+        __location__ = os.path.realpath(
+            os.path.join(os.getcwd(), os.path.dirname(__file__)))
+        with open(os.path.join(__location__,"aaindex1.txt")) as aaindex1:
+            key = ""
             aaindex_dic = {}
             for line in aaindex1:
                 dic = {}

@@ -1,5 +1,9 @@
+# -*- coding: utf-8 -*-
+"""scoring_matrix
 
-
+This module consist the blosum62 substitution matrix in a symmetric version. Additionally their are some scoring matrix
+function for linear transformation techniques.
+"""
 blosum62 = {('A', 'A'): 4, ('A', 'B'): -2, ('A', 'C'): 0, ('A', 'D'): -2, ('A', 'E'): -1, ('A', 'F'): -2, ('A', 'G'): 0,
             ('A', 'H'): -2, ('A', 'I'): -1, ('A', 'K'): -1, ('A', 'L'): -1, ('A', 'M'): -1, ('A', 'N'): -2, ('A', 'P'): -1,
             ('A', 'Q'): -1, ('A', 'R'): -1, ('A', 'S'): 1, ('A', 'T'): 0, ('A', 'V'): 0, ('A', 'W'): -3, ('A', 'X'): 0,
@@ -79,9 +83,28 @@ blosum62 = {('A', 'A'): 4, ('A', 'B'): -2, ('A', 'C'): 0, ('A', 'D'): -2, ('A', 
 """ The symmetrized blosum62 substitutionmatrix obtained from biopython package."""
 
 
-def symmetrize(self, matrix: dict, subst=False):
-    """ Substitution matrices in biopython are not symmetric.
-    This function makes them symmetric."""
+def symmetrize(self, matrix: dict, subst: bool = False) -> dict:
+    """ This function symmetrize a given matrix.
+
+    Attributes
+    ----------
+    matrix: dict {(i,j): int}
+                A scoring matrix given as dictionary.
+    subst: bool
+                In a substitution matrix both cases (i,j) or (j,i) are included in one key. If you want to divide
+                the score of mismatches by 2 then set this to True.
+
+    Returns
+    -------
+    dict : {(i,j): int]
+                Returns the same scoring matrix with symmetrized keys.
+
+    Notes
+    -----
+    Biopython's or most other substitution matrices are not symmetric and should be symmetrized by this method or
+    manuall.
+    """
+
     if subst:
         new_matrix = {}
         for k, v in matrix.items():
@@ -98,8 +121,18 @@ def symmetrize(self, matrix: dict, subst=False):
         return new_matrix
 
 
-def positivize(self, matrix: dict):
-    """ This function lineary transforms the scores to values greater/equal zero."""
+def positivize(self, matrix: dict) -> dict:
+    """ This function transforms all score values linearly to be greater equal than zero
+
+    Attributes
+    ----------
+    matrix: dict {(i,j): int}
+                A scoring matrix given as dictionary.
+    Returns
+    -------
+    dict : {(i,j): int]
+                Returns the same scoring matrix with positive score values
+    """
     new_matrix = {}
     matrix_min = min(matrix.values())
     if matrix_min >= 0:
@@ -111,11 +144,20 @@ def positivize(self, matrix: dict):
 
 
 def max_normalize(self, matrix: dict):
-    """ Normalization by dividing throught the maximum."""
+    """ This function normalize the score between 0 and 1, by dividung throught the maximum value.
+
+    Attributes
+    ----------
+    matrix: dict {(i,j): int}
+                A scoring matrix given as dictionary.
+    Returns
+    -------
+    dict : {(i,j): int]
+                Returns the same scoring matrix with normalized score values between 0 and 1.
+    """
     matrix = self.positivize(matrix)
     new_matrix = {}
     matrix_max = max(matrix.values())
     for k, v in matrix.items():
         new_matrix[k] = v / matrix_max
     return new_matrix
-

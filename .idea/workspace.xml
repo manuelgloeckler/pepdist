@@ -2,246 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9d4ee645-506a-47ce-8548-5b48114309c8" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/R_User_Library.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pepdist/distance/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pepdist/distance/aaindex.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pepdist/distance/distance.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pepdist/similarity/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pepdist/similarity/scoring_matrix.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pepdist/similarity/similarity.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/pepdist.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/pepdist.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pepdist/distance/aaindex1.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/__init__.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/test_distance.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tests/test_similarity.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Makefile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/doctrees/environment.pickle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/doctrees/index.doctree" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/doctrees/modules.doctree" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/doctrees/pepdist.doctree" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/doctrees/pepdist.tests.doctree" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/html/.buildinfo" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/html/_sources/index.rst.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/html/_sources/modules.rst.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/html/_sources/pepdist.rst.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/html/_sources/pepdist.tests.rst.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/html/_static/alabaster.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/html/_static/basic.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/html/_static/custom.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/html/_static/doctools.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/html/_static/documentation_options.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/html/_static/file.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/html/_static/jquery-3.2.1.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/html/_static/jquery.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/html/_static/language_data.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/html/_static/minus.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/html/_static/plus.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/html/_static/pygments.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/html/_static/searchtools.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/html/_static/underscore-1.3.1.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/html/_static/underscore.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/html/genindex.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/html/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/html/modules.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/html/objects.inv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/html/pepdist.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/html/pepdist.tests.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/html/py-modindex.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/html/search.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/html/searchindex.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/____init_____8py.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/annotated.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/bc_s.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/bdwn.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/classes.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/classpepdist_1_1distance_1_1_aaindex-members.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/classpepdist_1_1distance_1_1_aaindex.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/classpepdist_1_1distance_1_1_hash_table-members.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/classpepdist_1_1distance_1_1_hash_table.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/classpepdist_1_1distance_1_1_l_s_h-members.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/classpepdist_1_1distance_1_1_l_s_h.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/classpepdist_1_1distance_1_1descriptor-members.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/classpepdist_1_1distance_1_1descriptor.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/classpepdist_1_1similarity_1_1_scoring_matrices-members.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/classpepdist_1_1similarity_1_1_scoring_matrices.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/classpepdist_1_1similarity_1_1_subword_trie_node-members.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/classpepdist_1_1similarity_1_1_subword_trie_node.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/classpepdist_1_1similarity_1_1_subword_trie_node.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/classpepdist_1_1similarity_1_1_trie-members.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/classpepdist_1_1similarity_1_1_trie.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/classpepdist_1_1similarity_1_1_trie_node-members.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/classpepdist_1_1similarity_1_1_trie_node.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/classpepdist_1_1similarity_1_1_trie_node.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/classpepdist_1_1similarity_1_1kmer_trie-members.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/classpepdist_1_1similarity_1_1kmer_trie.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/closed.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/dir_1d36f5b99f4cb9412fd4f8f56aeb0eaa.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/dir_7851f0ed5b5f2440c8f21cb353f45c75.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/distance_8py.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/doc.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/doxygen.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/doxygen.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/dynsections.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/files.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/folderclosed.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/folderopen.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/functions.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/functions_func.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/hierarchy.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/jquery.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/menu.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/menudata.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/namespacemembers.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/namespacemembers_func.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/namespacepepdist.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/namespacepepdist_1_1distance.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/namespacepepdist_1_1plotting.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/namespacepepdist_1_1similarity.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/namespacepepdist_1_1tests.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/namespacepepdist_1_1tests_1_1test__distance.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/namespacepepdist_1_1tests_1_1test__similarity.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/namespaces.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/nav_f.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/nav_g.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/nav_h.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/open.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/plotting_8py.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/all_0.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/all_0.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/all_1.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/all_1.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/all_2.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/all_2.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/all_3.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/all_3.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/all_4.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/all_4.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/all_5.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/all_5.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/all_6.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/all_6.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/all_7.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/all_7.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/all_8.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/all_8.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/all_9.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/all_9.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/all_a.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/all_a.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/all_b.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/all_b.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/all_c.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/all_c.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/all_d.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/all_d.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/classes_0.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/classes_0.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/classes_1.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/classes_1.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/classes_2.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/classes_2.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/classes_3.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/classes_3.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/classes_4.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/classes_4.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/classes_5.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/classes_5.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/classes_6.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/classes_6.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/close.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/files_0.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/files_0.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/files_1.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/files_1.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/files_2.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/files_2.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/files_3.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/files_3.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/files_4.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/files_4.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/functions_0.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/functions_0.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/functions_1.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/functions_1.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/functions_2.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/functions_2.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/functions_3.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/functions_3.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/functions_4.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/functions_4.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/functions_5.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/functions_5.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/functions_6.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/functions_6.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/functions_7.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/functions_7.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/functions_8.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/functions_8.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/functions_9.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/functions_9.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/functions_a.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/functions_a.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/functions_b.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/functions_b.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/mag_sel.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/namespaces_0.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/namespaces_0.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/nomatches.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/search.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/search.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/search_l.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/search_m.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/search_r.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/search/searchdata.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/similarity_8py.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/splitbar.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/sync_off.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/sync_on.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/tab_a.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/tab_b.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/tab_h.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/tab_s.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/tabs.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/test__distance_8py.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/test__similarity_8py.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/tests_2____init_____8py.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/latex/Makefile" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/latex/____init_____8py.tex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/latex/dir_1d36f5b99f4cb9412fd4f8f56aeb0eaa.tex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/latex/dir_7851f0ed5b5f2440c8f21cb353f45c75.tex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/latex/distance_8py.tex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/latex/doxygen.sty" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/latex/files.tex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/latex/make.bat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/latex/namespacepepdist.tex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/latex/namespacepepdist_1_1distance.tex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/latex/namespacepepdist_1_1plotting.tex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/latex/namespacepepdist_1_1similarity.tex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/latex/namespacepepdist_1_1tests.tex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/latex/namespacepepdist_1_1tests_1_1test__distance.tex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/latex/namespacepepdist_1_1tests_1_1test__similarity.tex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/latex/namespaces.tex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/latex/plotting_8py.tex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/latex/refman.tex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/latex/similarity_8py.tex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/latex/test__distance_8py.tex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/latex/test__similarity_8py.tex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/latex/tests_2____init_____8py.tex" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/make.bat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pepdist/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pepdist/aaindex/aaindex1.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pepdist/aaindex/aaindex2.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pepdist/aaindex/aaindex3.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pepdist/distance.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pepdist/plotting.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pepdist/similarity.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pepdist/tests/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pepdist/tests/test_distance.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pepdist/tests/test_similarity.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/setup.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/conf.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/index.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/modules.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/pepdist.rst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/source/pepdist.tests.rst" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MANIFEST.in" beforeDir="false" afterPath="$PROJECT_DIR$/MANIFEST.in" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pepdist/distance/aaindex.py" beforeDir="false" afterPath="$PROJECT_DIR$/pepdist/distance/aaindex.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pepdist/similarity/scoring_matrix.py" beforeDir="false" afterPath="$PROJECT_DIR$/pepdist/similarity/scoring_matrix.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pepdist/similarity/similarity.py" beforeDir="false" afterPath="$PROJECT_DIR$/pepdist/similarity/similarity.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -255,16 +24,16 @@
         <entry file="file://$PROJECT_DIR$/pepdist/distance/__init__.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="34">
-              <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
+              <caret line="2" selection-start-line="2" selection-end-line="2" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/pepdist/similarity/similarity.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="190">
-              <caret line="537" column="15" selection-start-line="537" selection-start-column="15" selection-end-line="537" selection-end-column="15" />
+            <state relative-caret-position="85">
+              <caret line="5" column="10" selection-start-line="5" selection-start-column="10" selection-end-line="5" selection-end-column="10" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -296,20 +65,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pepdist/similarity/scoring_matrix.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2057">
-              <caret line="121" selection-start-line="121" selection-end-line="121" />
+            <state>
+              <caret selection-end-line="5" selection-end-column="3" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pepdist/distance/distance.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="68">
-              <caret line="4" column="3" lean-forward="true" selection-start-line="4" selection-start-column="3" selection-end-line="4" selection-end-column="3" />
-              <folding>
-                <element signature="e#242#260#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="306">
+              <caret line="19" column="44" selection-start-line="19" selection-start-column="44" selection-end-line="19" selection-end-column="44" />
             </state>
           </provider>
         </entry>
@@ -317,11 +83,25 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pepdist/distance/aaindex.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="17">
-              <caret line="1" column="18" selection-start-line="1" selection-start-column="18" selection-end-line="1" selection-end-column="18" />
+            <state relative-caret-position="1122">
+              <caret line="67" column="60" selection-start-line="67" selection-start-column="60" selection-end-line="67" selection-end-column="60" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/tests/__init__.py">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/MANIFEST.in">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="17">
+              <caret line="1" column="13" selection-start-line="1" selection-start-column="13" selection-end-line="1" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -343,12 +123,13 @@
       <list>
         <option value="$PROJECT_DIR$/pepdist/__init__.py" />
         <option value="$PROJECT_DIR$/setup.py" />
-        <option value="$PROJECT_DIR$/pepdist/similarity/scoring_matrix.py" />
-        <option value="$PROJECT_DIR$/pepdist/similarity/similarity.py" />
         <option value="$PROJECT_DIR$/pepdist/similarity/__init__.py" />
-        <option value="$PROJECT_DIR$/pepdist/distance/aaindex.py" />
         <option value="$PROJECT_DIR$/pepdist/distance/__init__.py" />
         <option value="$PROJECT_DIR$/pepdist/distance/distance.py" />
+        <option value="$PROJECT_DIR$/MANIFEST.in" />
+        <option value="$PROJECT_DIR$/pepdist/distance/aaindex.py" />
+        <option value="$PROJECT_DIR$/pepdist/similarity/scoring_matrix.py" />
+        <option value="$PROJECT_DIR$/pepdist/similarity/similarity.py" />
       </list>
     </option>
   </component>
@@ -381,12 +162,6 @@
               <item name="pepdist" type="b2602c69:ProjectViewProjectNode" />
               <item name="pepdist" type="462c0819:PsiDirectoryNode" />
               <item name="pepdist" type="462c0819:PsiDirectoryNode" />
-              <item name="distance" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="pepdist" type="b2602c69:ProjectViewProjectNode" />
-              <item name="pepdist" type="462c0819:PsiDirectoryNode" />
-              <item name="pepdist" type="462c0819:PsiDirectoryNode" />
               <item name="similarity" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
@@ -400,6 +175,11 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Manuel Glöckler\Desktop\pepdist\pepdist\distance" />
+    </key>
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -452,14 +232,20 @@
       <option name="project" value="LOCAL" />
       <updated>1564338363954</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="refactoring of structure...">
+      <created>1564412711919</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1564412711919</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.25266525" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2553305" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -473,11 +259,11 @@
       <window_info anchor="bottom" id="Terminal" order="8" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
       <window_info anchor="bottom" id="Python Console" order="10" visible="true" weight="0.32936078" />
-      <window_info anchor="right" id="R Packages" />
-      <window_info anchor="right" id="R Graphics" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="R Graphics" order="3" />
+      <window_info anchor="right" id="R Packages" order="4" weight="0.32995737" />
     </layout>
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -517,16 +303,51 @@
     <MESSAGE value="Comments" />
     <MESSAGE value="kmerTrie, k &gt; 2 bug ..." />
     <MESSAGE value="kmer Trie origin sequences bug" />
-    <option name="LAST_COMMIT_MESSAGE" value="kmer Trie origin sequences bug" />
+    <MESSAGE value="refactoring of structure..." />
+    <option name="LAST_COMMIT_MESSAGE" value="refactoring of structure..." />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/pepdist/distance.py" />
     <entry file="file://$PROJECT_DIR$/pepdist/plotting.py" />
     <entry file="file://$PROJECT_DIR$/pepdist/__init__.py" />
+    <entry file="file://$PROJECT_DIR$/pepdist/distance/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" selection-start-line="2" selection-end-line="2" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/setup.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
           <caret line="13" column="19" selection-start-line="13" selection-start-column="19" selection-end-line="13" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pepdist/distance/distance.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="19" column="44" selection-start-line="19" selection-start-column="44" selection-end-line="19" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pepdist/distance/aaindex.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1122">
+          <caret line="67" column="60" selection-start-line="67" selection-start-column="60" selection-end-line="67" selection-end-column="60" />
+          <folding>
+            <element signature="e#0#9#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MANIFEST.in">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="13" selection-start-line="1" selection-start-column="13" selection-end-line="1" selection-end-column="13" />
         </state>
       </provider>
     </entry>
@@ -540,46 +361,19 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pepdist/similarity/similarity.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="537" column="15" selection-start-line="537" selection-start-column="15" selection-end-line="537" selection-end-column="15" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pepdist/similarity/scoring_matrix.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2057">
-          <caret line="121" selection-start-line="121" selection-end-line="121" />
+        <state>
+          <caret selection-end-line="5" selection-end-column="3" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pepdist/distance/__init__.py">
+    <entry file="file://$PROJECT_DIR$/pepdist/similarity/similarity.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" lean-forward="true" selection-start-line="2" selection-end-line="2" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pepdist/distance/aaindex.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="18" selection-start-line="1" selection-start-column="18" selection-end-line="1" selection-end-column="18" />
+        <state relative-caret-position="85">
+          <caret line="5" column="10" selection-start-line="5" selection-start-column="10" selection-end-line="5" selection-end-column="10" />
           <folding>
-            <element signature="e#0#9#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pepdist/distance/distance.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="4" column="3" lean-forward="true" selection-start-line="4" selection-start-column="3" selection-end-line="4" selection-end-column="3" />
-          <folding>
-            <element signature="e#242#260#0" expanded="true" />
+            <element signature="e#0#18#0" expanded="true" />
           </folding>
         </state>
       </provider>

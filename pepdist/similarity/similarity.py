@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""similarity
+
+This module has multiple functions or classes to determine the k nearest neighbours given a scoring matrix. Therefore
+a efficient trie datastructure is implemented where a nearest neighbour can be determined fast by a branch and bound
+algorithm.
+"""
 import numpy as np
 from multiprocess import Pool
 import warnings
@@ -5,6 +12,8 @@ import gc
 import _pickle as cPickle
 from Bio.SubsMat import MatrixInfo
 import copy
+
+# TODO EXCEPTIONS AND MATRICES
 
 
 def word_score(word1: str, word2: str, score: dict) -> float:
@@ -44,6 +53,11 @@ class Trie(object):
         A prefix tree is a tree, where strings can be added
         and each node represent a prefix of this string.
 
+    Parameters
+    ----------
+    data : list
+        List of words that should be saved in the KmerTrie.
+
     Attributes
     ----------
     root : TrieNode
@@ -56,6 +70,7 @@ class Trie(object):
     """
 
     def __init__(self, data=None):
+        """ Initialize the Trie. If data is set it is added to the trie."""
         self.root = TrieNode("", 0)
         self.alphabet = set()
         self.lengths = set()
@@ -114,18 +129,20 @@ class Trie(object):
             score: dict,
             k: int = 1,
             weights: list = None) -> list:
-        """ Computes the nearest neighbour of a given strings
+        """ Computes the k nearest neighbours of a given strings
 
         Attributes
         ----------
         word : str
                     The query word
         score (dict):
-                    Scoring matrix, standard is blosum62 substitution matrix
+                    Scoring matrix, it has to be symmetric so that for each key (i,j), also the key (j,i) exist. You can
+                    use the blosum62 matrix provided by this package.
         k : int
-                    Number of nearest neighbours to find
+                    Number of nearest neighbours that the method returns.
         weights : list
-                    list of integers, that weight the position of the corresponding word.
+                    List of floats. Each float weight the corresponding position of the word. This list has to be the
+                    same length as the input word.
 
         Returns
         -------
@@ -133,6 +150,16 @@ class Trie(object):
                     Ordered list of k near neighbours, represented as tuples of
                     strings, corresponding to their sequence, and doubles,
                     corresponding to their score.
+        Notes
+        -----
+        If a key found in the trie/word pair is not in the scoring matrix, then it is scored by 0!
+        If their this is possible a warning is returned #TODO Warnings!
+        Examples
+        --------
+        >>>from pepdist import similarity
+        >>>trie = similarity.Trie(['AAWWAA', 'GGWWGA'])
+        >>>trie.k_nearest_neighbour('GGGGGG', score = similarity.blosum62)
+        [('GGWWGA', 0.35176323534072423)]
 
         """
         root = self.root
@@ -222,33 +249,31 @@ class Trie(object):
                     results.append((best, -np.sqrt(abs(bounds.pop()))))
         return results
 
-    """    
-    def k_nearest_subwords(
-            self,
-            word: str,
-            score: dict = blosum62,
-            k=1):
-            
-        spaced_seeds_leq = [[1]*len(word)]
-        for length in [7,8,9]:
-            if length < len(word):
-                for i in range(len(word)-length+1):
-                    seed_start = [0]*i
-                    seed_mid = [1]*length
-                    seed_end = [0]*(len(word)-length-i)
-                    seed_mid.extend(seed_end)
-                    spaced_seeds_leq.append(seed_start.extend(seed_mid))
-            if length > len(word):
-                pass
-        results = []      
-        for spaced_seed in spaced_seeds_leq:
-            results.extend(self.k_nearest_neighbour(word, score=score, k=k, weights=spaced_seed))
-            
-        return results
-        """
-
     def compute_neighbours(self, words: str, score: dict, k: int = 1, weights: list = None, cpu: int = 2) -> list:
-        """ Computes nearest neighbours in a multiprocessing way. """
+        """ Computes nearest neighbours in a multiprocessing way.
+        Attributes
+        ----------
+        words : list
+                    List of query words.
+        score (dict):
+                    Scoring matrix, it has to be symmetric so that for each key (i,j), also the key (j,i) exist. You can
+                    use the blosum62 matrix provided by this package.
+        k : int
+                    Number of nearest neighbours that the method returns.
+        weights : list
+                    List of floats. Each float weight the corresponding position of the word. This list has to be the
+                    same length as the input word.
+        cpu : int
+                    Number of cores that should be used.
+
+        Returns
+        -------
+        list : [[(str, double)]]
+                    List of ordered list of k near neighbours, represented as tuples of
+                    strings, corresponding to their sequence, and doubles,
+                    corresponding to their score.
+                    They are in the same order as the import words.
+        """
         pool = Pool(cpu)
         result = pool.map(lambda x: self.k_nearest_neighbour(x, score, k, weights), words)
         pool.close()
@@ -257,13 +282,13 @@ class Trie(object):
         return result
 
     def save_trie(self, path: str):
-        """ Saves the Trie structere"""
+        """ Saves the Trie structure at the given path. The path also defines the file name."""
         file = open(path, "wb")
         cPickle.dump(self, file, protocol=-1)
         file.close()
 
     def load_trie(self, path: str):
-        """ Loades a Trie structure"""
+        """ Load's a Trie structure from the given path."""
         # Garbage Collector slows down the loading significant and is
         # therefore excluded.
         gc.disable()
@@ -297,7 +322,7 @@ class Trie(object):
 
 
 def load_trie(path: str) -> Trie:
-    """ Loads a trie file and returns a Trie object."""
+    """ Loads a trie file at the given path and returns a Trie object."""
     gc.disable()
     file = open(path, "rb")
     trie = cPickle.load(file)
@@ -319,6 +344,8 @@ class TrieNode(object):
                 prefix.
     children : dict
                 Dictionary of children TrieNodes.
+    maxdepth : set
+                Contains all the maximum length's of complete word in this branch.
     word_finished : bool
                 End of a word, represent's a leaf in the Tree
     """
@@ -338,7 +365,29 @@ class TrieNode(object):
 
 
 def kmer_count(k, word, count=False):
-    """ Creates all possible unique k-mer in a given word"""
+    """ Creates all possible unique k-mer in a given word
+
+    Attributes
+    ----------
+    k : int
+                Defines the length of the k-mers.
+    word : str
+                Query string
+    count : bool
+                If True, the function returns a dictionary which contains all kmers as keys and their corresponding
+                frequencies as values. If False, only all unique kmers a returned.
+    Returns
+    -------
+    list : [str]
+                List of unique kmers, if count is False
+    dict : {str:int}
+                Dictionary of kmers and frequencies if count is True.
+    Examples
+    --------
+    >>> from pepdist import similarity
+    >>> similarity.kmer_count(3,'GAGGAA')
+    ['GAG', 'AGG', 'GGA', 'GAA']
+    """
     f = {}
     for x in range(len(word) + 1 - k):
         kmer = word[x:x + k]
@@ -352,8 +401,15 @@ def kmer_count(k, word, count=False):
 class KmerTrie(Trie):
     """ A trie/prefix-tree data structure.
 
-        A prefix tree is a tree, where strings can be added
-        and each node represent a prefix of this string.
+        A prefix tree is a tree, where strings can be added and each node represent a prefix of this string.
+        This is a special Trie, because for all k's in kmer_length, all kmers of all words are maintained in
+        the Trie.
+    Parameters
+    ----------
+    kmer_length : list
+        List of Integers, representing the length of all kmers maintained
+    data : list
+        List of words that should be saved in the KmerTrie.
 
     Attributes
     ----------
@@ -366,15 +422,15 @@ class KmerTrie(Trie):
 
     """
 
-    def __init__(self, kmer_length):
+    def __init__(self, kmer_length, data=None):
         super().__init__()
         self.root = KmerTrieNode("", 0)
-        self.alphabet = set()
-        self.lengths = set()
         self.kmer_length = kmer_length
+        if data is not None:
+            self.add(data)
 
     def add(self, words: list):
-        """ Adds given words into the Trie """
+        """ Adds given words into the Trie and adds all their kmers for the length's defined in kmer_length. """
         for word in words:
             self.lengths.add(len(word))
             kmers = [word]
@@ -414,10 +470,22 @@ class KmerTrie(Trie):
 
         Returns
         -------
-        list : [(str, double)]
+        list : [(str, double, orgin_sequences)]
                     Ordered list of k near neighbours, represented as tuples of
                     strings, corresponding to their sequence, and doubles,
-                    corresponding to their score.
+                    corresponding to their score. Additionaly a list origin_sequences
+                    is returned which contains all words that contain this kmer.
+        Notes
+        -----
+        If a key found in the trie/word pair is not in the scoring matrix, then it is scored by 0!
+        If their this is possible a warning is returned #TODO Warnings!
+
+        Examples
+        --------
+        >>>from pepdist import similarity
+        >>>trie = similarity.KmerTrie([3,4], data=['AAWWAA', 'GGWWGA'])
+        >>>trie.k_nearest_neighbour("WWW", score=similarity.blosum62)
+        [('WWG', 0.657951694959769, ['GGWWGA'])]
         """
         root = self.root
         results = []
@@ -521,13 +589,6 @@ class KmerTrie(Trie):
                 continue
             max_score = max(temp_results, key=lambda item: item[1])
 
-            # for res in temp_results:
-            # if res[0] == max_score[0]:
-            # for seq in res[2]:
-            #    if seq not in max_score[2]:
-            #        max_score[2].append(seq)
-            # temp_results.remove(res)
-
             results.append(max_score)
             temp_results.remove(max_score)
 
@@ -535,7 +596,25 @@ class KmerTrie(Trie):
 
     def compute_neighbours(self, words: list, score: dict, k: int = 1, cpu: int = 2, **kwargs) -> list:
         """ Computes nearest neighbours in a multiprocessing way.
-        :param **kwargs:
+        Attributes
+        ----------
+        words : list
+                    List of query words.
+        score (dict):
+                    Scoring matrix, it has to be symmetric so that for each key (i,j), also the key (j,i) exist. You can
+                    use the blosum62 matrix provided by this package.
+        k : int
+                    Number of nearest neighbours that the method returns.
+        cpu : int
+                    Number of cores that should be used.
+
+        Returns
+        -------
+        list : [[(str, double)]]
+                    List of ordered list of k near neighbours, represented as tuples of
+                    strings, corresponding to their sequence, and doubles,
+                    corresponding to their score.
+                    They are in the same order as the import words.
         """
         pool = Pool(cpu)
         result = pool.map(lambda x: self.k_nearest_neighbour(x, score, k, ), words)
@@ -597,19 +676,12 @@ class KmerTrie(Trie):
 
 
 class KmerTrieNode(TrieNode):
-    """ A node of a Trie
+    """ A node of a KmerTri
 
     Attributes
     ----------
-    char : str
-                Prefix, which is represented by this node
-    depth : int
-                Depth of the node, which represents the length of a
-                prefix.
-    children : dict
-                Dictionary of children TrieNodes.
-    word_finished : bool
-                End of a word, represent's a leaf in the Tree
+    sequences : list
+            List of words that contain the corresponding word.
     """
 
     def __init__(self, char: str, depth: int):
