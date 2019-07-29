@@ -12,7 +12,7 @@ setup(name='pepdist',
       author='Manuel Gloeckler',
       author_email='manuel.gloeckler@student.uni-tuebingen.de',
       license='No',
-      packages=['pepdist'],
+      packages=['similarity', 'distance', 'plotting'],
       install_requires=[
           'numpy',
 		  'pandas',
