@@ -6,7 +6,7 @@ based on AAindex or other metrics.
 
 import numpy as np
 from scipy.stats import norm
-
+from scipy.spatial import KDTree
 
 
 def naive_nearest_neighbour(data, inp_vec):
@@ -25,11 +25,27 @@ def naive_nearest_neighbour(data, inp_vec):
     return min_match, min_dist
 
 
-
 class descriptor():
-    """  """
+    """ Amino acid descriptor designed to describe peptides with the AAIndex.
 
-    def __init__(self, seqs, indices=[], norm_method=lambda x: x):
+    Parameters
+    ----------
+    seqs
+        List of sequences that should be described
+    indices
+        List of indices, for example AAIndex indices, that should describe the sequences.
+    norm_method
+        A function that should normalize the values. Default value is no normalization.
+
+    Attributes
+    ----------
+    sequences : list
+        List of sequences contained.
+    descriptors : list
+        List of arrays that describe the sequences.
+    """
+
+    def __init__(self, seqs: list, indices: list = [], norm_method=lambda x: x):
         self.sequences = seqs
         self.descriptors = []
         self.__indices = indices
@@ -42,24 +58,25 @@ class descriptor():
         return len(self.sequences)
 
     def add_seqs(self, seqs):
+        """ Add sequences to the descriptor. They will be automatically described by..."""
         self.sequences.extend(seqs)
         self.calculate_all()
 
     def add_index(self, index):
+        """ Add another index that should also describe the sequence. The descriptors are automatically updated."""
         self.indices.append(index)
         self.calculate_all()
 
     def change_norm_method(self, norm_method):
+        """" Change to another normalization method, the descriptors are automatically updated."""
         self.__norm_method = norm_method
         self.normalize_all()
 
     def normalize_all(self):
-        """ """
         for i in range(self.indices):
             self.indices[i] = self.norm_method(self.indices[i])
 
     def calculate_all(self):
-        """ """
         for i in range(len(self.sequences)):
             self.descriptors[i] = self.translate(self.sequences, self.indices)
 
@@ -86,7 +103,7 @@ class descriptor():
 class HashTable:
     """Hash Table Implementation for random projection binning
 
-    N given input vectors are projected by k independent gausian nornmal distributed
+    N given input vectors are projected by k independent gausian normal distributed
     projection vectors and than placed in quantization bin's of widht w.
 
     Parameters
@@ -225,7 +242,7 @@ class LSH:
                2 / (np.sqrt(2 * np.pi) * self.bin_width / scale) * \
                (1 - np.exp(-(self.bin_width ** 2 / (2 * scale ** 2))))
 
-    def compute_num_projections(self, fail_prob=0.01):
+    def compute_num_projections(self, fail_prob=0.1):
         """ L needed to have a probability smaller than fail_prob that nearest neighbor is not in the same bucket. """
         return np.ceil(np.log(fail_prob) / np.log(1 - self.p1() ** self.k_dot_products))
 
@@ -245,5 +262,12 @@ class LSH:
             bucket_size += hash_bucket_sizes / num_buckets
         return int(bucket_size / self.num_projections)
 
-    def train_LSH(self, data, query_sample):
-        pass
+    def train_LSH(self, data, query_sample, tolerance=1.5, maxk=10, fail_prob=0.1):
+        kdtree = KDTree(data)
+        best = np.inf
+        for q in query_sample:
+            dist = kdtree.query(q)[0]
+            if dist < best:
+                best = dist
+
+        bin_widht = best * tolerance

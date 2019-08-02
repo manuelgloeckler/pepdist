@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""scoring_matrix
+"""@module scoring_matrix
 
 This module consist the blosum62 substitution matrix in a symmetric version. Additionally their are some scoring matrix
 function for linear transformation techniques.

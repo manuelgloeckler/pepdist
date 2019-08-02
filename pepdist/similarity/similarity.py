@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""similarity
+"""@module similarity
 
 This module has multiple functions or classes to determine the k nearest neighbours given a scoring matrix. Therefore
 a efficient trie datastructure is implemented where a nearest neighbour can be determined fast by a branch and bound
@@ -55,7 +55,7 @@ class Trie(object):
 
     Parameters
     ----------
-    data : list
+    data :
         List of words that should be saved in the KmerTrie.
 
     Attributes
@@ -69,8 +69,7 @@ class Trie(object):
 
     """
 
-    def __init__(self, data=None):
-        """ Initialize the Trie. If data is set it is added to the trie."""
+    def __init__(self, data: list = None):
         self.root = TrieNode("", 0)
         self.alphabet = set()
         self.lengths = set()
@@ -133,16 +132,16 @@ class Trie(object):
 
         Attributes
         ----------
-        word : str
-                    The query word
-        score (dict):
-                    Scoring matrix, it has to be symmetric so that for each key (i,j), also the key (j,i) exist. You can
-                    use the blosum62 matrix provided by this package.
-        k : int
-                    Number of nearest neighbours that the method returns.
-        weights : list
-                    List of floats. Each float weight the corresponding position of the word. This list has to be the
-                    same length as the input word.
+        word
+            The query word
+        score
+            Scoring matrix, it has to be symmetric so that for each key (i,j), also the key (j,i) exist. You can
+            use the blosum62 matrix provided by this package.
+        k
+            Number of nearest neighbours that the method returns.
+        weights
+            List of floats. Each float weight the corresponding position of the word. This list has to be the
+            same length as the input word.
 
         Returns
         -------
@@ -154,8 +153,9 @@ class Trie(object):
         -----
         If a key found in the trie/word pair is not in the scoring matrix, then it is scored by 0!
         If their this is possible a warning is returned #TODO Warnings!
-        Examples
-        --------
+
+        Example
+        -------
         >>>from pepdist import similarity
         >>>trie = similarity.Trie(['AAWWAA', 'GGWWGA'])
         >>>trie.k_nearest_neighbour('GGGGGG', score = similarity.blosum62)
@@ -251,28 +251,29 @@ class Trie(object):
 
     def compute_neighbours(self, words: str, score: dict, k: int = 1, weights: list = None, cpu: int = 2) -> list:
         """ Computes nearest neighbours in a multiprocessing way.
+
         Attributes
         ----------
-        words : list
-                    List of query words.
-        score (dict):
-                    Scoring matrix, it has to be symmetric so that for each key (i,j), also the key (j,i) exist. You can
-                    use the blosum62 matrix provided by this package.
-        k : int
-                    Number of nearest neighbours that the method returns.
-        weights : list
-                    List of floats. Each float weight the corresponding position of the word. This list has to be the
-                    same length as the input word.
-        cpu : int
-                    Number of cores that should be used.
+        words
+            List of query words.
+        score
+            Scoring matrix, it has to be symmetric so that for each key (i,j), also the key (j,i) exist. You can
+            use the blosum62 matrix provided by this package.
+        k
+            Number of nearest neighbours that the method returns.
+        weights
+            List of floats. Each float weight the corresponding position of the word. This list has to be the
+            same length as the input word.
+        cpu
+            Number of cores that should be used.
 
         Returns
         -------
         list : [[(str, double)]]
-                    List of ordered list of k near neighbours, represented as tuples of
-                    strings, corresponding to their sequence, and doubles,
-                    corresponding to their score.
-                    They are in the same order as the import words.
+            List of ordered list of k near neighbours, represented as tuples of
+            strings, corresponding to their sequence, and doubles,
+            corresponding to their score.
+            They are in the same order as the import words.
         """
         pool = Pool(cpu)
         result = pool.map(lambda x: self.k_nearest_neighbour(x, score, k, weights), words)
@@ -338,16 +339,15 @@ class TrieNode(object):
     Attributes
     ----------
     char : str
-                Prefix, which is represented by this node
+        Prefix, which is represented by this node
     depth : int
-                Depth of the node, which represents the length of a
-                prefix.
+        Depth of the node, which represents the length of a prefix.
     children : dict
-                Dictionary of children TrieNodes.
+        Dictionary of children TrieNodes.
     maxdepth : set
-                Contains all the maximum length's of complete word in this branch.
+         Contains all the maximum length's of complete word in this branch.
     word_finished : bool
-                End of a word, represent's a leaf in the Tree
+        End of a word, represent's a leaf in the Tree
     """
 
     def __init__(self, char: str, depth: int):
@@ -364,26 +364,28 @@ class TrieNode(object):
         return self.char
 
 
-def kmer_count(k, word, count=False):
+def kmer_count(k:int, word:str, count=False):
     """ Creates all possible unique k-mer in a given word
 
     Attributes
     ----------
-    k : int
-                Defines the length of the k-mers.
-    word : str
-                Query string
-    count : bool
-                If True, the function returns a dictionary which contains all kmers as keys and their corresponding
-                frequencies as values. If False, only all unique kmers a returned.
+    k
+        Defines the length of the k-mers.
+    word
+        Query string
+    count
+        If True, the function returns a dictionary which contains all kmers as keys and their corresponding
+        frequencies as values. If False, only all unique kmers a returned.
+
     Returns
     -------
     list : [str]
-                List of unique kmers, if count is False
+        List of unique kmers, if count is False
     dict : {str:int}
-                Dictionary of kmers and frequencies if count is True.
-    Examples
-    --------
+        Dictionary of kmers and frequencies if count is True.
+
+    Example
+    -------
     >>> from pepdist import similarity
     >>> similarity.kmer_count(3,'GAGGAA')
     ['GAG', 'AGG', 'GGA', 'GAA']
@@ -404,16 +406,17 @@ class KmerTrie(Trie):
         A prefix tree is a tree, where strings can be added and each node represent a prefix of this string.
         This is a special Trie, because for all k's in kmer_length, all kmers of all words are maintained in
         the Trie.
+
     Parameters
     ----------
-    kmer_length : list
+    kmer_length
         List of Integers, representing the length of all kmers maintained
-    data : list
+    data
         List of words that should be saved in the KmerTrie.
 
     Attributes
     ----------
-    root : TrieNode
+    root : KmerTrieNode
         root of the Trie
     alphabet : Set
         Set of the characters used in the Trie.
@@ -422,7 +425,7 @@ class KmerTrie(Trie):
 
     """
 
-    def __init__(self, kmer_length, data=None):
+    def __init__(self, kmer_length:list, data: list = None):
         super().__init__()
         self.root = KmerTrieNode("", 0)
         self.kmer_length = kmer_length
@@ -461,12 +464,12 @@ class KmerTrie(Trie):
 
         Attributes
         ----------
-        word : str
-                    The query word
-        score (dict):
-                    Scoring matrix, standard is blosum62 substitution matrix
-        k : int
-                    Number of nearest neighbours to find
+        word
+            The query word
+        score
+            Scoring matrix, standard is blosum62 substitution matrix
+        k
+            Number of nearest neighbours to find
 
         Returns
         -------
@@ -480,8 +483,8 @@ class KmerTrie(Trie):
         If a key found in the trie/word pair is not in the scoring matrix, then it is scored by 0!
         If their this is possible a warning is returned #TODO Warnings!
 
-        Examples
-        --------
+        Example
+        -------
         >>>from pepdist import similarity
         >>>trie = similarity.KmerTrie([3,4], data=['AAWWAA', 'GGWWGA'])
         >>>trie.k_nearest_neighbour("WWW", score=similarity.blosum62)
@@ -598,23 +601,23 @@ class KmerTrie(Trie):
         """ Computes nearest neighbours in a multiprocessing way.
         Attributes
         ----------
-        words : list
-                    List of query words.
-        score (dict):
-                    Scoring matrix, it has to be symmetric so that for each key (i,j), also the key (j,i) exist. You can
-                    use the blosum62 matrix provided by this package.
-        k : int
-                    Number of nearest neighbours that the method returns.
-        cpu : int
-                    Number of cores that should be used.
+        words
+            List of query words.
+        score
+            Scoring matrix, it has to be symmetric so that for each key (i,j), also the key (j,i) exist. You can
+            use the blosum62 matrix provided by this package.
+        k
+            Number of nearest neighbours that the method returns.
+        cpu
+            Number of cores that should be used.
 
         Returns
         -------
         list : [[(str, double)]]
-                    List of ordered list of k near neighbours, represented as tuples of
-                    strings, corresponding to their sequence, and doubles,
-                    corresponding to their score.
-                    They are in the same order as the import words.
+            List of ordered list of k near neighbours, represented as tuples of
+            strings, corresponding to their sequence, and doubles,
+            corresponding to their score.
+            They are in the same order as the import words.
         """
         pool = Pool(cpu)
         result = pool.map(lambda x: self.k_nearest_neighbour(x, score, k, ), words)

@@ -35,34 +35,27 @@ that are associated with immunogenicity. These are listed here.
 
 
 class Aaindex():
-    """Parse the AAindex1 databse into a dictionary of id -> dict.
+    """Parse the AAindex1 datbase into a dictionary with id as key and the index as value.
 
     The AAindex1 consits of indices, which translate a given amino
     acid into a real value. This value should represent a special
-    proberty of this amino acid, for example hydrophobisity.
+    property of this amino acid, for example hydrophobisity.
 
     Attributes
     ----------
     aaindex_dic : dict
         A dictionary which maps the ID of an AAindex to the
-        corresponding index represented by a dict.
+        corresponding index, represented as a dictionary.
+
+    Notes
+    -----
+    A index with NA values is discarded, beacause they can't be used
+    for distance computation.
 
     """
 
     def __init__(self):
-        """The __init__ method parse the aaindex1.txt file to a dict.
-
-        The AAindex is represented in the module as local aaindex1.txt
-        file, which is parsed to a dictionary here. That maps the ID of
-        a index to the index, represnted as a dictionary that maps aaindex
-        amino acid to a real value.
-
-        Notes
-        ----------
-        A index with NA values is discarded, beacause they can't be used
-        for distance computation.
-
-        """
+        # parsing of the AAindex format...
         __location__ = os.path.realpath(
             os.path.join(os.getcwd(), os.path.dirname(__file__)))
         with open(os.path.join(__location__,"aaindex1.txt")) as aaindex1:
@@ -118,7 +111,7 @@ class Aaindex():
 
 
 def positivize(index):
-    """ Turns an a index of real numbers to a index of positve real numbers """
+    """ Turns an a index of real numbers to a index of positve real numbers. """
     positive_index = {}
     for i in index:
         positive_index[i] = index[i] + abs(min(index.values()))
@@ -127,7 +120,7 @@ def positivize(index):
 
 
 def max_normalize(index):
-    """ Normalize a index of real numbers to a normalized index between [0,1] """
+    """ Normalize a index of real numbers to a normalized index between [0,1]. """
     pos_index = positivize(index)
     normalized_index = {}
     maximum = max(pos_index.values())
@@ -138,6 +131,7 @@ def max_normalize(index):
 
 
 def z_normalize(index):
+    """ Normalize a index by with the z-score normalization method."""
     mean = np.mean(index.values())
     sigma = np.std(index.values())
     normalized_index = {}

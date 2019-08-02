@@ -1,0 +1,511 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>distance package &mdash; pepdist 31.08.19 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'31.08.19',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> pepdist
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">distance package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-distance.aaindex">distance.aaindex module</a></li>
+<li><a class="reference internal" href="#module-distance.distance">distance.distance module</a></li>
+<li><a class="reference internal" href="#module-distance">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pepdist</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>distance package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/distance.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="distance-package">
+<h1>distance package<a class="headerlink" href="#distance-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-distance.aaindex">
+<span id="distance-aaindex-module"></span><h2>distance.aaindex module<a class="headerlink" href="#module-distance.aaindex" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="distance.aaindex.Aaindex">
+<em class="property">class </em><code class="descclassname">distance.aaindex.</code><code class="descname">Aaindex</code><a class="headerlink" href="#distance.aaindex.Aaindex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Parse the AAindex1 datbase into a dictionary with id as key and the index as value.</p>
+<p>The AAindex1 consits of indices, which translate a given amino
+acid into a real value. This value should represent a special
+property of this amino acid, for example hydrophobisity.</p>
+<dl class="attribute">
+<dt id="distance.aaindex.Aaindex.aaindex_dic">
+<code class="descname">aaindex_dic</code><a class="headerlink" href="#distance.aaindex.Aaindex.aaindex_dic" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>dict</em> – A dictionary which maps the ID of an AAindex to the
+corresponding index, represented as a dictionary.</p>
+</dd></dl>
+
+<p class="rubric">Notes</p>
+<p>A index with NA values is discarded, beacause they can’t be used
+for distance computation.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="distance.aaindex.immu_indices">
+<code class="descclassname">distance.aaindex.</code><code class="descname">immu_indices</code><em class="property"> = ['GEIM800103', 'OOBM770104', 'PALJ810115', 'QIAN880132', 'OOBM850102', 'NADH010106', 'RADA880106', 'QIAN880112', 'WEBA780101', 'QIAN880125', 'JOND750101', 'QIAN880124', 'MUNV940101', 'HUTJ700102', 'MITS020101', 'KARP850103', 'FAUJ880113', 'ISOY800106', 'RACS820113', 'GEOR030105', 'QIAN880114', 'DIGM050101', 'MIYS850101']</em><a class="headerlink" href="#distance.aaindex.immu_indices" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>list</em> – List of Aaindex ID’s that are associated with immunogenicity</p>
+<p>The creators of the immunogenicity predictor POPI used a advanced
+generic algorithmen to find aimno acid indices in the AAindex databese,
+that are associated with immunogenicity. These are listed here.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="distance.aaindex.max_normalize">
+<code class="descclassname">distance.aaindex.</code><code class="descname">max_normalize</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.aaindex.max_normalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalize a index of real numbers to a normalized index between [0,1].</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="distance.aaindex.positivize">
+<code class="descclassname">distance.aaindex.</code><code class="descname">positivize</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.aaindex.positivize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turns an a index of real numbers to a index of positve real numbers.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="distance.aaindex.z_normalize">
+<code class="descclassname">distance.aaindex.</code><code class="descname">z_normalize</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.aaindex.z_normalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Normalize a index by with the z-score normalization method.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-distance.distance">
+<span id="distance-distance-module"></span><h2>distance.distance module<a class="headerlink" href="#module-distance.distance" title="Permalink to this headline">¶</a></h2>
+<p>&#64;module distance
+This module contains a locally sensitiv hashing class for fast nearest neighbour computation.
+Additionaly it contains functions to represent a peptide/sequence as a feature vector
+based on AAindex or other metrics.</p>
+<dl class="class">
+<dt id="distance.distance.HashTable">
+<em class="property">class </em><code class="descclassname">distance.distance.</code><code class="descname">HashTable</code><span class="sig-paren">(</span><em>k_dot_prodcucts</em>, <em>bin_width</em>, <em>inp_dimensions</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.HashTable" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Hash Table Implementation for random projection binning</p>
+<p>N given input vectors are projected by k independent gausian normal distributed
+projection vectors and than placed in quantization bin’s of widht w.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>k_dot_products</strong> (<em>int</em>) – k independet hash functions are used for binning.</li>
+<li><strong>bin_widht</strong> (<em>float</em>) – Width of a quantization bin.</li>
+<li><strong>inp_dimension</strong> (<em>int</em>) – Dimension of hashable input vectors.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="distance.distance.HashTable.k_dot_products">
+<code class="descname">k_dot_products</code><a class="headerlink" href="#distance.distance.HashTable.k_dot_products" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> – Hashfunction uses a projection of k dot products.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="distance.distance.HashTable.bin_widht">
+<code class="descname">bin_widht</code><a class="headerlink" href="#distance.distance.HashTable.bin_widht" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>float</em> – Width of a quantization bin.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="distance.distance.HashTable.b">
+<code class="descname">b</code><a class="headerlink" href="#distance.distance.HashTable.b" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>array(float)</em> – Uniformly distributed random variabales in [0,bin_width]</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="distance.distance.HashTable.inp_dimension">
+<code class="descname">inp_dimension</code><a class="headerlink" href="#distance.distance.HashTable.inp_dimension" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> – Dimension of hashable input vectors.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="distance.distance.HashTable.hash_table">
+<code class="descname">hash_table</code><a class="headerlink" href="#distance.distance.HashTable.hash_table" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>dict</em> – Dictionary which is used as hash table.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="distance.distance.HashTable.projections">
+<code class="descname">projections</code><a class="headerlink" href="#distance.distance.HashTable.projections" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>ndarray</em> – Normal distributed N(0,1) projection matrix.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="distance.distance.HashTable.generate_hash">
+<code class="descname">generate_hash</code><span class="sig-paren">(</span><em>inp_vec</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.HashTable.generate_hash" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="distance.distance.HashTable.keys">
+<code class="descname">keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.HashTable.keys" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="distance.distance.HashTable.values">
+<code class="descname">values</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.HashTable.values" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="distance.distance.LSH">
+<em class="property">class </em><code class="descclassname">distance.distance.</code><code class="descname">LSH</code><span class="sig-paren">(</span><em>num_projections</em>, <em>k_dot_products</em>, <em>bin_width</em>, <em>inp_dimensions</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Locally sensitv hashing</p>
+<dl class="attribute">
+<dt id="distance.distance.LSH.num_projections">
+<code class="descname">num_projections</code><a class="headerlink" href="#distance.distance.LSH.num_projections" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> – Number of projection done for each binning</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="distance.distance.LSH.k_dot_products">
+<code class="descname">k_dot_products</code><a class="headerlink" href="#distance.distance.LSH.k_dot_products" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> – Hashfunction uses a projection of k dot products.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="distance.distance.LSH.bin_widht">
+<code class="descname">bin_widht</code><a class="headerlink" href="#distance.distance.LSH.bin_widht" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>float</em> – Width of a quantization bin.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="distance.distance.LSH.inp_dimension">
+<code class="descname">inp_dimension</code><a class="headerlink" href="#distance.distance.LSH.inp_dimension" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> – Dimension of hashable input vectors.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="distance.distance.LSH.hash_tables">
+<code class="descname">hash_tables</code><a class="headerlink" href="#distance.distance.LSH.hash_tables" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>list</em> – List of Hashtable, which represents the num_projections times
+created hash tables</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="distance.distance.LSH.add">
+<code class="descname">add</code><span class="sig-paren">(</span><em>inp_vecs</em>, <em>labels</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH.add" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="distance.distance.LSH.compute_num_projections">
+<code class="descname">compute_num_projections</code><span class="sig-paren">(</span><em>fail_prob=0.1</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH.compute_num_projections" title="Permalink to this definition">¶</a></dt>
+<dd><p>L needed to have a probability smaller than fail_prob that nearest neighbor is not in the same bucket.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="distance.distance.LSH.mean_bucket_size">
+<code class="descname">mean_bucket_size</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH.mean_bucket_size" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="distance.distance.LSH.mean_buckets">
+<code class="descname">mean_buckets</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH.mean_buckets" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="distance.distance.LSH.nearest_neighbour">
+<code class="descname">nearest_neighbour</code><span class="sig-paren">(</span><em>inp_vec</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH.nearest_neighbour" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the nearest_neighbour by hashing the inp_vec and find the nearest neighbour in the
+corresponding bin.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="distance.distance.LSH.p1">
+<code class="descname">p1</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH.p1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Probability that two points with ||p-q|| &lt; bin_width Fall into the same bucket</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="distance.distance.LSH.p2">
+<code class="descname">p2</code><span class="sig-paren">(</span><em>scale=2</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH.p2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Probability that two points ||p-q|| &gt; scale * bin_width Fall into the same bucket.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="distance.distance.LSH.train_LSH">
+<code class="descname">train_LSH</code><span class="sig-paren">(</span><em>data</em>, <em>query_sample</em>, <em>tolerance=1.5</em>, <em>maxk=10</em>, <em>fail_prob=0.1</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH.train_LSH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="distance.distance.descriptor">
+<em class="property">class </em><code class="descclassname">distance.distance.</code><code class="descname">descriptor</code><span class="sig-paren">(</span><em>seqs: list</em>, <em>indices: list = []</em>, <em>norm_method=&lt;function descriptor.&lt;lambda&gt;&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.descriptor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Amino acid descriptor designed to describe peptides with the AAIndex.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>seqs</strong> – List of sequences that should be described</li>
+<li><strong>indices</strong> – List of indices, for example AAIndex indices, that should describe the sequences.</li>
+<li><strong>norm_method</strong> – A function that should normalize the values. Default value is no normalization.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="distance.distance.descriptor.sequences">
+<code class="descname">sequences</code><a class="headerlink" href="#distance.distance.descriptor.sequences" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>list</em> – List of sequences contained.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="distance.distance.descriptor.descriptors">
+<code class="descname">descriptors</code><a class="headerlink" href="#distance.distance.descriptor.descriptors" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>list</em> – List of arrays that describe the sequences.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="distance.distance.descriptor.add_index">
+<code class="descname">add_index</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.descriptor.add_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add another index that should also describe the sequence. The descriptors are automatically updated.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="distance.distance.descriptor.add_seqs">
+<code class="descname">add_seqs</code><span class="sig-paren">(</span><em>seqs</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.descriptor.add_seqs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add sequences to the descriptor. They will be automatically described by…</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="distance.distance.descriptor.calculate_all">
+<code class="descname">calculate_all</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.descriptor.calculate_all" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="distance.distance.descriptor.change_norm_method">
+<code class="descname">change_norm_method</code><span class="sig-paren">(</span><em>norm_method</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.descriptor.change_norm_method" title="Permalink to this definition">¶</a></dt>
+<dd><p>” Change to another normalization method, the descriptors are automatically updated.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="distance.distance.descriptor.normalize_all">
+<code class="descname">normalize_all</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.descriptor.normalize_all" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="distance.distance.descriptor.translate">
+<code class="descname">translate</code><span class="sig-paren">(</span><em>word: str</em>, <em>indices</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.descriptor.translate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Translate a string to feature vectors
+:param word: A sequence as string
+:type word: str
+:param indices: A List of dictionary which represent a aaindex
+:type indices: list</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">numpy ndarray of feature vectors</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="distance.distance.naive_nearest_neighbour">
+<code class="descclassname">distance.distance.</code><code class="descname">naive_nearest_neighbour</code><span class="sig-paren">(</span><em>data</em>, <em>inp_vec</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.naive_nearest_neighbour" title="Permalink to this definition">¶</a></dt>
+<dd><p>Naive nearest neighbour search</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-distance">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-distance" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Manuel Glöckler
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
