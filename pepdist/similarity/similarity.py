@@ -194,7 +194,7 @@ class Trie(object):
         for i in range(k):
 
             # Trie Search for equal strings is fast
-            if self.find_word(word) and all(v == 1 for v in weights):
+            if self.find_word(word) and all(v == 1 for v in weights) and (word,1.0) not in results:
                 results.append((word, 1.0))
                 continue
 
