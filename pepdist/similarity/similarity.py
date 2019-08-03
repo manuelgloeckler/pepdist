@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-"""@module similarity
-
-This module has multiple functions or classes to determine the k nearest neighbours given a scoring matrix. Therefore
+""" This module has multiple functions or classes to determine the k nearest neighbours given a scoring matrix. Therefore
 a efficient trie datastructure is implemented where a nearest neighbour can be determined fast by a branch and bound
 algorithm.
 """
@@ -9,8 +7,7 @@ import numpy as np
 from multiprocess import Pool
 import warnings
 import gc
-import _pickle as cPickle
-from Bio.SubsMat import MatrixInfo
+import _pickle
 import copy
 
 # TODO EXCEPTIONS AND MATRICES
@@ -18,6 +15,8 @@ import copy
 
 def word_score(word1: str, word2: str, score: dict) -> float:
     """ Computes the score between two words by the given scoring matrix"""
+    if len(word1) != len(word2):
+        warnings.warn("The words don't have the same length. The score for the common prefix is computed.")
     sc = 0
     for i in range(min(len(word1), len(word2))):
         key = (word1[i], word2[i])
@@ -26,7 +25,7 @@ def word_score(word1: str, word2: str, score: dict) -> float:
 
 
 def squared_root_similarity(word1: str, word2: str, score: dict) -> float:
-    """ Computes the squared root normalized score of thwo words"""
+    """ Computes the squared root normalized score of two words"""
     bl_ab = word_score(word1, word2, score=score)
     bl_aa = word_score(word1, word1, score=score)
     bl_bb = word_score(word2, word2, score=score)
@@ -39,9 +38,9 @@ def naive_nearest_neighbour(data, word, score):
     max_match = ""
     max_score = -np.inf
     for seq in data:
-        score = squared_root_similarity(word, seq, score)
-        if score > max_score:
-            max_score = score
+        temp_score = squared_root_similarity(word, seq, score)
+        if temp_score > max_score:
+            max_score = temp_score
             max_match = seq
 
     return max_match, max_score
@@ -67,6 +66,16 @@ class Trie(object):
     lengths : Set
         Set of word lengths saved in the Trie.
 
+    Example
+    -------
+    >>> from pepdist import similarity
+    >>> trie = similarity.Trie(['AAWWAA', 'GGWWGA'])
+    >>> trie.find_word('AAWWAA')
+    True
+    >>> trie.find_word('GGGGGG')
+    False
+    >>> trie.k_nearest_neighbour('GGGGGG', score = similarity.blosum62)
+    [('GGWWGA', 0.35176323534072423)]
     """
 
     def __init__(self, data: list = None):
@@ -78,6 +87,9 @@ class Trie(object):
 
     def add(self, words: list):
         """ Adds given words into the Trie """
+        if words is isinstance(str):
+            words = [words]
+
         for word in words:
             self.lengths.add(len(word))
             node = self.root
@@ -154,19 +166,19 @@ class Trie(object):
         If a key found in the trie/word pair is not in the scoring matrix, then it is scored by 0!
         If their this is possible a warning is returned #TODO Warnings!
 
-        Example
-        -------
-        >>>from pepdist import similarity
-        >>>trie = similarity.Trie(['AAWWAA', 'GGWWGA'])
-        >>>trie.k_nearest_neighbour('GGGGGG', score = similarity.blosum62)
-        [('GGWWGA', 0.35176323534072423)]
-
+        Raises
+        ------
+        ValueError
+            If the scoring matrix is not symmetric or the query/trie contains characters that are not mapped to a
+            score!
         """
+
+
         root = self.root
         word_length = len(word)
         results = []
 
-        self._check_scoring_matrix(score)
+        self.__check_scoring_matrix(word, score)
 
         # Set the weights if not specified
         if weights is None:
@@ -188,7 +200,7 @@ class Trie(object):
             self_score[i + 1] = self_score[i] + \
                                 weights[word_length - 1 - i] * score[
                                     word[word_length - 1 - i], word[word_length - 1 - i]]
-
+        # Bounds are saved in a stack and reused if k > 1
         bounds = [-np.inf] * k
 
         for i in range(k):
@@ -198,6 +210,7 @@ class Trie(object):
                 results.append((word, 1.0))
                 continue
 
+            # Initialize varaibles
             bound = bounds.pop()
             best = ""
             nodes = list(root.children.items())
@@ -205,6 +218,7 @@ class Trie(object):
             sc = [0] * (word_length + 1)
             s = [0] * (word_length + 1)
 
+            # Branch and Bound Algorithm!
             while not nodes == []:
                 char, node = nodes.pop()
                 length = node.depth
@@ -218,26 +232,30 @@ class Trie(object):
                 sc[length] = sc[index] + weights[index] * score[(char, word[index])]
                 s[length] = s[index] + weights[index] * score[(char, char)]
 
-                if (sc[length] + self_score[word_length - length]) ** 2 / ((s[length] +
-                                                                            min_scores[index]) * self_score[
-                                                                               word_length]) < bound:
+                # If smaller then bound, stop search in this branch!
+                if (sc[length] + self_score[word_length - length]) ** 2 / \
+                        ((s[length] + min_scores[index]) * self_score[word_length]) < bound:
                     continue
+
+                # If no word with the same length in the branch, then stop search in this branch
                 if length == word_length and node.word_finished:
                     # Already found
                     if "".join(prefix) in list(map(lambda x: x[0], results)):
                         continue
-
+                    # In the squared bound all negative values are positive, this is compensated here.
                     if sc[length] < 0:
                         scc = -sc[length] ** 2 / \
                               (s[length] * self_score[word_length])
                     else:
                         scc = sc[length] ** 2 / (s[length] * self_score[word_length])
 
+                    # We found a new bound!
                     if scc >= bound:
                         bound = scc
                         bounds.append(scc)
                         best = "".join(prefix)
                         continue
+                # Continue the search in this branch!
                 nodes.extend(node.children.items())
 
             if bound > 0:
@@ -285,7 +303,7 @@ class Trie(object):
     def save_trie(self, path: str):
         """ Saves the Trie structure at the given path. The path also defines the file name."""
         file = open(path, "wb")
-        cPickle.dump(self, file, protocol=-1)
+        _pickle.dump(self, file, protocol=-1)
         file.close()
 
     def load_trie(self, path: str):
@@ -294,39 +312,35 @@ class Trie(object):
         # therefore excluded.
         gc.disable()
         file = open(path, "rb")
-        trie = cPickle.load(file)
+        trie = _pickle.load(file)
         file.close()
         self.root = trie.root
         self.alphabet = trie.alphabet
         self.lengths = trie.lengths
         gc.enable()
 
-    def _check_scoring_matrix(self, score: dict):
-        pass
-
-    """
-    # TODO fertig machen!
+    def __check_scoring_matrix(self, word:str, score: dict):
         score_alphabet = set()
+        word_alphabet = set(list(word))
         for key1, key2 in score:
             if not (key2, key1) in score:
-                raise ValueError("The scoring matrix have to be symmetric, this is not the case for: "
+                raise ValueError("The scoring matrix have to be symmetric, this is not the case for: (" +
+                                 str(key1) + ", " + str(key2) + ")")
             score_alphabet.add(key1)
             score_alphabet.add(key2)
 
-        if not self.alphabet.issubset(score_alphabet): warnings.warn( "The Scoring matrix don't has the same alphabet 
-        as the Trie. Characters that are not mapped are scored with 0. The following substitution is problematic:" + 
-        str( self.alphabet.symmetric_difference(score_alphabet))) 
+        if not word_alphabet.issubset(score_alphabet):
+            raise ValueError(" The query contains characters which are not present in the scoring matrix.")
 
-        word_alphabet = set(list(word)) if not word_alphabet.issubset(score_alphabet): warnings.warn( "The query word 
-        don't has the same alphabet as the Scoring Matrix. Chacters that are not mapped are scored with 0. The 
-        following chars are problematic: " + str( word_alphabet.symmetric_difference(score_alphabet))) """
+        if not self.alphabet.issubset(score_alphabet):
+            raise ValueError(" The trie contains characters which are not present in the scoring matrix.")
 
 
 def load_trie(path: str) -> Trie:
     """ Loads a trie file at the given path and returns a Trie object."""
     gc.disable()
     file = open(path, "rb")
-    trie = cPickle.load(file)
+    trie = _pickle.load(file)
     file.close()
     gc.enable()
 
@@ -425,7 +439,7 @@ class KmerTrie(Trie):
 
     """
 
-    def __init__(self, kmer_length:list, data: list = None):
+    def __init__(self, kmer_length: list, data: list = None):
         super().__init__()
         self.root = KmerTrieNode("", 0)
         self.kmer_length = kmer_length
@@ -434,6 +448,9 @@ class KmerTrie(Trie):
 
     def add(self, words: list):
         """ Adds given words into the Trie and adds all their kmers for the length's defined in kmer_length. """
+        if words is isinstance(str):
+            words = [words]
+
         for word in words:
             self.lengths.add(len(word))
             kmers = [word]
@@ -481,13 +498,13 @@ class KmerTrie(Trie):
         Notes
         -----
         If a key found in the trie/word pair is not in the scoring matrix, then it is scored by 0!
-        If their this is possible a warning is returned #TODO Warnings!
+        If their this is possible a warning is returned
 
         Example
         -------
-        >>>from pepdist import similarity
-        >>>trie = similarity.KmerTrie([3,4], data=['AAWWAA', 'GGWWGA'])
-        >>>trie.k_nearest_neighbour("WWW", score=similarity.blosum62)
+        >>> from pepdist import similarity
+        >>> trie = similarity.KmerTrie([3,4], data=['AAWWAA', 'GGWWGA'])
+        >>> trie.k_nearest_neighbour("WWW", score=similarity.blosum62)
         [('WWG', 0.657951694959769, ['GGWWGA'])]
         """
         root = self.root
@@ -499,7 +516,7 @@ class KmerTrie(Trie):
                 kmers.extend(kmer_count(k_len, word))
         kmers = list(set(kmers))
 
-        self._check_scoring_matrix(score)
+        self.__check_scoring_matrix(word, score)
 
         # Compute minimum match score
         min_score = np.inf
@@ -509,6 +526,7 @@ class KmerTrie(Trie):
                 if s < min_score:
                     min_score = s
         temp_results = []
+
         for kmer in kmers:
             word_length = len(kmer)
             weights = [1] * word_length
@@ -524,7 +542,7 @@ class KmerTrie(Trie):
 
             # Trie Search for equal strings is fast
             if self.find_word(kmer) and all(v == 1 for v in weights):
-                temp_results.append((word, 1.0, self.__get_last_node(word).sequences))
+                temp_results.append((kmer, 1.0, self.__get_last_node(kmer).sequences))
                 continue
 
             bounds = [-np.inf] * k
@@ -552,9 +570,8 @@ class KmerTrie(Trie):
                     sc[length] = sc[index] + weights[index] * score[(char, kmer[index])]
                     s[length] = s[index] + weights[index] * score[(char, char)]
 
-                    if (sc[length] + self_score[word_length - length]) ** 2 / ((s[length] +
-                                                                                min_scores[index]) * self_score[
-                                                                                   word_length]) < bound:
+                    if (sc[length] + self_score[word_length - length]) ** 2 / \
+                            ((s[length] + min_scores[index]) * self_score[word_length]) < bound:
                         continue
                     if length == word_length and node.word_finished:
                         # Already found
@@ -590,10 +607,14 @@ class KmerTrie(Trie):
             if not temp_results:
                 results.append(('', -1, []))
                 continue
+            # TODO Some duplicated results in trie.add(["AAAA", "AYAY", "GAAG", "YYYY", "WWWW", "WWYW"])
+            # trie.k_nearest_neighbour("WWYY", similarity.blosum62, k=3)
             max_score = max(temp_results, key=lambda item: item[1])
+            max_scored_vals = [s for s in temp_results if s[1] == max_score[1]]
+            longest_max_score = max(max_scored_vals, key=lambda item: len(item[0]))
 
-            results.append(max_score)
-            temp_results.remove(max_score)
+            results.append(longest_max_score)
+            temp_results.remove(longest_max_score)
 
         return results
 
@@ -632,7 +653,7 @@ class KmerTrie(Trie):
         # therefore excluded.
         gc.disable()
         file = open(path, "rb")
-        trie = cPickle.load(file)
+        trie = _pickle.load(file)
         file.close()
         self.root = trie.root
         self.alphabet = trie.alphabet
@@ -651,31 +672,21 @@ class KmerTrie(Trie):
                 return KmerTrieNode("", 0)
         return node
 
-    def _check_scoring_matrix(self, score: dict):
-        pass
-
-    """
-    # TODO fertig machen!
+    def __check_scoring_matrix(self, word:str, score: dict):
         score_alphabet = set()
+        word_alphabet = set(list(word))
         for key1, key2 in score:
             if not (key2, key1) in score:
-                raise ValueError("The scoring matrix have to be symmetric, this is not the case for: "
+                raise ValueError("The scoring matrix have to be symmetric, this is not the case for: (" +
+                                 str(key1) + ", " + str(key2) + ")")
             score_alphabet.add(key1)
             score_alphabet.add(key2)
 
-        if not self.alphabet.issubset(score_alphabet):
-            warnings.warn(
-                "The Scoring matrix don't has the same alphabet as the Trie. Characters that are not mapped are scored with 0. The following substitution is problematic:" +
-                str(
-                    self.alphabet.symmetric_difference(score_alphabet)))
-
-        word_alphabet = set(list(word))
         if not word_alphabet.issubset(score_alphabet):
-            warnings.warn(
-                "The query word don't has the same alphabet as the Scoring Matrix. Chacters that are not mapped are scored with 0. The following chars are problematic: " +
-                str(
-                    word_alphabet.symmetric_difference(score_alphabet)))
-    """
+            raise ValueError(" The query contains characters which are not present in the scoring matrix.")
+
+        if not self.alphabet.issubset(score_alphabet):
+            raise ValueError(" The trie contains characters which are not present in the scoring matrix.")
 
 
 class KmerTrieNode(TrieNode):

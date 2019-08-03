@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
-"""@module scoring_matrix
-
-This module consist the blosum62 substitution matrix in a symmetric version. Additionally their are some scoring matrix
-function for linear transformation techniques.
+""" This module consist the blosum62 substitution matrix in a symmetric version. Additionally their are some scoring
+matrix function for linear transformation techniques.
 """
 blosum62 = {('A', 'A'): 4, ('A', 'B'): -2, ('A', 'C'): 0, ('A', 'D'): -2, ('A', 'E'): -1, ('A', 'F'): -2, ('A', 'G'): 0,
             ('A', 'H'): -2, ('A', 'I'): -1, ('A', 'K'): -1, ('A', 'L'): -1, ('A', 'M'): -1, ('A', 'N'): -2, ('A', 'P'): -1,
@@ -83,7 +81,7 @@ blosum62 = {('A', 'A'): 4, ('A', 'B'): -2, ('A', 'C'): 0, ('A', 'D'): -2, ('A', 
 """ The symmetrized blosum62 substitutionmatrix obtained from biopython package."""
 
 
-def symmetrize(self, matrix: dict, subst: bool = False) -> dict:
+def symmetrize(matrix: dict, subst: bool = False) -> dict:
     """ This function symmetrize a given matrix.
 
     Attributes
@@ -121,7 +119,7 @@ def symmetrize(self, matrix: dict, subst: bool = False) -> dict:
         return new_matrix
 
 
-def positivize(self, matrix: dict) -> dict:
+def positivize(matrix: dict) -> dict:
     """ This function transforms all score values linearly to be greater equal than zero
 
     Attributes
@@ -143,7 +141,7 @@ def positivize(self, matrix: dict) -> dict:
     return new_matrix
 
 
-def max_normalize(self, matrix: dict):
+def max_normalize(matrix: dict):
     """ This function normalize the score between 0 and 1, by dividung throught the maximum value.
 
     Attributes
@@ -155,7 +153,7 @@ def max_normalize(self, matrix: dict):
     dict : {(i,j): int]
                 Returns the same scoring matrix with normalized score values between 0 and 1.
     """
-    matrix = self.positivize(matrix)
+    matrix = positivize(matrix)
     new_matrix = {}
     matrix_max = max(matrix.values())
     for k, v in matrix.items():

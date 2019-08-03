@@ -113,8 +113,12 @@ class Aaindex():
 def positivize(index):
     """ Turns an a index of real numbers to a index of positve real numbers. """
     positive_index = {}
+    minimum = min(index.values())
+    if minimum >= 0:
+        return index
+
     for i in index:
-        positive_index[i] = index[i] + abs(min(index.values()))
+        positive_index[i] = index[i] + abs(minimum)
 
     return positive_index
 
@@ -122,8 +126,8 @@ def positivize(index):
 def max_normalize(index):
     """ Normalize a index of real numbers to a normalized index between [0,1]. """
     pos_index = positivize(index)
-    normalized_index = {}
     maximum = max(pos_index.values())
+    normalized_index = {}
     for i in index:
         normalized_index[i] = pos_index[i] / maximum
 
@@ -132,8 +136,8 @@ def max_normalize(index):
 
 def z_normalize(index):
     """ Normalize a index by with the z-score normalization method."""
-    mean = np.mean(index.values())
-    sigma = np.std(index.values())
+    mean = np.mean(list(index.values()))
+    sigma = np.std(list(index.values()))
     normalized_index = {}
     for i in index:
         normalized_index[i] = (index[i] - mean) / sigma

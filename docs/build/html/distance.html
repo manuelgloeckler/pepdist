@@ -218,13 +218,12 @@ that are associated with immunogenicity. These are listed here.</p>
 </div>
 <div class="section" id="module-distance.distance">
 <span id="distance-distance-module"></span><h2>distance.distance module<a class="headerlink" href="#module-distance.distance" title="Permalink to this headline">¶</a></h2>
-<p>&#64;module distance
-This module contains a locally sensitiv hashing class for fast nearest neighbour computation.
+<p>This module contains a locally sensitiv hashing class for fast nearest neighbour computation.
 Additionaly it contains functions to represent a peptide/sequence as a feature vector
 based on AAindex or other metrics.</p>
 <dl class="class">
 <dt id="distance.distance.HashTable">
-<em class="property">class </em><code class="descclassname">distance.distance.</code><code class="descname">HashTable</code><span class="sig-paren">(</span><em>k_dot_prodcucts</em>, <em>bin_width</em>, <em>inp_dimensions</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.HashTable" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">distance.distance.</code><code class="descname">HashTable</code><span class="sig-paren">(</span><em>inp_dimensions: int</em>, <em>k_dot_products: int</em>, <em>bin_width: float</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.HashTable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Hash Table Implementation for random projection binning</p>
 <p>N given input vectors are projected by k independent gausian normal distributed
@@ -297,7 +296,7 @@ projection vectors and than placed in quantization bin’s of widht w.</p>
 
 <dl class="class">
 <dt id="distance.distance.LSH">
-<em class="property">class </em><code class="descclassname">distance.distance.</code><code class="descname">LSH</code><span class="sig-paren">(</span><em>num_projections</em>, <em>k_dot_products</em>, <em>bin_width</em>, <em>inp_dimensions</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">distance.distance.</code><code class="descname">LSH</code><span class="sig-paren">(</span><em>inp_dimensions: int</em>, <em>num_projections: int = 10</em>, <em>k_dot_products: int = 3</em>, <em>bin_width: float = None</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Locally sensitv hashing</p>
 <dl class="attribute">
@@ -338,7 +337,7 @@ created hash tables</p>
 
 <dl class="method">
 <dt id="distance.distance.LSH.compute_num_projections">
-<code class="descname">compute_num_projections</code><span class="sig-paren">(</span><em>fail_prob=0.1</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH.compute_num_projections" title="Permalink to this definition">¶</a></dt>
+<code class="descname">compute_num_projections</code><span class="sig-paren">(</span><em>bin_width</em>, <em>k_dot_products</em>, <em>fail_prob=0.1</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH.compute_num_projections" title="Permalink to this definition">¶</a></dt>
 <dd><p>L needed to have a probability smaller than fail_prob that nearest neighbor is not in the same bucket.</p>
 </dd></dl>
 
@@ -361,13 +360,13 @@ corresponding bin.</p>
 
 <dl class="method">
 <dt id="distance.distance.LSH.p1">
-<code class="descname">p1</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH.p1" title="Permalink to this definition">¶</a></dt>
+<code class="descname">p1</code><span class="sig-paren">(</span><em>bin_width</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH.p1" title="Permalink to this definition">¶</a></dt>
 <dd><p>Probability that two points with ||p-q|| &lt; bin_width Fall into the same bucket</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="distance.distance.LSH.p2">
-<code class="descname">p2</code><span class="sig-paren">(</span><em>scale=2</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH.p2" title="Permalink to this definition">¶</a></dt>
+<code class="descname">p2</code><span class="sig-paren">(</span><em>bin_width</em>, <em>scale=2</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH.p2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Probability that two points ||p-q|| &gt; scale * bin_width Fall into the same bucket.</p>
 </dd></dl>
 
