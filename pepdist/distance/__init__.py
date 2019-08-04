@@ -4,7 +4,8 @@ from .aaindex import max_normalize
 from .aaindex import z_normalize
 from .aaindex import positivize
 
-from .distance import descriptor
+from .distance import IndexDescriptor
+from .distance import HashTable
 from .distance import LSH
 from .distance import naive_nearest_neighbour
 

@@ -87,7 +87,7 @@ class Trie(object):
 
     def add(self, words: list):
         """ Adds given words into the Trie """
-        if words is isinstance(str):
+        if isinstance(words, str):
             words = [words]
 
         for word in words:
@@ -448,7 +448,7 @@ class KmerTrie(Trie):
 
     def add(self, words: list):
         """ Adds given words into the Trie and adds all their kmers for the length's defined in kmer_length. """
-        if words is isinstance(str):
+        if isinstance(words, str):
             words = [words]
 
         for word in words:

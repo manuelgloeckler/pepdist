@@ -5,29 +5,53 @@ based on AAindex or other metrics.
 
 import numpy as np
 from scipy.stats import norm
-from scipy.spatial import KDTree
+from scipy.spatial import cKDTree
 import time
 import _pickle
 import gc
 
 
-def naive_nearest_neighbour(data, inp_vec):
-    """ Naive nearest neighbour search """
+def naive_nearest_neighbour(labels: list, descriptors: list, query: np.array)-> tuple:
+    """ Naive nearest neighbour search
+
+    Parameters
+    ----------
+    labels
+        List of sequences represented for example as list of strings.
+    descriptors
+        List of descriptors represented as list of numpy arrays.
+    query
+        A numpy array that represents the descriptor for a given sequence.
+
+    Returns
+    -------
+    (min_dist, min_match)
+        A tuple containing the minimum distance and the corresponding label.
+
+    Raises
+    ------
+    ValueError:
+        The label list and descriptor list must have the same length.
+
+    """
     min_dist = np.inf
     min_match = ""
 
-    for seq in data:
+    if len(labels) != len(descriptors):
+        raise ValueError("labels and vectors have to be the same length! And ordered in the same way.")
+
+    for i in range(len(labels)):
         # All rows represent a index, the mean of all index row distances is the overall
         # distance for one sequence.
-        dist = np.linalg.norm(seq.descriptor - inp_vec)
+        dist = np.linalg.norm(descriptors[i] - query)
         if dist < min_dist:
             min_dist = dist
-            min_match = seq.seq
+            min_match = labels[i]
 
     return min_match, min_dist
 
 
-class descriptor:
+class IndexDescriptor:
     """ Amino acid descriptor designed to describe peptides with the AAIndex.
 
     Parameters
@@ -45,16 +69,27 @@ class descriptor:
         List of sequences contained.
     descriptors : list
         List of arrays that describe the sequences.
+
+    Examples
+    --------
+    >>> from pepdist import distance
+    >>> seq = ["AAGG", "WYWW"]
+    >>> aa = distance.Aaindex()
+    >>> desc = distance.IndexDescriptor(seq, [aa['GEIM800103']])
+    >>> desc.sequences
+    ['AAGG', 'WYWW']
+    >>> desc.descriptors
+    [array([1.55, 1.55, 0.59, 0.59]), array([1.86, 1.08, 1.86, 1.86])]
     """
 
     def __init__(self, seqs: list, indices: list = [], norm_method=lambda x: x):
         self.sequences = seqs
         self.descriptors = []
-        self.indices = indices
-        self.normalized_indices = []
-        self.norm_method = norm_method
+        self.__indices = indices
+        self.__normalized_indices = []
+        self.__norm_method = norm_method
 
-        self.normalize_all()
+        self.__normalize_all()
         self.calculate_all()
 
     def __len__(self):
@@ -62,53 +97,89 @@ class descriptor:
 
     def add_seqs(self, seqs):
         """ Add sequences to the descriptor. They will be automatically described by..."""
-        if seqs is isinstance(str):
+        if isinstance(seqs, str):
             self.sequences.append(seqs)
-            self.descriptors.append(self.translate(seqs))
+            self.descriptors.append(self.translate(seqs, self.__normalized_indices))
         else:
             self.sequences.extend(seqs)
-            self.sequences.extend(list(map(lambda x: self.translate(x, self.normalized_indices), seqs)))
+            self.descriptors.extend(list(map(lambda x: self.translate(x, self.__normalized_indices), seqs)))
 
-    def add_index(self, index):
+    def remove_seqs(self, seqs: list):
+        """ Removes a sequence of multiple sequences from the descriptor class. """
+        # If string is the input...
+        if isinstance(seqs, str):
+            index = self.sequences.index(seqs)
+            del self.sequences[index]
+            del self.descriptors[index]
+        else:
+            for seq in seqs:
+                index = self.sequences.index(seq)
+                del self.sequences[index]
+                del self.descriptors[index]
+
+    def add_indices(self, indices: list):
         """ Add another index that should also describe the sequence. The descriptors are automatically updated."""
-        self.indices.append(index)
-        self.normalized_indices.append(self.norm_method(index))
+        # If only one is inputed...
+        if isinstance(indices, dict):
+            indices = [indices]
+        for index in indices:
+            self.__indices.append(index)
+            self.__normalized_indices.append(self.__norm_method(index))
+            self.calculate_all()
+
+    def remove_index(self, indices: list):
+        """ Removes a index or multiple indices. """
+        # If only one is inputed...
+        if isinstance(indices, dict):
+            index = self.__indices.index(indices)
+            del self.__indices[index]
+            del self.__normalized_indices[index]
+        else:
+            for i in indices:
+                index = self.__indices.index(i)
+                del self.__indices[index]
+                del self.__normalized_indices[index]
         self.calculate_all()
 
     def change_norm_method(self, norm_method):
         """" Change to another normalization method, the descriptors are automatically updated."""
-        self.norm_method = norm_method
-        self.normalize_all()
+        self.__norm_method = norm_method
+        self.__normalize_all()
         self.calculate_all()
 
-    def normalize_all(self):
-        for i in range(len(self.indices)):
+    def __normalize_all(self):
+        """ Normalize all sequence by the defined method """
+        for i in range(len(self.__indices)):
             if i > len(self.descriptors)-1:
-                self.normalized_indices.append(self.norm_method(self.indices[i]))
+                self.__normalized_indices.append(self.__norm_method(self.__indices[i]))
             else:
-                self.normalized_indices[i] = self.norm_method(self.indices[i])
+                self.__normalized_indices[i] = self.__norm_method(self.__indices[i])
 
     def calculate_all(self):
+        """ Translate all sequences by the defined indices. """
         for i in range(len(self.sequences)):
             if i > len(self.descriptors)-1:
-                self.descriptors.append(self.translate(self.sequences[i], self.normalized_indices))
+                self.descriptors.append(self.translate(self.sequences[i], self.__normalized_indices))
             else:
-                self.descriptors[i] = self.translate(self.sequences[i], self.normalized_indices)
+                self.descriptors[i] = self.translate(self.sequences[i], self.__normalized_indices)
 
     @ staticmethod
-    def translate(self, word: str, indices: list):
+    def translate(word: str, indices: list) -> np.array:
         """ Translate a string to feature vectors
             Parameters
             ----------
             word:
                 A sequence as string
             indices
-                A List of dictionary which represent a aaindex or another descriptor!
+                A List of dictionary which represent a aaindex or another descriptor! Only one index is also allowed.
             Returns
             -------
             numpy array
                 Concatenated translation of the word by all indices.
         """
+        if isinstance(indices, dict):
+            indices = [indices]
+
         vec = []
         for index in indices:
             for char in word:
@@ -126,54 +197,87 @@ class HashTable:
     ----------
     k_dot_products : int
         k independet hash functions are used for binning.
-    bin_widht : float
+    bin_width : float
         Width of a quantization bin.
-    inp_dimension : int
+    inp_dimensions : int
         Dimension of hashable input vectors.
 
     Attributes
     ----------
+    inp_dimensions : int
+        Dimension of hashable input vectors.
     k_dot_products : int
         Hashfunction uses a projection of k dot products.
-    bin_widht : float
+    bin_width : float
         Width of a quantization bin.
-    b : array(float)
-        Uniformly distributed random variabales in [0,bin_width]
-    inp_dimension : int
-        Dimension of hashable input vectors.
-    hash_table : dict
-        Dictionary which is used as hash table.
-    projections : ndarray
-        Normal distributed N(0,1) projection matrix.
+
+    Notes
+    -----
+    Input dimensions have to be the same!!!
     """
 
     def __init__(self, inp_dimensions: int, k_dot_products: int, bin_width: float):
         self.k_dot_products = k_dot_products
         self.bin_width = bin_width
-        self.b = np.random.uniform(low=0, high=bin_width, size=k_dot_products)
+        self.__b = np.random.uniform(low=0, high=bin_width, size=k_dot_products)
         self.inp_dimensions = inp_dimensions
-        self.hash_table = dict()
-        self.projections = np.random.randn(
-            self.k_dot_products, self.inp_dimensions)
+        self.__hash_table = dict()
+        self.__projections = np.random.randn(self.k_dot_products, self.inp_dimensions)
 
-    def generate_hash(self, inp_vec):
-        return tuple(np.floor(
-            (np.dot(inp_vec, self.projections.T) + self.b) / self.bin_width))
+    def generate_hash(self, descriptor):
+        return tuple(np.floor((np.dot(descriptor, self.__projections.T) + self.__b) / self.bin_width))
 
-    def __setitem__(self, inp_vec, label):
-        hash_value = self.generate_hash(inp_vec)
-        self.hash_table[hash_value] = self.hash_table \
-                                          .get(hash_value, list()) + [label]
+    def __setitem__(self, descriptor, label):
+        hash_value = self.generate_hash(descriptor)
+        if hash_value in self.__hash_table.keys():
+            self.__hash_table[hash_value].add(label, descriptor)
+        else:
+            new_bin = Bin()
+            new_bin.add(label, descriptor)
+            self.__hash_table[hash_value] = new_bin
 
     def __getitem__(self, inp_vec):
         hash_value = self.generate_hash(inp_vec)
-        return self.hash_table.get(hash_value, [])
+        return self.__hash_table.get(hash_value, Bin())
 
     def values(self):
-        return self.hash_table.values()
+        return self.__hash_table.values()
 
     def keys(self):
-        return self.hash_table.keys()
+        return self.__hash_table.keys()
+
+
+class Bin:
+    """ Hash Table bin"""
+
+    def __init__(self):
+        self.sequences = []
+        self.vectors = []
+        self.kdtree = None
+
+    def create_kdtree(self):
+        self.kdtree = cKDTree(self.vectors)
+
+    def nearest_neighbour(self, inp_vec):
+        if self.kdtree is not None:
+            dist, label = self.kdtree.query(inp_vec)
+            return self.sequences[label], dist
+        else:
+            min_dist = np.inf
+            min_match = ""
+            for i in range(len(self.sequences)):
+                dist = np.linalg.norm(self.vectors[i] - inp_vec)
+                if dist < min_dist:
+                    min_dist = dist
+                    min_match = self.sequences[i]
+            return min_match, min_dist
+
+    def add(self, label, descriptor):
+        self.sequences.append(label)
+        self.vectors.append(descriptor)
+        if self.kdtree is not None:
+            self.kdtree = cKDTree(self.vectors)
+
 
 
 
@@ -201,7 +305,8 @@ class LSH:
             inp_dimensions: int,
             num_projections: int = 10,
             k_dot_products: int = 3,
-            bin_width: float = None):
+            bin_width: float = None,
+            kd_tree: bool = True):
         self.num_projections = num_projections
         self.k_dot_products = k_dot_products
         if bin_width is None:
@@ -216,58 +321,71 @@ class LSH:
                     self.inp_dimensions,
                     self.k_dot_products,
                     self.bin_width))
+        self.kd_tree = kd_tree
+        if self.kd_tree:
+            for table in self.hash_tables:
+                for bins in table.values():
+                    bins.create_kdtree()
 
-    def __setitem__(self, inp_vec, label):
+    def __setitem__(self, descriptor, label):
         for table in self.hash_tables:
-            table[inp_vec] = (inp_vec, label)
+            table[descriptor] = label
 
     def __getitem__(self, inp_vec):
         results = list()
         for table in self.hash_tables:
-            results.extend(table[inp_vec])
-        return list(results)
+            results.append(table[inp_vec])
+        return results
 
-    def add(self, inp_vecs, labels):
-        if len(inp_vecs) != len(labels):
+    def add(self, labels, descriptors):
+        if len(descriptors) != len(labels):
             raise SystemExit("Length of descriptors and labels is not the same!")
         else:
-            for i in range(len(inp_vecs)):
-                self.__setitem__(inp_vecs[i], labels[i])
+            for i in range(len(descriptors)):
+                self.__setitem__(np.asarray(descriptors[i]), labels[i])
 
-    def nearest_neighbour(self, inp_vec):
+        if self.kd_tree:
+            for table in self.hash_tables:
+                for bins in table.values():
+                    bins.create_kdtree()
+
+    def nearest_neighbour(self, descriptor):
         """ Find the nearest_neighbour by hashing the inp_vec and find the nearest neighbour in the
             corresponding bin."""
-        hash_bin = self.__getitem__(inp_vec)
-        if not hash_bin:
-            hash_bin = [item for sublist in self.hash_tables[0].hash_table.values() for item in sublist]
-        min_dist = np.inf
-        min_match = ""
-        for seq in hash_bin:
-            dist = np.linalg.norm(seq[0] - inp_vec)
-            if dist < min_dist:
-                min_dist = dist
-                min_match = seq[1]
+        hash_bin = self.__getitem__(descriptor)
 
-        return (min_match, min_dist)
+        results = []
+        for bins in hash_bin:
+            results.append(bins.nearest_neighbour(np.asarray(descriptor)))
+
+        if not results:
+            hash_bin = [item for sublist in self.hash_tables[0].values() for item in sublist]
+            results.append(bins.nearest_neighbour(np.asarray(descriptor)))
+
+        minimum = min(results, key=lambda x: x[0])
+        min_match = minimum[0]
+        min_dist = minimum[1]
+
+        return min_match, min_dist
 
     @ staticmethod
-    def p1(self, bin_width):
+    def p1(bin_width):
         """ Probability that two points with ||p-q|| < bin_width Fall into the same bucket """
         return 1 - 2 * norm.cdf(-bin_width) - \
                2 / (np.sqrt(2 * np.pi) * bin_width) * \
                (1 - np.exp(-(bin_width ** 2 / 2)))
 
     @ staticmethod
-    def p2(self, bin_width, scale=2):
+    def p2(bin_width, scale=2):
         """ Probability that two points ||p-q|| > scale * bin_width Fall into the same bucket."""
         return 1 - 2 * norm.cdf(-bin_width / scale) - \
                2 / (np.sqrt(2 * np.pi) * bin_width / scale) * \
                (1 - np.exp(-(bin_width ** 2 / (2 * scale ** 2))))
 
     @ staticmethod
-    def compute_num_projections(self, bin_width, k_dot_products, fail_prob=0.1):
+    def compute_num_projections(bin_width, k_dot_products, fail_prob=0.1):
         """ L needed to have a probability smaller than fail_prob that nearest neighbor is not in the same bucket. """
-        return int(np.ceil(np.log(fail_prob) / np.log(1 - self.p1(bin_width) ** k_dot_products)))
+        return int(np.ceil(np.log(fail_prob) / np.log(1 - LSH.p1(bin_width) ** k_dot_products)))
 
     def mean_buckets(self):
         """ Returns the mean number of buckets in each hashtable """
@@ -288,7 +406,7 @@ class LSH:
         return int(bucket_size / self.num_projections)
 
     def train_LSH(self, data, query_sample, tolerance=1.5, maxk=10, fail_prob=0.1):
-        kdtree = KDTree(data)
+        kdtree = cKDTree(data)
         best = -np.inf
         for q in query_sample:
             dist = kdtree.query(q)[0]
