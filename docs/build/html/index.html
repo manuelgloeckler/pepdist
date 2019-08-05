@@ -222,6 +222,14 @@ value.</p>
 </div>
 <div class="section" id="distance">
 <h2>Distance<a class="headerlink" href="#distance" title="Permalink to this headline">¶</a></h2>
+<p>The autodoc documenteded function’s and classes are documented via autodoc here <code class="xref py py-mod docutils literal notranslate"><span class="pre">pepdist.distance</span></code>. The main classes are <code class="xref py py-class docutils literal notranslate"><span class="pre">pepdist.distance.Aaindex</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">pepdist.distance.descriptor</span></code> and
+<code class="xref py py-class docutils literal notranslate"><span class="pre">pepdist.distance.LSH</span></code>. The Aaindex class parse the AAindex database into python dictionaries. This indices map a amino acid to a real value and therefore can be used to map petides to a feature
+vector representing a physical or chemical property. The distance between two peptides can then be represented as the euclidean distance of the feature vectors. However encoding a peptide with multiple
+indices can lead to very high dimensional feature vectors. For an efficent approximate nearest neighbour search a locally sensitive hashing was implementet which allows blazing fast search times.</p>
+<p>Here are some example of how to use it:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="go">&gt;&gt;&gt;from pepdist import distance</span>
+</pre></div>
+</div>
 </div>
 </div>
 

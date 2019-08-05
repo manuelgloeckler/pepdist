@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-""" This module has multiple functions or classes to determine the k nearest neighbours given a scoring matrix. Therefore
-a efficient trie datastructure is implemented where a nearest neighbour can be determined fast by a branch and bound
+""" This module has multiple functions or classes to determine the k nearest neighbors given a scoring matrix. Therefore
+an efficient trie data structure is implemented where the nearest neighbor can be resolved fast by a branch and bound
 algorithm.
 """
 import numpy as np
@@ -14,7 +14,7 @@ import copy
 
 
 def word_score(word1: str, word2: str, score: dict) -> float:
-    """ Computes the score between two words by the given scoring matrix"""
+    """ Computes the score between two words by the given scoring matrix. """
     if len(word1) != len(word2):
         warnings.warn("The words don't have the same length. The score for the common prefix is computed.")
     sc = 0
@@ -25,7 +25,7 @@ def word_score(word1: str, word2: str, score: dict) -> float:
 
 
 def squared_root_similarity(word1: str, word2: str, score: dict) -> float:
-    """ Computes the squared root normalized score of two words"""
+    """ Computes the squared root normalized score of two words. """
     bl_ab = word_score(word1, word2, score=score)
     bl_aa = word_score(word1, word1, score=score)
     bl_bb = word_score(word2, word2, score=score)
@@ -34,7 +34,7 @@ def squared_root_similarity(word1: str, word2: str, score: dict) -> float:
 
 
 def naive_nearest_neighbour(data, word, score):
-    """ Computes the nearest neighbor in a naive fashion"""
+    """ Computes the nearest neighbor in a naive fashion. """
     max_match = ""
     max_score = -np.inf
     for seq in data:
@@ -49,8 +49,8 @@ def naive_nearest_neighbour(data, word, score):
 class Trie(object):
     """ A trie/prefix-tree data structure.
 
-        A prefix tree is a tree, where strings can be added
-        and each node represent a prefix of this string.
+    A prefix tree is a tree, where strings can be added
+    and each node represent a prefix of this string.
 
     Parameters
     ----------
@@ -65,6 +65,12 @@ class Trie(object):
         Set of the characters used in the Trie.
     lengths : Set
         Set of word lengths saved in the Trie.
+
+    Notes
+    -----
+    This method needs a symmetrized BLOSUM like scoring matrix. Additionally, for apparent
+    reasons, this matrix has to map all pairs of characters from the trie and query word
+    to a real value.
 
     Example
     -------
@@ -173,7 +179,6 @@ class Trie(object):
             score!
         """
 
-
         root = self.root
         word_length = len(word)
         results = []
@@ -183,16 +188,6 @@ class Trie(object):
         # Set the weights if not specified
         if weights is None:
             weights = [1] * (word_length + 1)
-
-        # Compute minimum match score
-        min_score = np.inf
-        for k1, k2 in score.keys():
-            if k1 == k2 and not k1 == "X":
-                s = score[(k1, k2)]
-                if s < min_score:
-                    min_score = s
-
-        min_scores = list(map(lambda x: sum(min_score * np.array(weights[x + 1:])), list(range(word_length))))
 
         # Score of the query word
         self_score = [0] * (word_length + 1)
@@ -234,7 +229,7 @@ class Trie(object):
 
                 # If smaller then bound, stop search in this branch!
                 if (sc[length] + self_score[word_length - length]) ** 2 / \
-                        ((s[length] + min_scores[index]) * self_score[word_length]) < bound:
+                        ((s[length] + self_score[word_length - length]) * self_score[word_length]) < bound:
                     continue
 
                 # If no word with the same length in the branch, then stop search in this branch
@@ -518,20 +513,11 @@ class KmerTrie(Trie):
 
         self.__check_scoring_matrix(word, score)
 
-        # Compute minimum match score
-        min_score = np.inf
-        for k1, k2 in score.keys():
-            if k1 == k2 and not k1 == "X":
-                s = score[(k1, k2)]
-                if s < min_score:
-                    min_score = s
         temp_results = []
 
         for kmer in kmers:
             word_length = len(kmer)
             weights = [1] * word_length
-
-            min_scores = list(map(lambda x: sum(min_score * np.array(weights[x + 1:])), list(range(word_length))))
 
             # Score of the query word
             self_score = [0] * (word_length + 1)
@@ -571,7 +557,7 @@ class KmerTrie(Trie):
                     s[length] = s[index] + weights[index] * score[(char, char)]
 
                     if (sc[length] + self_score[word_length - length]) ** 2 / \
-                            ((s[length] + min_scores[index]) * self_score[word_length]) < bound:
+                            ((s[length] + self_score[word_length - length]) * self_score[word_length]) < bound:
                         continue
                     if length == word_length and node.word_finished:
                         # Already found
@@ -648,7 +634,7 @@ class KmerTrie(Trie):
         return result
 
     def load_trie(self, path):
-        """ Loades a Trie structure"""
+        """ Load's a Trie structure"""
         # Garbage Collector slows down the loading significant and is
         # therefore excluded.
         gc.disable()
@@ -662,7 +648,7 @@ class KmerTrie(Trie):
         gc.enable()
 
     def __get_last_node(self, word: str):
-        """ Returns true if the word is in the Trie """
+        """ Returns the last node of the common prefix between the word and the trie. """
         node = self.root
         for char in word:
             if char in node.children:

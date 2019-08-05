@@ -222,6 +222,28 @@ that are associated with immunogenicity. These are listed here.</p>
 Additionaly it contains functions to represent a peptide/sequence as a feature vector
 based on AAindex or other metrics.</p>
 <dl class="class">
+<dt id="distance.distance.Bin">
+<em class="property">class </em><code class="descclassname">distance.distance.</code><code class="descname">Bin</code><a class="headerlink" href="#distance.distance.Bin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Hash Table bin</p>
+<dl class="method">
+<dt id="distance.distance.Bin.add">
+<code class="descname">add</code><span class="sig-paren">(</span><em>label</em>, <em>descriptor</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.Bin.add" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="distance.distance.Bin.create_kdtree">
+<code class="descname">create_kdtree</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.Bin.create_kdtree" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="distance.distance.Bin.nearest_neighbour">
+<code class="descname">nearest_neighbour</code><span class="sig-paren">(</span><em>inp_vec</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.Bin.nearest_neighbour" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
 <dt id="distance.distance.HashTable">
 <em class="property">class </em><code class="descclassname">distance.distance.</code><code class="descname">HashTable</code><span class="sig-paren">(</span><em>inp_dimensions: int</em>, <em>k_dot_products: int</em>, <em>bin_width: float</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.HashTable" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
@@ -234,13 +256,19 @@ projection vectors and than placed in quantization bin’s of widht w.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>k_dot_products</strong> (<em>int</em>) – k independet hash functions are used for binning.</li>
-<li><strong>bin_widht</strong> (<em>float</em>) – Width of a quantization bin.</li>
-<li><strong>inp_dimension</strong> (<em>int</em>) – Dimension of hashable input vectors.</li>
+<li><strong>bin_width</strong> (<em>float</em>) – Width of a quantization bin.</li>
+<li><strong>inp_dimensions</strong> (<em>int</em>) – Dimension of hashable input vectors.</li>
 </ul>
 </td>
 </tr>
 </tbody>
 </table>
+<dl class="attribute">
+<dt id="distance.distance.HashTable.inp_dimensions">
+<code class="descname">inp_dimensions</code><a class="headerlink" href="#distance.distance.HashTable.inp_dimensions" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> – Dimension of hashable input vectors.</p>
+</dd></dl>
+
 <dl class="attribute">
 <dt id="distance.distance.HashTable.k_dot_products">
 <code class="descname">k_dot_products</code><a class="headerlink" href="#distance.distance.HashTable.k_dot_products" title="Permalink to this definition">¶</a></dt>
@@ -248,38 +276,16 @@ projection vectors and than placed in quantization bin’s of widht w.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="distance.distance.HashTable.bin_widht">
-<code class="descname">bin_widht</code><a class="headerlink" href="#distance.distance.HashTable.bin_widht" title="Permalink to this definition">¶</a></dt>
+<dt id="distance.distance.HashTable.bin_width">
+<code class="descname">bin_width</code><a class="headerlink" href="#distance.distance.HashTable.bin_width" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>float</em> – Width of a quantization bin.</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="distance.distance.HashTable.b">
-<code class="descname">b</code><a class="headerlink" href="#distance.distance.HashTable.b" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>array(float)</em> – Uniformly distributed random variabales in [0,bin_width]</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="distance.distance.HashTable.inp_dimension">
-<code class="descname">inp_dimension</code><a class="headerlink" href="#distance.distance.HashTable.inp_dimension" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>int</em> – Dimension of hashable input vectors.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="distance.distance.HashTable.hash_table">
-<code class="descname">hash_table</code><a class="headerlink" href="#distance.distance.HashTable.hash_table" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>dict</em> – Dictionary which is used as hash table.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="distance.distance.HashTable.projections">
-<code class="descname">projections</code><a class="headerlink" href="#distance.distance.HashTable.projections" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>ndarray</em> – Normal distributed N(0,1) projection matrix.</p>
-</dd></dl>
-
+<p class="rubric">Notes</p>
+<p>Input dimensions have to be the same!!!</p>
 <dl class="method">
 <dt id="distance.distance.HashTable.generate_hash">
-<code class="descname">generate_hash</code><span class="sig-paren">(</span><em>inp_vec</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.HashTable.generate_hash" title="Permalink to this definition">¶</a></dt>
+<code class="descname">generate_hash</code><span class="sig-paren">(</span><em>descriptor</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.HashTable.generate_hash" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="method">
@@ -295,91 +301,8 @@ projection vectors and than placed in quantization bin’s of widht w.</p>
 </dd></dl>
 
 <dl class="class">
-<dt id="distance.distance.LSH">
-<em class="property">class </em><code class="descclassname">distance.distance.</code><code class="descname">LSH</code><span class="sig-paren">(</span><em>inp_dimensions: int</em>, <em>num_projections: int = 10</em>, <em>k_dot_products: int = 3</em>, <em>bin_width: float = None</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH" title="Permalink to this definition">¶</a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Locally sensitv hashing</p>
-<dl class="attribute">
-<dt id="distance.distance.LSH.num_projections">
-<code class="descname">num_projections</code><a class="headerlink" href="#distance.distance.LSH.num_projections" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>int</em> – Number of projection done for each binning</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="distance.distance.LSH.k_dot_products">
-<code class="descname">k_dot_products</code><a class="headerlink" href="#distance.distance.LSH.k_dot_products" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>int</em> – Hashfunction uses a projection of k dot products.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="distance.distance.LSH.bin_widht">
-<code class="descname">bin_widht</code><a class="headerlink" href="#distance.distance.LSH.bin_widht" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>float</em> – Width of a quantization bin.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="distance.distance.LSH.inp_dimension">
-<code class="descname">inp_dimension</code><a class="headerlink" href="#distance.distance.LSH.inp_dimension" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>int</em> – Dimension of hashable input vectors.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="distance.distance.LSH.hash_tables">
-<code class="descname">hash_tables</code><a class="headerlink" href="#distance.distance.LSH.hash_tables" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>list</em> – List of Hashtable, which represents the num_projections times
-created hash tables</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="distance.distance.LSH.add">
-<code class="descname">add</code><span class="sig-paren">(</span><em>inp_vecs</em>, <em>labels</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH.add" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="distance.distance.LSH.compute_num_projections">
-<code class="descname">compute_num_projections</code><span class="sig-paren">(</span><em>bin_width</em>, <em>k_dot_products</em>, <em>fail_prob=0.1</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH.compute_num_projections" title="Permalink to this definition">¶</a></dt>
-<dd><p>L needed to have a probability smaller than fail_prob that nearest neighbor is not in the same bucket.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="distance.distance.LSH.mean_bucket_size">
-<code class="descname">mean_bucket_size</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH.mean_bucket_size" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="distance.distance.LSH.mean_buckets">
-<code class="descname">mean_buckets</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH.mean_buckets" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="method">
-<dt id="distance.distance.LSH.nearest_neighbour">
-<code class="descname">nearest_neighbour</code><span class="sig-paren">(</span><em>inp_vec</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH.nearest_neighbour" title="Permalink to this definition">¶</a></dt>
-<dd><p>Find the nearest_neighbour by hashing the inp_vec and find the nearest neighbour in the
-corresponding bin.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="distance.distance.LSH.p1">
-<code class="descname">p1</code><span class="sig-paren">(</span><em>bin_width</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH.p1" title="Permalink to this definition">¶</a></dt>
-<dd><p>Probability that two points with ||p-q|| &lt; bin_width Fall into the same bucket</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="distance.distance.LSH.p2">
-<code class="descname">p2</code><span class="sig-paren">(</span><em>bin_width</em>, <em>scale=2</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH.p2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Probability that two points ||p-q|| &gt; scale * bin_width Fall into the same bucket.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="distance.distance.LSH.train_LSH">
-<code class="descname">train_LSH</code><span class="sig-paren">(</span><em>data</em>, <em>query_sample</em>, <em>tolerance=1.5</em>, <em>maxk=10</em>, <em>fail_prob=0.1</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH.train_LSH" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="distance.distance.descriptor">
-<em class="property">class </em><code class="descclassname">distance.distance.</code><code class="descname">descriptor</code><span class="sig-paren">(</span><em>seqs: list</em>, <em>indices: list = []</em>, <em>norm_method=&lt;function descriptor.&lt;lambda&gt;&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.descriptor" title="Permalink to this definition">¶</a></dt>
+<dt id="distance.distance.IndexDescriptor">
+<em class="property">class </em><code class="descclassname">distance.distance.</code><code class="descname">IndexDescriptor</code><span class="sig-paren">(</span><em>seqs: list</em>, <em>indices: list = []</em>, <em>norm_method=&lt;function IndexDescriptor.&lt;lambda&gt;&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.IndexDescriptor" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Amino acid descriptor designed to describe peptides with the AAIndex.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -396,58 +319,83 @@ corresponding bin.</p>
 </tbody>
 </table>
 <dl class="attribute">
-<dt id="distance.distance.descriptor.sequences">
-<code class="descname">sequences</code><a class="headerlink" href="#distance.distance.descriptor.sequences" title="Permalink to this definition">¶</a></dt>
+<dt id="distance.distance.IndexDescriptor.sequences">
+<code class="descname">sequences</code><a class="headerlink" href="#distance.distance.IndexDescriptor.sequences" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>list</em> – List of sequences contained.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="distance.distance.descriptor.descriptors">
-<code class="descname">descriptors</code><a class="headerlink" href="#distance.distance.descriptor.descriptors" title="Permalink to this definition">¶</a></dt>
+<dt id="distance.distance.IndexDescriptor.descriptors">
+<code class="descname">descriptors</code><a class="headerlink" href="#distance.distance.IndexDescriptor.descriptors" title="Permalink to this definition">¶</a></dt>
 <dd><p><em>list</em> – List of arrays that describe the sequences.</p>
 </dd></dl>
 
+<dl class="attribute">
+<dt id="distance.distance.IndexDescriptor.indices">
+<code class="descname">indices</code><a class="headerlink" href="#distance.distance.IndexDescriptor.indices" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>list</em> – List of indices used to describe the sequences.</p>
+</dd></dl>
+
+<p class="rubric">Examples</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pepdist</span> <span class="k">import</span> <span class="n">distance</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">seq</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;AAGG&quot;</span><span class="p">,</span> <span class="s2">&quot;WYWW&quot;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">aa</span> <span class="o">=</span> <span class="n">distance</span><span class="o">.</span><span class="n">Aaindex</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">desc</span> <span class="o">=</span> <span class="n">distance</span><span class="o">.</span><span class="n">IndexDescriptor</span><span class="p">(</span><span class="n">seq</span><span class="p">,</span> <span class="p">[</span><span class="n">aa</span><span class="p">[</span><span class="s1">&#39;GEIM800103&#39;</span><span class="p">]])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">desc</span><span class="o">.</span><span class="n">sequences</span>
+<span class="go">[&#39;AAGG&#39;, &#39;WYWW&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">desc</span><span class="o">.</span><span class="n">descriptors</span>
+<span class="go">[array([1.55, 1.55, 0.59, 0.59]), array([1.86, 1.08, 1.86, 1.86])]</span>
+</pre></div>
+</div>
 <dl class="method">
-<dt id="distance.distance.descriptor.add_index">
-<code class="descname">add_index</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.descriptor.add_index" title="Permalink to this definition">¶</a></dt>
+<dt id="distance.distance.IndexDescriptor.add_indices">
+<code class="descname">add_indices</code><span class="sig-paren">(</span><em>indices: list</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.IndexDescriptor.add_indices" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add another index that should also describe the sequence. The descriptors are automatically updated.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="distance.distance.descriptor.add_seqs">
-<code class="descname">add_seqs</code><span class="sig-paren">(</span><em>seqs</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.descriptor.add_seqs" title="Permalink to this definition">¶</a></dt>
+<dt id="distance.distance.IndexDescriptor.add_seqs">
+<code class="descname">add_seqs</code><span class="sig-paren">(</span><em>seqs</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.IndexDescriptor.add_seqs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add sequences to the descriptor. They will be automatically described by…</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="distance.distance.descriptor.calculate_all">
-<code class="descname">calculate_all</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.descriptor.calculate_all" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="distance.distance.IndexDescriptor.calculate_all">
+<code class="descname">calculate_all</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.IndexDescriptor.calculate_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Translate all sequences by the defined indices.</p>
+</dd></dl>
 
 <dl class="method">
-<dt id="distance.distance.descriptor.change_norm_method">
-<code class="descname">change_norm_method</code><span class="sig-paren">(</span><em>norm_method</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.descriptor.change_norm_method" title="Permalink to this definition">¶</a></dt>
+<dt id="distance.distance.IndexDescriptor.change_norm_method">
+<code class="descname">change_norm_method</code><span class="sig-paren">(</span><em>norm_method</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.IndexDescriptor.change_norm_method" title="Permalink to this definition">¶</a></dt>
 <dd><p>” Change to another normalization method, the descriptors are automatically updated.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="distance.distance.descriptor.normalize_all">
-<code class="descname">normalize_all</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.descriptor.normalize_all" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt id="distance.distance.IndexDescriptor.remove_index">
+<code class="descname">remove_index</code><span class="sig-paren">(</span><em>indices: list</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.IndexDescriptor.remove_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes a index or multiple indices.</p>
+</dd></dl>
 
 <dl class="method">
-<dt id="distance.distance.descriptor.translate">
-<code class="descname">translate</code><span class="sig-paren">(</span><em>word: str</em>, <em>indices</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.descriptor.translate" title="Permalink to this definition">¶</a></dt>
+<dt id="distance.distance.IndexDescriptor.remove_seqs">
+<code class="descname">remove_seqs</code><span class="sig-paren">(</span><em>seqs: list</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.IndexDescriptor.remove_seqs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes a sequence of multiple sequences from the descriptor class.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="distance.distance.IndexDescriptor.translate">
+<em class="property">static </em><code class="descname">translate</code><span class="sig-paren">(</span><em>word: str</em>, <em>indices: list</em><span class="sig-paren">)</span> &#x2192; numpy.array<a class="headerlink" href="#distance.distance.IndexDescriptor.translate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Translate a string to feature vectors
 :param word: A sequence as string
-:type word: str
-:param indices: A List of dictionary which represent a aaindex
-:type indices: list</p>
+:param indices: A List of dictionary which represent a aaindex or another descriptor! Only one index is also allowed.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">numpy ndarray of feature vectors</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Concatenated translation of the word by all indices.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">numpy array</td>
 </tr>
 </tbody>
 </table>
@@ -455,10 +403,129 @@ corresponding bin.</p>
 
 </dd></dl>
 
+<dl class="class">
+<dt id="distance.distance.LSH">
+<em class="property">class </em><code class="descclassname">distance.distance.</code><code class="descname">LSH</code><span class="sig-paren">(</span><em>inp_dimensions: int</em>, <em>num_projections: int = 10</em>, <em>k_dot_products: int = 3</em>, <em>bin_width: float = None</em>, <em>kd_tree: bool = True</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Locally sensitv hashing</p>
+<dl class="attribute">
+<dt id="distance.distance.LSH.num_projections">
+<code class="descname">num_projections</code><a class="headerlink" href="#distance.distance.LSH.num_projections" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> – Number of projection done for each binning</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="distance.distance.LSH.k_dot_products">
+<code class="descname">k_dot_products</code><a class="headerlink" href="#distance.distance.LSH.k_dot_products" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> – Hashfunction uses a projection of k dot products.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="distance.distance.LSH.bin_width">
+<code class="descname">bin_width</code><a class="headerlink" href="#distance.distance.LSH.bin_width" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>float</em> – Width of a quantization bin.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="distance.distance.LSH.inp_dimensions">
+<code class="descname">inp_dimensions</code><a class="headerlink" href="#distance.distance.LSH.inp_dimensions" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> – Dimension of hashable input vectors.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="distance.distance.LSH.hash_tables">
+<code class="descname">hash_tables</code><a class="headerlink" href="#distance.distance.LSH.hash_tables" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>list</em> – List of Hashtable, which represents the num_projections times
+created hash tables</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="distance.distance.LSH.add">
+<code class="descname">add</code><span class="sig-paren">(</span><em>labels</em>, <em>descriptors</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH.add" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="distance.distance.LSH.compute_num_projections">
+<em class="property">static </em><code class="descname">compute_num_projections</code><span class="sig-paren">(</span><em>bin_width</em>, <em>k_dot_products</em>, <em>fail_prob=0.1</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH.compute_num_projections" title="Permalink to this definition">¶</a></dt>
+<dd><p>L needed to have a probability smaller than fail_prob that nearest neighbor is not in the same bucket.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="distance.distance.LSH.load_lsh">
+<em class="property">static </em><code class="descname">load_lsh</code><span class="sig-paren">(</span><em>self</em>, <em>path: str</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH.load_lsh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load’s a Trie structure from the given path.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="distance.distance.LSH.mean_bucket_size">
+<code class="descname">mean_bucket_size</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH.mean_bucket_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the mean number of elements in a bucket.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="distance.distance.LSH.mean_buckets">
+<code class="descname">mean_buckets</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH.mean_buckets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the mean number of buckets in each hashtable</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="distance.distance.LSH.nearest_neighbour">
+<code class="descname">nearest_neighbour</code><span class="sig-paren">(</span><em>descriptor</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH.nearest_neighbour" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the nearest_neighbour by hashing the inp_vec and find the nearest neighbour in the
+corresponding bin.</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="distance.distance.LSH.p1">
+<em class="property">static </em><code class="descname">p1</code><span class="sig-paren">(</span><em>bin_width</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH.p1" title="Permalink to this definition">¶</a></dt>
+<dd><p>Probability that two points with ||p-q|| &lt; bin_width Fall into the same bucket</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="distance.distance.LSH.p2">
+<em class="property">static </em><code class="descname">p2</code><span class="sig-paren">(</span><em>bin_width</em>, <em>scale=2</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH.p2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Probability that two points ||p-q|| &gt; scale * bin_width Fall into the same bucket.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="distance.distance.LSH.save_lsh">
+<code class="descname">save_lsh</code><span class="sig-paren">(</span><em>path: str</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH.save_lsh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves the LSH structure at the given path. The path also defines the file name.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="distance.distance.LSH.train_LSH">
+<code class="descname">train_LSH</code><span class="sig-paren">(</span><em>data</em>, <em>query_sample</em>, <em>tolerance=1.5</em>, <em>maxk=10</em>, <em>fail_prob=0.1</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH.train_LSH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 <dl class="function">
 <dt id="distance.distance.naive_nearest_neighbour">
-<code class="descclassname">distance.distance.</code><code class="descname">naive_nearest_neighbour</code><span class="sig-paren">(</span><em>data</em>, <em>inp_vec</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.naive_nearest_neighbour" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">distance.distance.</code><code class="descname">naive_nearest_neighbour</code><span class="sig-paren">(</span><em>labels: list</em>, <em>descriptors: list</em>, <em>query: numpy.array</em><span class="sig-paren">)</span> &#x2192; tuple<a class="headerlink" href="#distance.distance.naive_nearest_neighbour" title="Permalink to this definition">¶</a></dt>
 <dd><p>Naive nearest neighbour search</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>labels</strong> – List of sequences represented for example as list of strings.</li>
+<li><strong>descriptors</strong> – List of descriptors represented as list of numpy arrays.</li>
+<li><strong>query</strong> – A numpy array that represents the descriptor for a given sequence.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A tuple containing the minimum distance and the corresponding label.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">(min_dist, min_match)</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last">ValueError: – The label list and descriptor list must have the same length.</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>

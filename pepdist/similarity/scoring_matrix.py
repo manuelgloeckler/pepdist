@@ -87,10 +87,10 @@ def symmetrize(matrix: dict, subst: bool = False) -> dict:
     Attributes
     ----------
     matrix: dict {(i,j): int}
-                A scoring matrix given as dictionary.
-    subst: bool
-                In a substitution matrix both cases (i,j) or (j,i) are included in one key. If you want to divide
-                the score of mismatches by 2 then set this to True.
+        A scoring matrix given as dictionary.
+    subst
+        In a substitution matrix, both cases (i,j) or (j, i), are included in one key. If you want to divide
+        the score of mismatches by two then set this to True.
 
     Returns
     -------
@@ -100,7 +100,7 @@ def symmetrize(matrix: dict, subst: bool = False) -> dict:
     Notes
     -----
     Biopython's or most other substitution matrices are not symmetric and should be symmetrized by this method or
-    manuall.
+    manual.
     """
 
     if subst:
@@ -125,11 +125,11 @@ def positivize(matrix: dict) -> dict:
     Attributes
     ----------
     matrix: dict {(i,j): int}
-                A scoring matrix given as dictionary.
+        A scoring matrix given as dictionary.
     Returns
     -------
     dict : {(i,j): int]
-                Returns the same scoring matrix with positive score values
+        Returns the same scoring matrix with positive score values
     """
     new_matrix = {}
     matrix_min = min(matrix.values())
@@ -147,11 +147,11 @@ def max_normalize(matrix: dict):
     Attributes
     ----------
     matrix: dict {(i,j): int}
-                A scoring matrix given as dictionary.
+        A scoring matrix given as dictionary.
     Returns
     -------
     dict : {(i,j): int]
-                Returns the same scoring matrix with normalized score values between 0 and 1.
+        Returns the same scoring matrix with normalized score values between 0 and 1.
     """
     matrix = positivize(matrix)
     new_matrix = {}

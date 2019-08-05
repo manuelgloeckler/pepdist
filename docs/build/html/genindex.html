@@ -183,9 +183,11 @@
 </li>
       <li><a href="distance.html#distance.aaindex.Aaindex.aaindex_dic">aaindex_dic (distance.aaindex.Aaindex attribute)</a>
 </li>
-      <li><a href="distance.html#distance.distance.LSH.add">add() (distance.distance.LSH method)</a>
+      <li><a href="distance.html#distance.distance.Bin.add">add() (distance.distance.Bin method)</a>
 
       <ul>
+        <li><a href="distance.html#distance.distance.LSH.add">(distance.distance.LSH method)</a>
+</li>
         <li><a href="similarity.html#similarity.similarity.KmerTrie.add">(similarity.similarity.KmerTrie method)</a>
 </li>
         <li><a href="similarity.html#similarity.similarity.Trie.add">(similarity.similarity.Trie method)</a>
@@ -193,11 +195,11 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="distance.html#distance.distance.descriptor.add_index">add_index() (distance.distance.descriptor method)</a>
+      <li><a href="distance.html#distance.distance.IndexDescriptor.add_indices">add_indices() (distance.distance.IndexDescriptor method)</a>
 </li>
       <li><a href="similarity.html#similarity.similarity.TrieNode.add_maxdepth">add_maxdepth() (similarity.similarity.TrieNode method)</a>
 </li>
-      <li><a href="distance.html#distance.distance.descriptor.add_seqs">add_seqs() (distance.distance.descriptor method)</a>
+      <li><a href="distance.html#distance.distance.IndexDescriptor.add_seqs">add_seqs() (distance.distance.IndexDescriptor method)</a>
 </li>
       <li><a href="similarity.html#similarity.similarity.KmerTrie.alphabet">alphabet (similarity.similarity.KmerTrie attribute)</a>
 
@@ -211,12 +213,12 @@
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="distance.html#distance.distance.HashTable.b">b (distance.distance.HashTable attribute)</a>
+      <li><a href="distance.html#distance.distance.Bin">Bin (class in distance.distance)</a>
 </li>
-      <li><a href="distance.html#distance.distance.HashTable.bin_widht">bin_widht (distance.distance.HashTable attribute)</a>
+      <li><a href="distance.html#distance.distance.HashTable.bin_width">bin_width (distance.distance.HashTable attribute)</a>
 
       <ul>
-        <li><a href="distance.html#distance.distance.LSH.bin_widht">(distance.distance.LSH attribute)</a>
+        <li><a href="distance.html#distance.distance.LSH.bin_width">(distance.distance.LSH attribute)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -229,9 +231,9 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="distance.html#distance.distance.descriptor.calculate_all">calculate_all() (distance.distance.descriptor method)</a>
+      <li><a href="distance.html#distance.distance.IndexDescriptor.calculate_all">calculate_all() (distance.distance.IndexDescriptor method)</a>
 </li>
-      <li><a href="distance.html#distance.distance.descriptor.change_norm_method">change_norm_method() (distance.distance.descriptor method)</a>
+      <li><a href="distance.html#distance.distance.IndexDescriptor.change_norm_method">change_norm_method() (distance.distance.IndexDescriptor method)</a>
 </li>
       <li><a href="similarity.html#similarity.similarity.TrieNode.char">char (similarity.similarity.TrieNode attribute)</a>
 </li>
@@ -245,7 +247,7 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="distance.html#distance.distance.LSH.compute_num_projections">compute_num_projections() (distance.distance.LSH method)</a>
+      <li><a href="distance.html#distance.distance.LSH.compute_num_projections">compute_num_projections() (distance.distance.LSH static method)</a>
 </li>
       <li><a href="similarity.html#similarity.similarity.count">count (in module similarity.similarity)</a>
 </li>
@@ -255,6 +257,8 @@
         <li><a href="similarity.html#similarity.similarity.Trie.cpu">(similarity.similarity.Trie attribute)</a>
 </li>
       </ul></li>
+      <li><a href="distance.html#distance.distance.Bin.create_kdtree">create_kdtree() (distance.distance.Bin method)</a>
+</li>
       <li><a href="plotting.html#plotting.plotting.cum_distplot">cum_distplot() (in module plotting.plotting)</a>
 </li>
   </ul></td>
@@ -265,14 +269,12 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="similarity.html#similarity.similarity.TrieNode.depth">depth (similarity.similarity.TrieNode attribute)</a>
 </li>
-      <li><a href="distance.html#distance.distance.descriptor">descriptor (class in distance.distance)</a>
+      <li><a href="distance.html#distance.distance.IndexDescriptor.descriptors">descriptors (distance.distance.IndexDescriptor attribute)</a>
 </li>
-      <li><a href="distance.html#distance.distance.descriptor.descriptors">descriptors (distance.distance.descriptor attribute)</a>
+      <li><a href="distance.html#module-distance">distance (module)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="distance.html#module-distance">distance (module)</a>
-</li>
       <li><a href="distance.html#module-distance.aaindex">distance.aaindex (module)</a>
 </li>
       <li><a href="distance.html#module-distance.distance">distance.distance (module)</a>
@@ -305,8 +307,6 @@
 <h2 id="H">H</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="distance.html#distance.distance.HashTable.hash_table">hash_table (distance.distance.HashTable attribute)</a>
-</li>
       <li><a href="distance.html#distance.distance.LSH.hash_tables">hash_tables (distance.distance.LSH attribute)</a>
 </li>
   </ul></td>
@@ -323,12 +323,16 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="distance.html#distance.aaindex.immu_indices">immu_indices (in module distance.aaindex)</a>
 </li>
+      <li><a href="distance.html#distance.distance.IndexDescriptor">IndexDescriptor (class in distance.distance)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="distance.html#distance.distance.HashTable.inp_dimension">inp_dimension (distance.distance.HashTable attribute)</a>
+      <li><a href="distance.html#distance.distance.IndexDescriptor.indices">indices (distance.distance.IndexDescriptor attribute)</a>
+</li>
+      <li><a href="distance.html#distance.distance.HashTable.inp_dimensions">inp_dimensions (distance.distance.HashTable attribute)</a>
 
       <ul>
-        <li><a href="distance.html#distance.distance.LSH.inp_dimension">(distance.distance.LSH attribute)</a>
+        <li><a href="distance.html#distance.distance.LSH.inp_dimensions">(distance.distance.LSH attribute)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -381,6 +385,10 @@
         <li><a href="similarity.html#similarity.similarity.Trie.lengths">(similarity.similarity.Trie attribute)</a>
 </li>
       </ul></li>
+      <li><a href="distance.html#distance.distance.LSH.load_lsh">load_lsh() (distance.distance.LSH static method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="similarity.html#similarity.similarity.load_trie">load_trie() (in module similarity.similarity)</a>
 
       <ul>
@@ -389,8 +397,6 @@
         <li><a href="similarity.html#similarity.similarity.Trie.load_trie">(similarity.similarity.Trie method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="distance.html#distance.distance.LSH">LSH (class in distance.distance)</a>
 </li>
   </ul></td>
@@ -429,10 +435,12 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="distance.html#distance.distance.LSH.nearest_neighbour">nearest_neighbour() (distance.distance.LSH method)</a>
+      <li><a href="distance.html#distance.distance.Bin.nearest_neighbour">nearest_neighbour() (distance.distance.Bin method)</a>
+
+      <ul>
+        <li><a href="distance.html#distance.distance.LSH.nearest_neighbour">(distance.distance.LSH method)</a>
 </li>
-      <li><a href="distance.html#distance.distance.descriptor.normalize_all">normalize_all() (distance.distance.descriptor method)</a>
-</li>
+      </ul></li>
       <li><a href="distance.html#distance.distance.LSH.num_projections">num_projections (distance.distance.LSH attribute)</a>
 </li>
   </ul></td>
@@ -441,16 +449,16 @@
 <h2 id="P">P</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="distance.html#distance.distance.LSH.p1">p1() (distance.distance.LSH method)</a>
+      <li><a href="distance.html#distance.distance.LSH.p1">p1() (distance.distance.LSH static method)</a>
 </li>
-      <li><a href="distance.html#distance.distance.LSH.p2">p2() (distance.distance.LSH method)</a>
+      <li><a href="distance.html#distance.distance.LSH.p2">p2() (distance.distance.LSH static method)</a>
 </li>
       <li><a href="plotting.html#plotting.plotting.plot_all">plot_all() (in module plotting.plotting)</a>
 </li>
-      <li><a href="plotting.html#module-plotting">plotting (module)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="plotting.html#module-plotting">plotting (module)</a>
+</li>
       <li><a href="plotting.html#module-plotting.plotting">plotting.plotting (module)</a>
 </li>
       <li><a href="distance.html#distance.aaindex.positivize">positivize() (in module distance.aaindex)</a>
@@ -459,8 +467,6 @@
         <li><a href="similarity.html#similarity.scoring_matrix.positivize">(in module similarity.scoring_matrix)</a>
 </li>
       </ul></li>
-      <li><a href="distance.html#distance.distance.HashTable.projections">projections (distance.distance.HashTable attribute)</a>
-</li>
   </ul></td>
 </tr></table>
 
@@ -469,8 +475,12 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="plotting.html#plotting.plotting.remove_equals">remove_equals() (in module plotting.plotting)</a>
 </li>
+      <li><a href="distance.html#distance.distance.IndexDescriptor.remove_index">remove_index() (distance.distance.IndexDescriptor method)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="distance.html#distance.distance.IndexDescriptor.remove_seqs">remove_seqs() (distance.distance.IndexDescriptor method)</a>
+</li>
       <li><a href="similarity.html#similarity.similarity.KmerTrie.root">root (similarity.similarity.KmerTrie attribute)</a>
 
       <ul>
@@ -483,6 +493,8 @@
 <h2 id="S">S</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="distance.html#distance.distance.LSH.save_lsh">save_lsh() (distance.distance.LSH method)</a>
+</li>
       <li><a href="similarity.html#similarity.similarity.Trie.save_trie">save_trie() (similarity.similarity.Trie method)</a>
 </li>
       <li><a href="similarity.html#similarity.similarity.KmerTrie.score">score (similarity.similarity.KmerTrie attribute)</a>, <a href="similarity.html#similarity.similarity.KmerTrie.score">[1]</a>
@@ -491,7 +503,7 @@
         <li><a href="similarity.html#similarity.similarity.Trie.score">(similarity.similarity.Trie attribute)</a>, <a href="similarity.html#similarity.similarity.Trie.score">[1]</a>
 </li>
       </ul></li>
-      <li><a href="distance.html#distance.distance.descriptor.sequences">sequences (distance.distance.descriptor attribute)</a>
+      <li><a href="distance.html#distance.distance.IndexDescriptor.sequences">sequences (distance.distance.IndexDescriptor attribute)</a>
 
       <ul>
         <li><a href="similarity.html#similarity.similarity.KmerTrieNode.sequences">(similarity.similarity.KmerTrieNode attribute)</a>
@@ -519,7 +531,7 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="distance.html#distance.distance.LSH.train_LSH">train_LSH() (distance.distance.LSH method)</a>
 </li>
-      <li><a href="distance.html#distance.distance.descriptor.translate">translate() (distance.distance.descriptor method)</a>
+      <li><a href="distance.html#distance.distance.IndexDescriptor.translate">translate() (distance.distance.IndexDescriptor static method)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>

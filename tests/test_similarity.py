@@ -85,10 +85,11 @@ def test_random_nearest_neighbour(random_sample):
     trie.add(random_sample)
     for data in random_sample:
         assert trie.k_nearest_neighbour(data, similarity.blosum62)[0][0] == data
-    test_peptide = ''.join(random.choice('ACDEFGHIKLMNPQRSTVWY') for i in range(9))
-    trie_solution = trie.k_nearest_neighbour(test_peptide, similarity.blosum62)
-    naive_solution = similarity.naive_nearest_neighbour(random_sample, test_peptide, similarity.blosum62)
-    assert isclose(trie_solution[0][1], naive_solution[1], rel_tol=0.1)
+    for i in range(20):
+        test_peptide = ''.join(random.choice('ACDEFGHIKLMNPQRSTVWY') for i in range(9))
+        trie_solution = trie.k_nearest_neighbour(test_peptide, similarity.blosum62)
+        naive_solution = similarity.naive_nearest_neighbour(random_sample, test_peptide, similarity.blosum62)
+        assert isclose(trie_solution[0][1], naive_solution[1], rel_tol=0.0001)
 
 
 def test_kmer_trie_creation():

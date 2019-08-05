@@ -69,6 +69,8 @@ class IndexDescriptor:
         List of sequences contained.
     descriptors : list
         List of arrays that describe the sequences.
+    indices : list
+        List of indices used to describe the sequences.
 
     Examples
     --------
@@ -85,7 +87,7 @@ class IndexDescriptor:
     def __init__(self, seqs: list, indices: list = [], norm_method=lambda x: x):
         self.sequences = seqs
         self.descriptors = []
-        self.__indices = indices
+        self.indices = indices
         self.__normalized_indices = []
         self.__norm_method = norm_method
 
@@ -123,7 +125,7 @@ class IndexDescriptor:
         if isinstance(indices, dict):
             indices = [indices]
         for index in indices:
-            self.__indices.append(index)
+            self.indices.append(index)
             self.__normalized_indices.append(self.__norm_method(index))
             self.calculate_all()
 
@@ -131,13 +133,13 @@ class IndexDescriptor:
         """ Removes a index or multiple indices. """
         # If only one is inputed...
         if isinstance(indices, dict):
-            index = self.__indices.index(indices)
-            del self.__indices[index]
+            index = self.indices.index(indices)
+            del self.indices[index]
             del self.__normalized_indices[index]
         else:
             for i in indices:
-                index = self.__indices.index(i)
-                del self.__indices[index]
+                index = self.indices.index(i)
+                del self.indices[index]
                 del self.__normalized_indices[index]
         self.calculate_all()
 
@@ -149,11 +151,11 @@ class IndexDescriptor:
 
     def __normalize_all(self):
         """ Normalize all sequence by the defined method """
-        for i in range(len(self.__indices)):
+        for i in range(len(self.indices)):
             if i > len(self.descriptors)-1:
-                self.__normalized_indices.append(self.__norm_method(self.__indices[i]))
+                self.__normalized_indices.append(self.__norm_method(self.indices[i]))
             else:
-                self.__normalized_indices[i] = self.__norm_method(self.__indices[i])
+                self.__normalized_indices[i] = self.__norm_method(self.indices[i])
 
     def calculate_all(self):
         """ Translate all sequences by the defined indices. """
@@ -360,9 +362,11 @@ class LSH:
 
         if not results:
             hash_bin = [item for sublist in self.hash_tables[0].values() for item in sublist]
-            results.append(bins.nearest_neighbour(np.asarray(descriptor)))
+            for bins in hash_bin:
+                results.append(bins.nearest_neighbour(np.asarray(descriptor)))
+                results.append(bins.nearest_neighbour(np.asarray(descriptor)))
 
-        minimum = min(results, key=lambda x: x[0])
+        minimum = min(results, key=lambda x: x[1])
         min_match = minimum[0]
         min_dist = minimum[1]
 

@@ -233,8 +233,8 @@ matrix function for linear transformation techniques.</p>
 <dl class="attribute">
 <dt id="similarity.scoring_matrix.subst">
 <code class="descclassname">similarity.scoring_matrix.</code><code class="descname">subst</code><a class="headerlink" href="#similarity.scoring_matrix.subst" title="Permalink to this definition">¶</a></dt>
-<dd><p><em>bool</em> – In a substitution matrix both cases (i,j) or (j,i) are included in one key. If you want to divide
-the score of mismatches by 2 then set this to True.</p>
+<dd><p>In a substitution matrix, both cases (i,j) or (j, i), are included in one key. If you want to divide
+the score of mismatches by two then set this to True.</p>
 </dd></dl>
 
 <table class="docutils field-list" frame="void" rules="none">
@@ -249,14 +249,14 @@ the score of mismatches by 2 then set this to True.</p>
 </table>
 <p class="rubric">Notes</p>
 <p>Biopython’s or most other substitution matrices are not symmetric and should be symmetrized by this method or
-manuall.</p>
+manual.</p>
 </dd></dl>
 
 </div>
 <div class="section" id="module-similarity.similarity">
 <span id="similarity-module"></span><h2>similarity module<a class="headerlink" href="#module-similarity.similarity" title="Permalink to this headline">¶</a></h2>
-<p>This module has multiple functions or classes to determine the k nearest neighbours given a scoring matrix. Therefore
-a efficient trie datastructure is implemented where a nearest neighbour can be determined fast by a branch and bound
+<p>This module has multiple functions or classes to determine the k nearest neighbors given a scoring matrix. Therefore
+an efficient trie data structure is implemented where the nearest neighbor can be resolved fast by a branch and bound
 algorithm.</p>
 <dl class="class">
 <dt id="similarity.similarity.KmerTrie">
@@ -381,7 +381,7 @@ is returned which contains all words that contain this kmer.</td>
 </table>
 <p class="rubric">Notes</p>
 <p>If a key found in the trie/word pair is not in the scoring matrix, then it is scored by 0!
-If their this is possible a warning is returned #TODO Warnings!</p>
+If their this is possible a warning is returned</p>
 <p class="rubric">Example</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pepdist</span> <span class="k">import</span> <span class="n">similarity</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">trie</span> <span class="o">=</span> <span class="n">similarity</span><span class="o">.</span><span class="n">KmerTrie</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;AAWWAA&#39;</span><span class="p">,</span> <span class="s1">&#39;GGWWGA&#39;</span><span class="p">])</span>
@@ -394,7 +394,7 @@ If their this is possible a warning is returned #TODO Warnings!</p>
 <dl class="method">
 <dt id="similarity.similarity.KmerTrie.load_trie">
 <code class="descname">load_trie</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#similarity.similarity.KmerTrie.load_trie" title="Permalink to this definition">¶</a></dt>
-<dd><p>Loades a Trie structure</p>
+<dd><p>Load’s a Trie structure</p>
 </dd></dl>
 
 </dd></dl>
@@ -417,9 +417,8 @@ If their this is possible a warning is returned #TODO Warnings!</p>
 <em class="property">class </em><code class="descclassname">similarity.similarity.</code><code class="descname">Trie</code><span class="sig-paren">(</span><em>data: list = None</em><span class="sig-paren">)</span><a class="headerlink" href="#similarity.similarity.Trie" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>A trie/prefix-tree data structure.</p>
-<blockquote>
-<div>A prefix tree is a tree, where strings can be added
-and each node represent a prefix of this string.</div></blockquote>
+<p>A prefix tree is a tree, where strings can be added
+and each node represent a prefix of this string.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -446,6 +445,21 @@ and each node represent a prefix of this string.</div></blockquote>
 <dd><p><em>Set</em> – Set of word lengths saved in the Trie.</p>
 </dd></dl>
 
+<p class="rubric">Notes</p>
+<p>This method needs a symmetrized BLOSUM like scoring matrix. Additionally, for apparent
+reasons, this matrix has to map all pairs of characters from the trie and query word
+to a real value.</p>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pepdist</span> <span class="k">import</span> <span class="n">similarity</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">trie</span> <span class="o">=</span> <span class="n">similarity</span><span class="o">.</span><span class="n">Trie</span><span class="p">([</span><span class="s1">&#39;AAWWAA&#39;</span><span class="p">,</span> <span class="s1">&#39;GGWWGA&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">trie</span><span class="o">.</span><span class="n">find_word</span><span class="p">(</span><span class="s1">&#39;AAWWAA&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">trie</span><span class="o">.</span><span class="n">find_word</span><span class="p">(</span><span class="s1">&#39;GGGGGG&#39;</span><span class="p">)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">trie</span><span class="o">.</span><span class="n">k_nearest_neighbour</span><span class="p">(</span><span class="s1">&#39;GGGGGG&#39;</span><span class="p">,</span> <span class="n">score</span> <span class="o">=</span> <span class="n">similarity</span><span class="o">.</span><span class="n">blosum62</span><span class="p">)</span>
+<span class="go">[(&#39;GGWWGA&#39;, 0.35176323534072423)]</span>
+</pre></div>
+</div>
 <dl class="method">
 <dt id="similarity.similarity.Trie.add">
 <code class="descname">add</code><span class="sig-paren">(</span><em>words: list</em><span class="sig-paren">)</span><a class="headerlink" href="#similarity.similarity.Trie.add" title="Permalink to this definition">¶</a></dt>
@@ -560,17 +574,6 @@ corresponding to their score.</td>
 <p class="rubric">Notes</p>
 <p>If a key found in the trie/word pair is not in the scoring matrix, then it is scored by 0!
 If their this is possible a warning is returned #TODO Warnings!</p>
-<p class="rubric">Example</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pepdist</span> <span class="k">import</span> <span class="n">similarity</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">trie</span> <span class="o">=</span> <span class="n">similarity</span><span class="o">.</span><span class="n">Trie</span><span class="p">([</span><span class="s1">&#39;AAWWAA&#39;</span><span class="p">,</span> <span class="s1">&#39;GGWWGA&#39;</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">trie</span><span class="o">.</span><span class="n">find_word</span><span class="p">(</span><span class="s1">&#39;AAWWAA&#39;</span><span class="p">)</span>
-<span class="go">True</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">trie</span><span class="o">.</span><span class="n">find_word</span><span class="p">(</span><span class="s1">&#39;GGGGGG&#39;</span><span class="p">)</span>
-<span class="go">False</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">trie</span><span class="o">.</span><span class="n">k_nearest_neighbour</span><span class="p">(</span><span class="s1">&#39;GGGGGG&#39;</span><span class="p">,</span> <span class="n">score</span> <span class="o">=</span> <span class="n">similarity</span><span class="o">.</span><span class="n">blosum62</span><span class="p">)</span>
-<span class="go">[(&#39;GGWWGA&#39;, 0.35176323534072423)]</span>
-</pre></div>
-</div>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -690,19 +693,19 @@ frequencies as values. If False, only all unique kmers a returned.</p>
 <dl class="function">
 <dt id="similarity.similarity.naive_nearest_neighbour">
 <code class="descclassname">similarity.similarity.</code><code class="descname">naive_nearest_neighbour</code><span class="sig-paren">(</span><em>data</em>, <em>word</em>, <em>score</em><span class="sig-paren">)</span><a class="headerlink" href="#similarity.similarity.naive_nearest_neighbour" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes the nearest neighbor in a naive fashion</p>
+<dd><p>Computes the nearest neighbor in a naive fashion.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="similarity.similarity.squared_root_similarity">
 <code class="descclassname">similarity.similarity.</code><code class="descname">squared_root_similarity</code><span class="sig-paren">(</span><em>word1: str</em>, <em>word2: str</em>, <em>score: dict</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#similarity.similarity.squared_root_similarity" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes the squared root normalized score of two words</p>
+<dd><p>Computes the squared root normalized score of two words.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="similarity.similarity.word_score">
 <code class="descclassname">similarity.similarity.</code><code class="descname">word_score</code><span class="sig-paren">(</span><em>word1: str</em>, <em>word2: str</em>, <em>score: dict</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#similarity.similarity.word_score" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes the score between two words by the given scoring matrix</p>
+<dd><p>Computes the score between two words by the given scoring matrix.</p>
 </dd></dl>
 
 </div>

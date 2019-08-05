@@ -77,6 +77,16 @@ The kmerTrie can be used to find to highest scoring kmer between peptides:
 
 Distance
 --------
+The autodoc documenteded function's and classes are documented via autodoc here :mod:`pepdist.distance`. The main classes are :class:`pepdist.distance.Aaindex`, :class:`pepdist.distance.descriptor` and 
+:class:`pepdist.distance.LSH`. The Aaindex class parse the AAindex database into python dictionaries. This indices map a amino acid to a real value and therefore can be used to map petides to a feature
+vector representing a physical or chemical property. The distance between two peptides can then be represented as the euclidean distance of the feature vectors. However encoding a peptide with multiple
+indices can lead to very high dimensional feature vectors. For an efficent approximate nearest neighbour search a locally sensitive hashing was implementet which allows blazing fast search times.
 
+Here are some example of how to use it:
+
+.. code-block:: python
+
+    >>>from pepdist import distance
+    
 
 
