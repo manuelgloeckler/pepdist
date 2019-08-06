@@ -1,0 +1,14 @@
+# Idea #
+###################
+.idea/
+
+# Test #
+###################
+.eggs
+.pytest_cache
+pepdist.egg-info
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+
