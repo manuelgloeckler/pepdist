@@ -1,0 +1,749 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Similarity package &mdash; pepdist 31.08.19 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'./',
+              VERSION:'31.08.19',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> pepdist
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Similarity package</a><ul>
+<li><a class="reference internal" href="#module-similarity.scoring_matrix">Scoring matrix module</a></li>
+<li><a class="reference internal" href="#module-similarity.similarity">Similarity module</a></li>
+</ul>
+</li>
+</ul>
+</div>
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pepdist</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Similarity package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/similarity.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="similarity-package">
+<h1>Similarity package<a class="headerlink" href="#similarity-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-similarity.scoring_matrix">
+<span id="scoring-matrix-module"></span><h2>Scoring matrix module<a class="headerlink" href="#module-similarity.scoring_matrix" title="Permalink to this headline">¶</a></h2>
+<p>This module consist the blosum62 substitution matrix in a symmetric version. Additionally their are some scoring
+matrix function for linear transformation techniques.</p>
+<dl class="data">
+<dt id="similarity.scoring_matrix.blosum62">
+<code class="descclassname">similarity.scoring_matrix.</code><code class="descname">blosum62</code><em class="property"> = {('A', 'A'): 4, ('A', 'B'): -2, ('A', 'C'): 0, ('A', 'D'): -2, ('A', 'E'): -1, ('A', 'F'): -2, ('A', 'G'): 0, ('A', 'H'): -2, ('A', 'I'): -1, ('A', 'K'): -1, ('A', 'L'): -1, ('A', 'M'): -1, ('A', 'N'): -2, ('A', 'P'): -1, ('A', 'Q'): -1, ('A', 'R'): -1, ('A', 'S'): 1, ('A', 'T'): 0, ('A', 'V'): 0, ('A', 'W'): -3, ('A', 'X'): 0, ('A', 'Y'): -2, ('A', 'Z'): -1, ('B', 'A'): -2, ('B', 'B'): 4, ('B', 'C'): -3, ('B', 'D'): 4, ('B', 'E'): 1, ('B', 'F'): -3, ('B', 'G'): -1, ('B', 'H'): 0, ('B', 'I'): -3, ('B', 'K'): 0, ('B', 'L'): -4, ('B', 'M'): -3, ('B', 'N'): 3, ('B', 'P'): -2, ('B', 'Q'): 0, ('B', 'R'): -1, ('B', 'S'): 0, ('B', 'T'): -1, ('B', 'V'): -3, ('B', 'W'): -4, ('B', 'X'): -1, ('B', 'Y'): -3, ('B', 'Z'): 1, ('C', 'A'): 0, ('C', 'B'): -3, ('C', 'C'): 9, ('C', 'D'): -3, ('C', 'E'): -4, ('C', 'F'): -2, ('C', 'G'): -3, ('C', 'H'): -3, ('C', 'I'): -1, ('C', 'K'): -3, ('C', 'L'): -1, ('C', 'M'): -1, ('C', 'N'): -3, ('C', 'P'): -3, ('C', 'Q'): -3, ('C', 'R'): -3, ('C', 'S'): -1, ('C', 'T'): -1, ('C', 'V'): -1, ('C', 'W'): -2, ('C', 'X'): -2, ('C', 'Y'): -2, ('C', 'Z'): -3, ('D', 'A'): -2, ('D', 'B'): 4, ('D', 'C'): -3, ('D', 'D'): 6, ('D', 'E'): 2, ('D', 'F'): -3, ('D', 'G'): -1, ('D', 'H'): -1, ('D', 'I'): -3, ('D', 'K'): -1, ('D', 'L'): -4, ('D', 'M'): -3, ('D', 'N'): 1, ('D', 'P'): -1, ('D', 'Q'): 0, ('D', 'R'): -2, ('D', 'S'): 0, ('D', 'T'): -1, ('D', 'V'): -3, ('D', 'W'): -4, ('D', 'X'): -1, ('D', 'Y'): -3, ('D', 'Z'): 1, ('E', 'A'): -1, ('E', 'B'): 1, ('E', 'C'): -4, ('E', 'D'): 2, ('E', 'E'): 5, ('E', 'F'): -3, ('E', 'G'): -2, ('E', 'H'): 0, ('E', 'I'): -3, ('E', 'K'): 1, ('E', 'L'): -3, ('E', 'M'): -2, ('E', 'N'): 0, ('E', 'P'): -1, ('E', 'Q'): 2, ('E', 'R'): 0, ('E', 'S'): 0, ('E', 'T'): -1, ('E', 'V'): -2, ('E', 'W'): -3, ('E', 'X'): -1, ('E', 'Y'): -2, ('E', 'Z'): 4, ('F', 'A'): -2, ('F', 'B'): -3, ('F', 'C'): -2, ('F', 'D'): -3, ('F', 'E'): -3, ('F', 'F'): 6, ('F', 'G'): -3, ('F', 'H'): -1, ('F', 'I'): 0, ('F', 'K'): -3, ('F', 'L'): 0, ('F', 'M'): 0, ('F', 'N'): -3, ('F', 'P'): -4, ('F', 'Q'): -3, ('F', 'R'): -3, ('F', 'S'): -2, ('F', 'T'): -2, ('F', 'V'): -1, ('F', 'W'): 1, ('F', 'X'): -1, ('F', 'Y'): 3, ('F', 'Z'): -3, ('G', 'A'): 0, ('G', 'B'): -1, ('G', 'C'): -3, ('G', 'D'): -1, ('G', 'E'): -2, ('G', 'F'): -3, ('G', 'G'): 6, ('G', 'H'): -2, ('G', 'I'): -4, ('G', 'K'): -2, ('G', 'L'): -4, ('G', 'M'): -3, ('G', 'N'): 0, ('G', 'P'): -2, ('G', 'Q'): -2, ('G', 'R'): -2, ('G', 'S'): 0, ('G', 'T'): -2, ('G', 'V'): -3, ('G', 'W'): -2, ('G', 'X'): -1, ('G', 'Y'): -3, ('G', 'Z'): -2, ('H', 'A'): -2, ('H', 'B'): 0, ('H', 'C'): -3, ('H', 'D'): -1, ('H', 'E'): 0, ('H', 'F'): -1, ('H', 'G'): -2, ('H', 'H'): 8, ('H', 'I'): -3, ('H', 'K'): -1, ('H', 'L'): -3, ('H', 'M'): -2, ('H', 'N'): 1, ('H', 'P'): -2, ('H', 'Q'): 0, ('H', 'R'): 0, ('H', 'S'): -1, ('H', 'T'): -2, ('H', 'V'): -3, ('H', 'W'): -2, ('H', 'X'): -1, ('H', 'Y'): 2, ('H', 'Z'): 0, ('I', 'A'): -1, ('I', 'B'): -3, ('I', 'C'): -1, ('I', 'D'): -3, ('I', 'E'): -3, ('I', 'F'): 0, ('I', 'G'): -4, ('I', 'H'): -3, ('I', 'I'): 4, ('I', 'K'): -3, ('I', 'L'): 2, ('I', 'M'): 1, ('I', 'N'): -3, ('I', 'P'): -3, ('I', 'Q'): -3, ('I', 'R'): -3, ('I', 'S'): -2, ('I', 'T'): -1, ('I', 'V'): 3, ('I', 'W'): -3, ('I', 'X'): -1, ('I', 'Y'): -1, ('I', 'Z'): -3, ('K', 'A'): -1, ('K', 'B'): 0, ('K', 'C'): -3, ('K', 'D'): -1, ('K', 'E'): 1, ('K', 'F'): -3, ('K', 'G'): -2, ('K', 'H'): -1, ('K', 'I'): -3, ('K', 'K'): 5, ('K', 'L'): -2, ('K', 'M'): -1, ('K', 'N'): 0, ('K', 'P'): -1, ('K', 'Q'): 1, ('K', 'R'): 2, ('K', 'S'): 0, ('K', 'T'): -1, ('K', 'V'): -2, ('K', 'W'): -3, ('K', 'X'): -1, ('K', 'Y'): -2, ('K', 'Z'): 1, ('L', 'A'): -1, ('L', 'B'): -4, ('L', 'C'): -1, ('L', 'D'): -4, ('L', 'E'): -3, ('L', 'F'): 0, ('L', 'G'): -4, ('L', 'H'): -3, ('L', 'I'): 2, ('L', 'K'): -2, ('L', 'L'): 4, ('L', 'M'): 2, ('L', 'N'): -3, ('L', 'P'): -3, ('L', 'Q'): -2, ('L', 'R'): -2, ('L', 'S'): -2, ('L', 'T'): -1, ('L', 'V'): 1, ('L', 'W'): -2, ('L', 'X'): -1, ('L', 'Y'): -1, ('L', 'Z'): -3, ('M', 'A'): -1, ('M', 'B'): -3, ('M', 'C'): -1, ('M', 'D'): -3, ('M', 'E'): -2, ('M', 'F'): 0, ('M', 'G'): -3, ('M', 'H'): -2, ('M', 'I'): 1, ('M', 'K'): -1, ('M', 'L'): 2, ('M', 'M'): 5, ('M', 'N'): -2, ('M', 'P'): -2, ('M', 'Q'): 0, ('M', 'R'): -1, ('M', 'S'): -1, ('M', 'T'): -1, ('M', 'V'): 1, ('M', 'W'): -1, ('M', 'X'): -1, ('M', 'Y'): -1, ('M', 'Z'): -1, ('N', 'A'): -2, ('N', 'B'): 3, ('N', 'C'): -3, ('N', 'D'): 1, ('N', 'E'): 0, ('N', 'F'): -3, ('N', 'G'): 0, ('N', 'H'): 1, ('N', 'I'): -3, ('N', 'K'): 0, ('N', 'L'): -3, ('N', 'M'): -2, ('N', 'N'): 6, ('N', 'P'): -2, ('N', 'Q'): 0, ('N', 'R'): 0, ('N', 'S'): 1, ('N', 'T'): 0, ('N', 'V'): -3, ('N', 'W'): -4, ('N', 'X'): -1, ('N', 'Y'): -2, ('N', 'Z'): 0, ('P', 'A'): -1, ('P', 'B'): -2, ('P', 'C'): -3, ('P', 'D'): -1, ('P', 'E'): -1, ('P', 'F'): -4, ('P', 'G'): -2, ('P', 'H'): -2, ('P', 'I'): -3, ('P', 'K'): -1, ('P', 'L'): -3, ('P', 'M'): -2, ('P', 'N'): -2, ('P', 'P'): 7, ('P', 'Q'): -1, ('P', 'R'): -2, ('P', 'S'): -1, ('P', 'T'): -1, ('P', 'V'): -2, ('P', 'W'): -4, ('P', 'X'): -2, ('P', 'Y'): -3, ('P', 'Z'): -1, ('Q', 'A'): -1, ('Q', 'B'): 0, ('Q', 'C'): -3, ('Q', 'D'): 0, ('Q', 'E'): 2, ('Q', 'F'): -3, ('Q', 'G'): -2, ('Q', 'H'): 0, ('Q', 'I'): -3, ('Q', 'K'): 1, ('Q', 'L'): -2, ('Q', 'M'): 0, ('Q', 'N'): 0, ('Q', 'P'): -1, ('Q', 'Q'): 5, ('Q', 'R'): 1, ('Q', 'S'): 0, ('Q', 'T'): -1, ('Q', 'V'): -2, ('Q', 'W'): -2, ('Q', 'X'): -1, ('Q', 'Y'): -1, ('Q', 'Z'): 3, ('R', 'A'): -1, ('R', 'B'): -1, ('R', 'C'): -3, ('R', 'D'): -2, ('R', 'E'): 0, ('R', 'F'): -3, ('R', 'G'): -2, ('R', 'H'): 0, ('R', 'I'): -3, ('R', 'K'): 2, ('R', 'L'): -2, ('R', 'M'): -1, ('R', 'N'): 0, ('R', 'P'): -2, ('R', 'Q'): 1, ('R', 'R'): 5, ('R', 'S'): -1, ('R', 'T'): -1, ('R', 'V'): -3, ('R', 'W'): -3, ('R', 'X'): -1, ('R', 'Y'): -2, ('R', 'Z'): 0, ('S', 'A'): 1, ('S', 'B'): 0, ('S', 'C'): -1, ('S', 'D'): 0, ('S', 'E'): 0, ('S', 'F'): -2, ('S', 'G'): 0, ('S', 'H'): -1, ('S', 'I'): -2, ('S', 'K'): 0, ('S', 'L'): -2, ('S', 'M'): -1, ('S', 'N'): 1, ('S', 'P'): -1, ('S', 'Q'): 0, ('S', 'R'): -1, ('S', 'S'): 4, ('S', 'T'): 1, ('S', 'V'): -2, ('S', 'W'): -3, ('S', 'X'): 0, ('S', 'Y'): -2, ('S', 'Z'): 0, ('T', 'A'): 0, ('T', 'B'): -1, ('T', 'C'): -1, ('T', 'D'): -1, ('T', 'E'): -1, ('T', 'F'): -2, ('T', 'G'): -2, ('T', 'H'): -2, ('T', 'I'): -1, ('T', 'K'): -1, ('T', 'L'): -1, ('T', 'M'): -1, ('T', 'N'): 0, ('T', 'P'): -1, ('T', 'Q'): -1, ('T', 'R'): -1, ('T', 'S'): 1, ('T', 'T'): 5, ('T', 'V'): 0, ('T', 'W'): -2, ('T', 'X'): 0, ('T', 'Y'): -2, ('T', 'Z'): -1, ('V', 'A'): 0, ('V', 'B'): -3, ('V', 'C'): -1, ('V', 'D'): -3, ('V', 'E'): -2, ('V', 'F'): -1, ('V', 'G'): -3, ('V', 'H'): -3, ('V', 'I'): 3, ('V', 'K'): -2, ('V', 'L'): 1, ('V', 'M'): 1, ('V', 'N'): -3, ('V', 'P'): -2, ('V', 'Q'): -2, ('V', 'R'): -3, ('V', 'S'): -2, ('V', 'T'): 0, ('V', 'V'): 4, ('V', 'W'): -3, ('V', 'X'): -1, ('V', 'Y'): -1, ('V', 'Z'): -2, ('W', 'A'): -3, ('W', 'B'): -4, ('W', 'C'): -2, ('W', 'D'): -4, ('W', 'E'): -3, ('W', 'F'): 1, ('W', 'G'): -2, ('W', 'H'): -2, ('W', 'I'): -3, ('W', 'K'): -3, ('W', 'L'): -2, ('W', 'M'): -1, ('W', 'N'): -4, ('W', 'P'): -4, ('W', 'Q'): -2, ('W', 'R'): -3, ('W', 'S'): -3, ('W', 'T'): -2, ('W', 'V'): -3, ('W', 'W'): 11, ('W', 'X'): -2, ('W', 'Y'): 2, ('W', 'Z'): -3, ('X', 'A'): 0, ('X', 'B'): -1, ('X', 'C'): -2, ('X', 'D'): -1, ('X', 'E'): -1, ('X', 'F'): -1, ('X', 'G'): -1, ('X', 'H'): -1, ('X', 'I'): -1, ('X', 'K'): -1, ('X', 'L'): -1, ('X', 'M'): -1, ('X', 'N'): -1, ('X', 'P'): -2, ('X', 'Q'): -1, ('X', 'R'): -1, ('X', 'S'): 0, ('X', 'T'): 0, ('X', 'V'): -1, ('X', 'W'): -2, ('X', 'X'): -1, ('X', 'Y'): -1, ('X', 'Z'): -1, ('Y', 'A'): -2, ('Y', 'B'): -3, ('Y', 'C'): -2, ('Y', 'D'): -3, ('Y', 'E'): -2, ('Y', 'F'): 3, ('Y', 'G'): -3, ('Y', 'H'): 2, ('Y', 'I'): -1, ('Y', 'K'): -2, ('Y', 'L'): -1, ('Y', 'M'): -1, ('Y', 'N'): -2, ('Y', 'P'): -3, ('Y', 'Q'): -1, ('Y', 'R'): -2, ('Y', 'S'): -2, ('Y', 'T'): -2, ('Y', 'V'): -1, ('Y', 'W'): 2, ('Y', 'X'): -1, ('Y', 'Y'): 7, ('Y', 'Z'): -2, ('Z', 'A'): -1, ('Z', 'B'): 1, ('Z', 'C'): -3, ('Z', 'D'): 1, ('Z', 'E'): 4, ('Z', 'F'): -3, ('Z', 'G'): -2, ('Z', 'H'): 0, ('Z', 'I'): -3, ('Z', 'K'): 1, ('Z', 'L'): -3, ('Z', 'M'): -1, ('Z', 'N'): 0, ('Z', 'P'): -1, ('Z', 'Q'): 3, ('Z', 'R'): 0, ('Z', 'S'): 0, ('Z', 'T'): -1, ('Z', 'V'): -2, ('Z', 'W'): -3, ('Z', 'X'): -1, ('Z', 'Y'): -2, ('Z', 'Z'): 4}</em><a class="headerlink" href="#similarity.scoring_matrix.blosum62" title="Permalink to this definition">¶</a></dt>
+<dd><p>The symmetrized blosum62 substitutionmatrix obtained from biopython package.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="similarity.scoring_matrix.max_normalize">
+<code class="descclassname">similarity.scoring_matrix.</code><code class="descname">max_normalize</code><span class="sig-paren">(</span><em>matrix: dict</em><span class="sig-paren">)</span><a class="headerlink" href="#similarity.scoring_matrix.max_normalize" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function normalize the score between 0 and 1, by dividung throught the maximum value.</p>
+<dl class="attribute">
+<dt id="similarity.scoring_matrix.matrix">
+<code class="descclassname">similarity.scoring_matrix.</code><code class="descname">matrix</code><a class="headerlink" href="#similarity.scoring_matrix.matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>dict {(i,j): int}</em> – A scoring matrix given as dictionary.</p>
+</dd></dl>
+
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>dict</strong> – Returns the same scoring matrix with normalized score values between 0 and 1.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">{(i,j): int]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="similarity.scoring_matrix.positivize">
+<code class="descclassname">similarity.scoring_matrix.</code><code class="descname">positivize</code><span class="sig-paren">(</span><em>matrix: dict</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#similarity.scoring_matrix.positivize" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function transforms all score values linearly to be greater equal than zero</p>
+<dl class="attribute">
+<dt>
+<code class="descclassname">similarity.scoring_matrix.</code><code class="descname">matrix</code></dt>
+<dd><p><em>dict {(i,j): int}</em> – A scoring matrix given as dictionary.</p>
+</dd></dl>
+
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>dict</strong> – Returns the same scoring matrix with positive score values</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">{(i,j): int]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="similarity.scoring_matrix.symmetrize">
+<code class="descclassname">similarity.scoring_matrix.</code><code class="descname">symmetrize</code><span class="sig-paren">(</span><em>matrix: dict</em>, <em>subst: bool = False</em><span class="sig-paren">)</span> &#x2192; dict<a class="headerlink" href="#similarity.scoring_matrix.symmetrize" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function symmetrize a given matrix.</p>
+<dl class="attribute">
+<dt>
+<code class="descclassname">similarity.scoring_matrix.</code><code class="descname">matrix</code></dt>
+<dd><p><em>dict {(i,j): int}</em> – A scoring matrix given as dictionary.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="similarity.scoring_matrix.subst">
+<code class="descclassname">similarity.scoring_matrix.</code><code class="descname">subst</code><a class="headerlink" href="#similarity.scoring_matrix.subst" title="Permalink to this definition">¶</a></dt>
+<dd><p>In a substitution matrix, both cases (i,j) or (j, i), are included in one key. If you want to divide
+the score of mismatches by two then set this to True.</p>
+</dd></dl>
+
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>dict</strong> – Returns the same scoring matrix with symmetrized keys.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">{(i,j): int]</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Biopython’s or most other substitution matrices are not symmetric and should be symmetrized by this method or
+manual.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-similarity.similarity">
+<span id="similarity-module"></span><h2>Similarity module<a class="headerlink" href="#module-similarity.similarity" title="Permalink to this headline">¶</a></h2>
+<p>This module has multiple functions or classes to determine the k nearest neighbors given a scoring matrix. Therefore
+an efficient trie data structure is implemented where the nearest neighbor can be resolved fast by a branch and bound
+algorithm.</p>
+<dl class="class">
+<dt id="similarity.similarity.KmerTrie">
+<em class="property">class </em><code class="descclassname">similarity.similarity.</code><code class="descname">KmerTrie</code><span class="sig-paren">(</span><em>kmer_length: list</em>, <em>data: list = None</em><span class="sig-paren">)</span><a class="headerlink" href="#similarity.similarity.KmerTrie" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#similarity.similarity.Trie" title="similarity.similarity.Trie"><code class="xref py py-class docutils literal notranslate"><span class="pre">similarity.similarity.Trie</span></code></a></p>
+<p>A trie/prefix-tree data structure.</p>
+<blockquote>
+<div>A prefix tree is a tree, where strings can be added and each node represent a prefix of this string.
+This is a special Trie, because for all k’s in kmer_length, all kmers of all words are maintained in
+the Trie.</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>kmer_length</strong> – List of Integers, representing the length of all kmers maintained</li>
+<li><strong>data</strong> – List of words that should be saved in the KmerTrie.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="similarity.similarity.KmerTrie.root">
+<code class="descname">root</code><a class="headerlink" href="#similarity.similarity.KmerTrie.root" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>KmerTrieNode</em> – root of the Trie</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="similarity.similarity.KmerTrie.alphabet">
+<code class="descname">alphabet</code><a class="headerlink" href="#similarity.similarity.KmerTrie.alphabet" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Set</em> – Set of the characters used in the Trie.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="similarity.similarity.KmerTrie.lengths">
+<code class="descname">lengths</code><a class="headerlink" href="#similarity.similarity.KmerTrie.lengths" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Set</em> – Set of word lengths saved in the Trie.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="similarity.similarity.KmerTrie.add">
+<code class="descname">add</code><span class="sig-paren">(</span><em>words: list</em><span class="sig-paren">)</span><a class="headerlink" href="#similarity.similarity.KmerTrie.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds given words into the Trie and adds all their kmers for the length’s defined in kmer_length.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="similarity.similarity.KmerTrie.compute_neighbours">
+<code class="descname">compute_neighbours</code><span class="sig-paren">(</span><em>words: list</em>, <em>score: dict</em>, <em>k: int = 1</em>, <em>cpu: int = 2</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; list<a class="headerlink" href="#similarity.similarity.KmerTrie.compute_neighbours" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes nearest neighbours in a multiprocessing way.
+.. attribute:: words</p>
+<blockquote>
+<div>List of query words.</div></blockquote>
+<dl class="attribute">
+<dt id="similarity.similarity.KmerTrie.score">
+<code class="descname">score</code><a class="headerlink" href="#similarity.similarity.KmerTrie.score" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scoring matrix, it has to be symmetric so that for each key (i,j), also the key (j,i) exist. You can
+use the blosum62 matrix provided by this package.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="similarity.similarity.KmerTrie.k">
+<code class="descname">k</code><a class="headerlink" href="#similarity.similarity.KmerTrie.k" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of nearest neighbours that the method returns.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="similarity.similarity.KmerTrie.cpu">
+<code class="descname">cpu</code><a class="headerlink" href="#similarity.similarity.KmerTrie.cpu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of cores that should be used.</p>
+</dd></dl>
+
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>list</strong> – List of ordered list of k near neighbours, represented as tuples of
+strings, corresponding to their sequence, and doubles,
+corresponding to their score.
+They are in the same order as the import words.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">[[(str, double)]]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="similarity.similarity.KmerTrie.k_nearest_neighbour">
+<code class="descname">k_nearest_neighbour</code><span class="sig-paren">(</span><em>word: str</em>, <em>score: dict</em>, <em>k=1</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#similarity.similarity.KmerTrie.k_nearest_neighbour" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the nearest neighbour of a given strings</p>
+<dl class="attribute">
+<dt id="similarity.similarity.KmerTrie.word">
+<code class="descname">word</code><a class="headerlink" href="#similarity.similarity.KmerTrie.word" title="Permalink to this definition">¶</a></dt>
+<dd><p>The query word</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descname">score</code></dt>
+<dd><p>Scoring matrix, standard is blosum62 substitution matrix</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descname">k</code></dt>
+<dd><p>Number of nearest neighbours to find</p>
+</dd></dl>
+
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>list</strong> – Ordered list of k near neighbours, represented as tuples of
+strings, corresponding to their sequence, and doubles,
+corresponding to their score. Additionaly a list origin_sequences
+is returned which contains all words that contain this kmer.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">[(str, double, orgin_sequences)]</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>If a key found in the trie/word pair is not in the scoring matrix, then it is scored by 0!
+If their this is possible a warning is returned</p>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pepdist</span> <span class="k">import</span> <span class="n">similarity</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">trie</span> <span class="o">=</span> <span class="n">similarity</span><span class="o">.</span><span class="n">KmerTrie</span><span class="p">([</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">data</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;AAWWAA&#39;</span><span class="p">,</span> <span class="s1">&#39;GGWWGA&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">trie</span><span class="o">.</span><span class="n">k_nearest_neighbour</span><span class="p">(</span><span class="s2">&quot;WWW&quot;</span><span class="p">,</span> <span class="n">score</span><span class="o">=</span><span class="n">similarity</span><span class="o">.</span><span class="n">blosum62</span><span class="p">)</span>
+<span class="go">[(&#39;WWG&#39;, 0.657951694959769, [&#39;GGWWGA&#39;])]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="similarity.similarity.KmerTrie.load_trie">
+<code class="descname">load_trie</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#similarity.similarity.KmerTrie.load_trie" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load’s a Trie structure</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="similarity.similarity.KmerTrieNode">
+<em class="property">class </em><code class="descclassname">similarity.similarity.</code><code class="descname">KmerTrieNode</code><span class="sig-paren">(</span><em>char: str</em>, <em>depth: int</em><span class="sig-paren">)</span><a class="headerlink" href="#similarity.similarity.KmerTrieNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#similarity.similarity.TrieNode" title="similarity.similarity.TrieNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">similarity.similarity.TrieNode</span></code></a></p>
+<p>A node of a KmerTri</p>
+<dl class="attribute">
+<dt id="similarity.similarity.KmerTrieNode.sequences">
+<code class="descname">sequences</code><a class="headerlink" href="#similarity.similarity.KmerTrieNode.sequences" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>list</em> – List of words that contain the corresponding word.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="similarity.similarity.Trie">
+<em class="property">class </em><code class="descclassname">similarity.similarity.</code><code class="descname">Trie</code><span class="sig-paren">(</span><em>data: list = None</em><span class="sig-paren">)</span><a class="headerlink" href="#similarity.similarity.Trie" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A trie/prefix-tree data structure.</p>
+<p>A prefix tree is a tree, where strings can be added
+and each node represent a prefix of this string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>data</strong> – List of words that should be saved in the KmerTrie.</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="similarity.similarity.Trie.root">
+<code class="descname">root</code><a class="headerlink" href="#similarity.similarity.Trie.root" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>TrieNode</em> – root of the Trie</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="similarity.similarity.Trie.alphabet">
+<code class="descname">alphabet</code><a class="headerlink" href="#similarity.similarity.Trie.alphabet" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Set</em> – Set of the characters used in the Trie.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="similarity.similarity.Trie.lengths">
+<code class="descname">lengths</code><a class="headerlink" href="#similarity.similarity.Trie.lengths" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>Set</em> – Set of word lengths saved in the Trie.</p>
+</dd></dl>
+
+<p class="rubric">Notes</p>
+<p>This method needs a symmetrized BLOSUM like scoring matrix. Additionally, for apparent
+reasons, this matrix has to map all pairs of characters from the trie and query word
+to a real value.</p>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pepdist</span> <span class="k">import</span> <span class="n">similarity</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">trie</span> <span class="o">=</span> <span class="n">similarity</span><span class="o">.</span><span class="n">Trie</span><span class="p">([</span><span class="s1">&#39;AAWWAA&#39;</span><span class="p">,</span> <span class="s1">&#39;GGWWGA&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">trie</span><span class="o">.</span><span class="n">find_word</span><span class="p">(</span><span class="s1">&#39;AAWWAA&#39;</span><span class="p">)</span>
+<span class="go">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">trie</span><span class="o">.</span><span class="n">find_word</span><span class="p">(</span><span class="s1">&#39;GGGGGG&#39;</span><span class="p">)</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">trie</span><span class="o">.</span><span class="n">k_nearest_neighbour</span><span class="p">(</span><span class="s1">&#39;GGGGGG&#39;</span><span class="p">,</span> <span class="n">score</span> <span class="o">=</span> <span class="n">similarity</span><span class="o">.</span><span class="n">blosum62</span><span class="p">)</span>
+<span class="go">[(&#39;GGWWGA&#39;, 0.35176323534072423)]</span>
+</pre></div>
+</div>
+<dl class="method">
+<dt id="similarity.similarity.Trie.add">
+<code class="descname">add</code><span class="sig-paren">(</span><em>words: list</em><span class="sig-paren">)</span><a class="headerlink" href="#similarity.similarity.Trie.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds given words into the Trie</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="similarity.similarity.Trie.compute_neighbours">
+<code class="descname">compute_neighbours</code><span class="sig-paren">(</span><em>words: str</em>, <em>score: dict</em>, <em>k: int = 1</em>, <em>weights: list = None</em>, <em>cpu: int = 2</em><span class="sig-paren">)</span> &#x2192; list<a class="headerlink" href="#similarity.similarity.Trie.compute_neighbours" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes nearest neighbours in a multiprocessing way.</p>
+<dl class="attribute">
+<dt id="similarity.similarity.Trie.words">
+<code class="descname">words</code><a class="headerlink" href="#similarity.similarity.Trie.words" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of query words.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="similarity.similarity.Trie.score">
+<code class="descname">score</code><a class="headerlink" href="#similarity.similarity.Trie.score" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scoring matrix, it has to be symmetric so that for each key (i,j), also the key (j,i) exist. You can
+use the blosum62 matrix provided by this package.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="similarity.similarity.Trie.k">
+<code class="descname">k</code><a class="headerlink" href="#similarity.similarity.Trie.k" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of nearest neighbours that the method returns.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="similarity.similarity.Trie.weights">
+<code class="descname">weights</code><a class="headerlink" href="#similarity.similarity.Trie.weights" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of floats. Each float weight the corresponding position of the word. This list has to be the
+same length as the input word.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="similarity.similarity.Trie.cpu">
+<code class="descname">cpu</code><a class="headerlink" href="#similarity.similarity.Trie.cpu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of cores that should be used.</p>
+</dd></dl>
+
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>list</strong> – List of ordered list of k near neighbours, represented as tuples of
+strings, corresponding to their sequence, and doubles,
+corresponding to their score.
+They are in the same order as the import words.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">[[(str, double)]]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="similarity.similarity.Trie.find_word">
+<code class="descname">find_word</code><span class="sig-paren">(</span><em>word: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#similarity.similarity.Trie.find_word" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true if the word is in the Trie</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="similarity.similarity.Trie.get_prefix">
+<code class="descname">get_prefix</code><span class="sig-paren">(</span><em>word: str</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#similarity.similarity.Trie.get_prefix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the common prefix of the word with the Trie</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="similarity.similarity.Trie.k_nearest_neighbour">
+<code class="descname">k_nearest_neighbour</code><span class="sig-paren">(</span><em>word: str</em>, <em>score: dict</em>, <em>k: int = 1</em>, <em>weights: list = None</em><span class="sig-paren">)</span> &#x2192; list<a class="headerlink" href="#similarity.similarity.Trie.k_nearest_neighbour" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the k nearest neighbours of a given strings</p>
+<dl class="attribute">
+<dt id="similarity.similarity.Trie.word">
+<code class="descname">word</code><a class="headerlink" href="#similarity.similarity.Trie.word" title="Permalink to this definition">¶</a></dt>
+<dd><p>The query word</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descname">score</code></dt>
+<dd><p>Scoring matrix, it has to be symmetric so that for each key (i,j), also the key (j,i) exist. You can
+use the blosum62 matrix provided by this package.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descname">k</code></dt>
+<dd><p>Number of nearest neighbours that the method returns.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descname">weights</code></dt>
+<dd><p>List of floats. Each float weight the corresponding position of the word. This list has to be the
+same length as the input word.</p>
+</dd></dl>
+
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>list</strong> – Ordered list of k near neighbours, represented as tuples of
+strings, corresponding to their sequence, and doubles,
+corresponding to their score.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">[(str, double)]</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>If a key found in the trie/word pair is not in the scoring matrix, then it is scored by 0!
+If their this is possible a warning is returned #TODO Warnings!</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code> – If the scoring matrix is not symmetric or the query/trie contains characters that are not mapped to a
+score!</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="similarity.similarity.Trie.load_trie">
+<code class="descname">load_trie</code><span class="sig-paren">(</span><em>path: str</em><span class="sig-paren">)</span><a class="headerlink" href="#similarity.similarity.Trie.load_trie" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load’s a Trie structure from the given path.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="similarity.similarity.Trie.save_trie">
+<code class="descname">save_trie</code><span class="sig-paren">(</span><em>path: str</em><span class="sig-paren">)</span><a class="headerlink" href="#similarity.similarity.Trie.save_trie" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves the Trie structure at the given path. The path also defines the file name.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="similarity.similarity.TrieNode">
+<em class="property">class </em><code class="descclassname">similarity.similarity.</code><code class="descname">TrieNode</code><span class="sig-paren">(</span><em>char: str</em>, <em>depth: int</em><span class="sig-paren">)</span><a class="headerlink" href="#similarity.similarity.TrieNode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A node of a Trie</p>
+<dl class="attribute">
+<dt id="similarity.similarity.TrieNode.char">
+<code class="descname">char</code><a class="headerlink" href="#similarity.similarity.TrieNode.char" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>str</em> – Prefix, which is represented by this node</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="similarity.similarity.TrieNode.depth">
+<code class="descname">depth</code><a class="headerlink" href="#similarity.similarity.TrieNode.depth" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>int</em> – Depth of the node, which represents the length of a prefix.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="similarity.similarity.TrieNode.children">
+<code class="descname">children</code><a class="headerlink" href="#similarity.similarity.TrieNode.children" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>dict</em> – Dictionary of children TrieNodes.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="similarity.similarity.TrieNode.maxdepth">
+<code class="descname">maxdepth</code><a class="headerlink" href="#similarity.similarity.TrieNode.maxdepth" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>set</em> – Contains all the maximum length’s of complete word in this branch.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="similarity.similarity.TrieNode.word_finished">
+<code class="descname">word_finished</code><a class="headerlink" href="#similarity.similarity.TrieNode.word_finished" title="Permalink to this definition">¶</a></dt>
+<dd><p><em>bool</em> – End of a word, represent’s a leaf in the Tree</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="similarity.similarity.TrieNode.add_maxdepth">
+<code class="descname">add_maxdepth</code><span class="sig-paren">(</span><em>depth: int</em><span class="sig-paren">)</span><a class="headerlink" href="#similarity.similarity.TrieNode.add_maxdepth" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="similarity.similarity.kmer_count">
+<code class="descclassname">similarity.similarity.</code><code class="descname">kmer_count</code><span class="sig-paren">(</span><em>k: int</em>, <em>word: str</em>, <em>count=False</em><span class="sig-paren">)</span><a class="headerlink" href="#similarity.similarity.kmer_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates all possible unique k-mer in a given word</p>
+<dl class="attribute">
+<dt id="similarity.similarity.k">
+<code class="descclassname">similarity.similarity.</code><code class="descname">k</code><a class="headerlink" href="#similarity.similarity.k" title="Permalink to this definition">¶</a></dt>
+<dd><p>Defines the length of the k-mers.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="similarity.similarity.word">
+<code class="descclassname">similarity.similarity.</code><code class="descname">word</code><a class="headerlink" href="#similarity.similarity.word" title="Permalink to this definition">¶</a></dt>
+<dd><p>Query string</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="similarity.similarity.count">
+<code class="descclassname">similarity.similarity.</code><code class="descname">count</code><a class="headerlink" href="#similarity.similarity.count" title="Permalink to this definition">¶</a></dt>
+<dd><p>If True, the function returns a dictionary which contains all kmers as keys and their corresponding
+frequencies as values. If False, only all unique kmers a returned.</p>
+</dd></dl>
+
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li><strong>list</strong> (<em>[str]</em>) – List of unique kmers, if count is False</li>
+<li><strong>dict</strong> (<em>{str:int}</em>) – Dictionary of kmers and frequencies if count is True.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Example</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">pepdist</span> <span class="k">import</span> <span class="n">similarity</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">similarity</span><span class="o">.</span><span class="n">kmer_count</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="s1">&#39;GAGGAA&#39;</span><span class="p">)</span>
+<span class="go">[&#39;GAG&#39;, &#39;AGG&#39;, &#39;GGA&#39;, &#39;GAA&#39;]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="similarity.similarity.load_trie">
+<code class="descclassname">similarity.similarity.</code><code class="descname">load_trie</code><span class="sig-paren">(</span><em>path: str</em><span class="sig-paren">)</span> &#x2192; similarity.similarity.Trie<a class="headerlink" href="#similarity.similarity.load_trie" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads a trie file at the given path and returns a Trie object.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="similarity.similarity.naive_nearest_neighbour">
+<code class="descclassname">similarity.similarity.</code><code class="descname">naive_nearest_neighbour</code><span class="sig-paren">(</span><em>data</em>, <em>word</em>, <em>score</em><span class="sig-paren">)</span><a class="headerlink" href="#similarity.similarity.naive_nearest_neighbour" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the nearest neighbor in a naive fashion.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="similarity.similarity.squared_root_similarity">
+<code class="descclassname">similarity.similarity.</code><code class="descname">squared_root_similarity</code><span class="sig-paren">(</span><em>word1: str</em>, <em>word2: str</em>, <em>score: dict</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#similarity.similarity.squared_root_similarity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the squared root normalized score of two words.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="similarity.similarity.word_score">
+<code class="descclassname">similarity.similarity.</code><code class="descname">word_score</code><span class="sig-paren">(</span><em>word1: str</em>, <em>word2: str</em>, <em>score: dict</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#similarity.similarity.word_score" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the score between two words by the given scoring matrix.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Manuel Glöckler
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
