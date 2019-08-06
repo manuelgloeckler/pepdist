@@ -78,4 +78,7 @@ Here are some example of how to use it:
     >>> lsh.nearest_neighbour(desc.descriptors[0])
     ('AAAGG', 0.0)
 
+Documentation
+-------------
+A full read the docs documentation can be accesed by: https://manuelgloeckler.github.io/pepdist/
 
