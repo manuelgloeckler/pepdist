@@ -1,30 +1,18 @@
-distance package
+Distance package
 ================
-
-Submodules
-----------
-
-distance.aaindex module
------------------------
+AAindex module
+--------------
 
 .. automodule:: distance.aaindex
    :members:
    :undoc-members:
    :show-inheritance:
 
-distance.distance module
-------------------------
+Distance module
+---------------
 
 .. automodule:: distance.distance
    :members:
    :undoc-members:
    :show-inheritance:
 
-
-Module contents
----------------
-
-.. automodule:: distance
-   :members:
-   :undoc-members:
-   :show-inheritance:

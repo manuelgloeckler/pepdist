@@ -1,29 +1,17 @@
-similarity package
+Similarity package
 ==================
-
-Submodules
-----------
-
-scoring\_matrix module
----------------------------------
+Scoring matrix module
+---------------------
 
 .. automodule:: similarity.scoring_matrix
    :members:
    :undoc-members:
    :show-inheritance:
    
-similarity module
-----------------------------
+Similarity module
+-----------------
 
 .. automodule:: similarity.similarity
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-Module contents
----------------
-
-.. automodule:: similarity
    :members:
    :undoc-members:
    :show-inheritance:

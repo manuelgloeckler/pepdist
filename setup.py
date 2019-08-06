@@ -12,14 +12,13 @@ setup(name='pepdist',
       author='Manuel Gloeckler',
       author_email='manuel.gloeckler@student.uni-tuebingen.de',
       license='No',
-      packages=['similarity', 'distance', 'plotting'],
+      packages=['similarity', 'distance', 'pepdist', 'plotting'],
       install_requires=[
           'numpy',
 		  'pandas',
 		  'scipy',
           'multiprocess',
-          'seaborn',
-          'biopython'
+          'seaborn'
       ],
       setup_requires=['pytest-runner'],
       tests_require=['pytest'],

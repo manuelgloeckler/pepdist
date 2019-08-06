@@ -92,6 +92,13 @@ class Aaindex():
                     aaindex_dic[key] = dic
             self.aaindex_dic = aaindex_dic
 
+    def keys(self):
+        """ Returns the IDs of the AAIndex database """
+        return self.aaindex_dic.keys()
+
+    def values(self):
+        """ Returns the indices of the AAIndex database """
+
     def __len__(self):
         return len(self.aaindex_dic)
 
