@@ -145,7 +145,8 @@ class Trie(object):
             word: str,
             score: dict,
             k: int = 1,
-            weights: list = None) -> list:
+            weights: list = None,
+            score_only: bool = False) -> list:
         """ Computes the k nearest neighbours of a given strings
 
         Attributes
@@ -160,6 +161,8 @@ class Trie(object):
         weights
             List of floats. Each float weight the corresponding position of the word. This list has to be the
             same length as the input word.
+        score_only
+            Only the list of scores is returned
 
         Returns
         -------
@@ -167,6 +170,8 @@ class Trie(object):
                     Ordered list of k near neighbours, represented as tuples of
                     strings, corresponding to their sequence, and doubles,
                     corresponding to their score.
+        list: [double]
+                    If score_only is True, only the score is returned.
         Notes
         -----
         If a key found in the trie/word pair is not in the scoring matrix, then it is scored by 0!
@@ -193,15 +198,15 @@ class Trie(object):
         self_score = [0] * (word_length + 1)
         for i in range(word_length):
             self_score[i + 1] = self_score[i] + \
-                                weights[word_length - 1 - i] * score[
-                                    word[word_length - 1 - i], word[word_length - 1 - i]]
+                                weights[word_length - 1 - i] * \
+                                score[word[word_length - 1 - i], word[word_length - 1 - i]]
         # Bounds are saved in a stack and reused if k > 1
         bounds = [-np.inf] * k
 
         for i in range(k):
 
             # Trie Search for equal strings is fast
-            if self.find_word(word) and all(v == 1 for v in weights) and (word,1.0) not in results:
+            if self.find_word(word) and all(v == 1 for v in weights) and (word, 1.0) not in results:
                 results.append((word, 1.0))
                 continue
 
@@ -224,7 +229,9 @@ class Trie(object):
                     continue
 
                 prefix[index] = char
+                # Score between word1 and word2
                 sc[length] = sc[index] + weights[index] * score[(char, word[index])]
+                # Score between word2 and word2
                 s[length] = s[index] + weights[index] * score[(char, char)]
 
                 # If smaller then bound, stop search in this branch!
@@ -234,8 +241,9 @@ class Trie(object):
 
                 # If no word with the same length in the branch, then stop search in this branch
                 if length == word_length and node.word_finished:
+                    seq = "".join(prefix)
                     # Already found
-                    if "".join(prefix) in list(map(lambda x: x[0], results)):
+                    if seq in list(map(lambda x: x[0], results)):
                         continue
                     # In the squared bound all negative values are positive, this is compensated here.
                     if sc[length] < 0:
@@ -248,7 +256,7 @@ class Trie(object):
                     if scc >= bound:
                         bound = scc
                         bounds.append(scc)
-                        best = "".join(prefix)
+                        best = seq
                         continue
                 # Continue the search in this branch!
                 nodes.extend(node.children.items())
@@ -260,9 +268,13 @@ class Trie(object):
                     results.append(("", -1))
                 else:
                     results.append((best, -np.sqrt(abs(bounds.pop()))))
-        return results
+        # Return according to type defined.
+        if score_only:
+            return list(map(lambda x: x[1], results))
+        else:
+            return results
 
-    def compute_neighbours(self, words: str, score: dict, k: int = 1, weights: list = None, cpu: int = 2) -> list:
+    def compute_neighbours(self, words: str, score: dict, k: int = 1, weights: list = None, cpu: int = 1) -> list:
         """ Computes nearest neighbours in a multiprocessing way.
 
         Attributes
@@ -289,7 +301,7 @@ class Trie(object):
             They are in the same order as the import words.
         """
         pool = Pool(cpu)
-        result = pool.map(lambda x: self.k_nearest_neighbour(x, score, k, weights), words)
+        result = pool.map(lambda x: self.k_nearest_neighbour(x, score, k=k, weights=weights), words)
         pool.close()
         pool.join()
 

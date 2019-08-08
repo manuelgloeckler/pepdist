@@ -12,3 +12,6 @@ pepdist.egg-info
 __pycache__/
 
 
+pepdist/__pycache__/__init__.cpython-37.pyc
+pepdist/similarity/__pycache__/scoring_matrix.cpython-37.pyc
+pepdist/similarity/__pycache__/similarity.cpython-37.pyc
