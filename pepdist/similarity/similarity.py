@@ -538,14 +538,14 @@ class KmerTrie(Trie):
                                     weights[word_length - 1 - i] * score[
                                         kmer[word_length - 1 - i], kmer[word_length - 1 - i]]
 
-            # Trie Search for equal strings is fast
-            if self.find_word(kmer) and all(v == 1 for v in weights):
-                temp_results.append((kmer, 1.0, self.__get_last_node(kmer).sequences))
-                continue
-
             bounds = [-np.inf] * k
 
             for i in range(k):
+
+                # Trie Search for equal strings is fast
+                if self.find_word(kmer) and all(v == 1 for v in weights) and kmer not in list(map(lambda x: x[0], temp_results)):
+                    temp_results.append((kmer, 1.0, self.__get_last_node(kmer).sequences))
+                    continue
 
                 bound = bounds.pop()
                 best = ""
@@ -605,7 +605,6 @@ class KmerTrie(Trie):
             if not temp_results:
                 results.append(('', -1, []))
                 continue
-            # TODO Some duplicated results in trie.add(["AAAA", "AYAY", "GAAG", "YYYY", "WWWW", "WWYW"])
             # trie.k_nearest_neighbour("WWYY", similarity.blosum62, k=3)
             max_score = max(temp_results, key=lambda item: item[1])
             max_scored_vals = [s for s in temp_results if s[1] == max_score[1]]
