@@ -274,7 +274,12 @@ class Trie(object):
         else:
             return results
 
-    def compute_neighbours(self, words: str, score: dict, k: int = 1, weights: list = None, cpu: int = 1) -> list:
+    def compute_neighbours(self, words: str,
+                           score: dict,
+                           k: int = 1,
+                           weights: list = None,
+                           score_only = False,
+                           cpu: int = 1) -> list:
         """ Computes nearest neighbours in a multiprocessing way.
 
         Attributes
@@ -301,7 +306,8 @@ class Trie(object):
             They are in the same order as the import words.
         """
         pool = Pool(cpu)
-        result = pool.map(lambda x: self.k_nearest_neighbour(x, score, k=k, weights=weights), words)
+        result = pool.map(lambda x: self.k_nearest_neighbour(x, score, k=k, weights=weights, score_only=score_only),
+                          words)
         pool.close()
         pool.join()
 
@@ -444,6 +450,7 @@ class KmerTrie(Trie):
     lengths : Set
         Set of word lengths saved in the Trie.
 
+
     """
 
     def __init__(self, kmer_length: list, data: list = None):
@@ -483,7 +490,7 @@ class KmerTrie(Trie):
                 node.word_finished = True
                 node.sequences.append(word)
 
-    def k_nearest_neighbour(self, word: str, score: dict, k=1, **kwargs):
+    def k_nearest_neighbour(self, word: str, score: dict, k: int =1, score_only: bool = False, **kwargs):
         """ Computes the nearest neighbour of a given strings
 
         Attributes
@@ -494,6 +501,8 @@ class KmerTrie(Trie):
             Scoring matrix, standard is blosum62 substitution matrix
         k
             Number of nearest neighbours to find
+        score_only
+            If True, only the scores are returned.
 
         Returns
         -------
@@ -613,9 +622,18 @@ class KmerTrie(Trie):
             results.append(longest_max_score)
             temp_results.remove(longest_max_score)
 
-        return results
+        if score_only:
+            return list(map(lambda x: x[1], results))
+        else:
+            return results
 
-    def compute_neighbours(self, words: list, score: dict, k: int = 1, cpu: int = 2, **kwargs) -> list:
+    def compute_neighbours(self,
+                           words: list,
+                           score: dict,
+                           k: int = 1,
+                           cpu: int = 2,
+                           score_only: bool = False,
+                           **kwargs) -> list:
         """ Computes nearest neighbours in a multiprocessing way.
         Attributes
         ----------
@@ -638,7 +656,7 @@ class KmerTrie(Trie):
             They are in the same order as the import words.
         """
         pool = Pool(cpu)
-        result = pool.map(lambda x: self.k_nearest_neighbour(x, score, k, ), words)
+        result = pool.map(lambda x: self.k_nearest_neighbour(x, score, k=k, score_only = score_only ), words)
         pool.close()
         pool.join()
 
