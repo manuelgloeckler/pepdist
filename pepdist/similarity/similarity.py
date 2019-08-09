@@ -4,11 +4,12 @@ an efficient trie data structure is implemented where the nearest neighbor can b
 algorithm.
 """
 import numpy as np
-from multiprocess import Pool
+import multiprocess
 import warnings
 import gc
 import _pickle
 import copy
+
 
 # TODO EXCEPTIONS AND MATRICES
 
@@ -207,7 +208,10 @@ class Trie(object):
 
             # Trie Search for equal strings is fast
             if self.find_word(word) and all(v == 1 for v in weights) and (word, 1.0) not in results:
-                results.append((word, 1.0))
+                if k == 1:
+                    results = (word, 1.0)
+                else:
+                    results.append((word, 1.0))
                 continue
 
             # Initialize varaibles
@@ -260,58 +264,31 @@ class Trie(object):
                         continue
                 # Continue the search in this branch!
                 nodes.extend(node.children.items())
-
+            bound = bounds.pop()
             if bound > 0:
-                results.append((best, np.sqrt(bounds.pop())))
+                if k == 1:
+                    results = (best, np.sqrt(abs(bound)))
+                else:
+                    results.append((best, np.sqrt(abs(bound))))
             else:
                 if bound == -np.inf:
-                    results.append(("", -1))
+                    if k == 1:
+                        results = ("", -1)
+                    else:
+                        results.append(("", -1))
                 else:
-                    results.append((best, -np.sqrt(abs(bounds.pop()))))
+                    if k == 1:
+                        results = (best, -np.sqrt(abs(bound)))
+                    else:
+                        results.append((best, -np.sqrt(abs(bound))))
         # Return according to type defined.
         if score_only:
-            return list(map(lambda x: x[1], results))
+            if k == 1:
+                return results[1]
+            else:
+                return list(map(lambda x: x[1], results))
         else:
             return results
-
-    def compute_neighbours(self, words: str,
-                           score: dict,
-                           k: int = 1,
-                           weights: list = None,
-                           score_only = False,
-                           cpu: int = 1) -> list:
-        """ Computes nearest neighbours in a multiprocessing way.
-
-        Attributes
-        ----------
-        words
-            List of query words.
-        score
-            Scoring matrix, it has to be symmetric so that for each key (i,j), also the key (j,i) exist. You can
-            use the blosum62 matrix provided by this package.
-        k
-            Number of nearest neighbours that the method returns.
-        weights
-            List of floats. Each float weight the corresponding position of the word. This list has to be the
-            same length as the input word.
-        cpu
-            Number of cores that should be used.
-
-        Returns
-        -------
-        list : [[(str, double)]]
-            List of ordered list of k near neighbours, represented as tuples of
-            strings, corresponding to their sequence, and doubles,
-            corresponding to their score.
-            They are in the same order as the import words.
-        """
-        pool = Pool(cpu)
-        result = pool.map(lambda x: self.k_nearest_neighbour(x, score, k=k, weights=weights, score_only=score_only),
-                          words)
-        pool.close()
-        pool.join()
-
-        return result
 
     def save_trie(self, path: str):
         """ Saves the Trie structure at the given path. The path also defines the file name."""
@@ -332,7 +309,7 @@ class Trie(object):
         self.lengths = trie.lengths
         gc.enable()
 
-    def __check_scoring_matrix(self, word:str, score: dict):
+    def __check_scoring_matrix(self, word: str, score: dict):
         score_alphabet = set()
         word_alphabet = set(list(word))
         for key1, key2 in score:
@@ -391,7 +368,7 @@ class TrieNode(object):
         return self.char
 
 
-def kmer_count(k:int, word:str, count=False):
+def kmer_count(k: int, word: str, count=False):
     """ Creates all possible unique k-mer in a given word
 
     Attributes
@@ -490,7 +467,7 @@ class KmerTrie(Trie):
                 node.word_finished = True
                 node.sequences.append(word)
 
-    def k_nearest_neighbour(self, word: str, score: dict, k: int =1, score_only: bool = False, **kwargs):
+    def k_nearest_neighbour(self, word: str, score: dict, k: int = 1, score_only: bool = False, **kwargs):
         """ Computes the nearest neighbour of a given strings
 
         Attributes
@@ -552,8 +529,14 @@ class KmerTrie(Trie):
             for i in range(k):
 
                 # Trie Search for equal strings is fast
-                if self.find_word(kmer) and all(v == 1 for v in weights) and kmer not in list(map(lambda x: x[0], temp_results)):
+                if self.find_word(kmer):
+                    if kmer in list(map(lambda x: x[0], temp_results)):
+                        for temp_result in temp_results:
+                            if temp_result[0] == kmer:
+                                temp_results.remove(temp_result)
+                                break
                     temp_results.append((kmer, 1.0, self.__get_last_node(kmer).sequences))
+                    # Dont search
                     continue
 
                 bound = bounds.pop()
@@ -581,18 +564,20 @@ class KmerTrie(Trie):
                             ((s[length] + self_score[word_length - length]) * self_score[word_length]) < bound:
                         continue
                     if length == word_length and node.word_finished:
-                        # Already found
-                        if "".join(prefix) in list(map(lambda x: x[0], temp_results)):
-                            for temp_result in temp_results:
-                                if temp_result[0] == "".join(prefix):
-                                    temp_result[2].extend([seq for seq in node.sequences if seq not in temp_result[2]])
-                            continue
 
                         if sc[length] < 0:
                             scc = -sc[length] ** 2 / \
                                   (s[length] * self_score[word_length])
                         else:
                             scc = sc[length] ** 2 / (s[length] * self_score[word_length])
+
+                        # Already found
+                        if "".join(prefix) in list(map(lambda x: x[0], temp_results)):
+                            for temp_result in temp_results:
+                                if temp_result[0] == "".join(prefix):
+                                    temp_result[2].extend([seq for seq in node.sequences if seq not in temp_result[2]])
+
+                            continue
 
                         if scc >= bound:
                             bound = scc
@@ -627,41 +612,6 @@ class KmerTrie(Trie):
         else:
             return results
 
-    def compute_neighbours(self,
-                           words: list,
-                           score: dict,
-                           k: int = 1,
-                           cpu: int = 2,
-                           score_only: bool = False,
-                           **kwargs) -> list:
-        """ Computes nearest neighbours in a multiprocessing way.
-        Attributes
-        ----------
-        words
-            List of query words.
-        score
-            Scoring matrix, it has to be symmetric so that for each key (i,j), also the key (j,i) exist. You can
-            use the blosum62 matrix provided by this package.
-        k
-            Number of nearest neighbours that the method returns.
-        cpu
-            Number of cores that should be used.
-
-        Returns
-        -------
-        list : [[(str, double)]]
-            List of ordered list of k near neighbours, represented as tuples of
-            strings, corresponding to their sequence, and doubles,
-            corresponding to their score.
-            They are in the same order as the import words.
-        """
-        pool = Pool(cpu)
-        result = pool.map(lambda x: self.k_nearest_neighbour(x, score, k=k, score_only = score_only ), words)
-        pool.close()
-        pool.join()
-
-        return result
-
     def load_trie(self, path):
         """ Load's a Trie structure"""
         # Garbage Collector slows down the loading significant and is
@@ -687,7 +637,7 @@ class KmerTrie(Trie):
                 return KmerTrieNode("", 0)
         return node
 
-    def __check_scoring_matrix(self, word:str, score: dict):
+    def __check_scoring_matrix(self, word: str, score: dict):
         score_alphabet = set()
         word_alphabet = set(list(word))
         for key1, key2 in score:
@@ -716,3 +666,29 @@ class KmerTrieNode(TrieNode):
     def __init__(self, char: str, depth: int):
         super().__init__(char, depth)
         self.sequences = []
+
+
+def multiprocess_data(data: list, func: callable, cpus: int = 1):
+    """ Computes nearest neighbours in a multiprocessing way.
+    Attributes
+    ----------
+    data
+        List of querys.
+    func
+        function to multithread
+    cpus
+        Number of cores that should be used.
+
+    Returns
+    -------
+    list
+        For all d in data, a list [func(d)] is computed.
+    """
+
+    pool = multiprocess.Pool(cpus)
+    results = pool.map(func, data)
+
+    pool.close()
+    pool.join()
+
+    return results

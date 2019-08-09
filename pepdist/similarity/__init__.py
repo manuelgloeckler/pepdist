@@ -11,3 +11,4 @@ from .similarity import load_trie
 from .similarity import word_score
 from .similarity import squared_root_similarity
 from .similarity import naive_nearest_neighbour
+from .similarity import multiprocess_data

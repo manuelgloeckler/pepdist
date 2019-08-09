@@ -66,14 +66,14 @@ def test_nearest_neighbour(get_trie_data):
     trie = similarity.Trie()
     trie.add(get_trie_data)
     for data in get_trie_data:
-        assert trie.k_nearest_neighbour(data, similarity.blosum62) == [(data, 1.0)]
+        assert trie.k_nearest_neighbour(data, similarity.blosum62) == (data, 1.0)
 
 
 def test_k_nearest_neighbour(get_trie_data):
     trie = similarity.Trie()
     trie.add(get_trie_data)
     for data in get_trie_data:
-        assert trie.k_nearest_neighbour(data, similarity.blosum62, k=1) == [(data, 1.0)]
+        assert trie.k_nearest_neighbour(data, similarity.blosum62, k=1) == (data, 1.0)
         assert trie.k_nearest_neighbour(data, similarity.blosum62, k=2)[0] == (data, 1.0)
     assert len(trie.k_nearest_neighbour("AAAY", similarity.blosum62, k=3)) == 3
     assert trie.k_nearest_neighbour("WWYY", similarity.blosum62, k=2)[0][0] == "WWYW"
@@ -84,12 +84,12 @@ def test_random_nearest_neighbour(random_sample):
     trie = similarity.Trie()
     trie.add(random_sample)
     for data in random_sample:
-        assert trie.k_nearest_neighbour(data, similarity.blosum62)[0][0] == data
+        assert trie.k_nearest_neighbour(data, similarity.blosum62)[0] == data
     for i in range(20):
         test_peptide = ''.join(random.choice('ACDEFGHIKLMNPQRSTVWY') for i in range(9))
         trie_solution = trie.k_nearest_neighbour(test_peptide, similarity.blosum62)
         naive_solution = similarity.naive_nearest_neighbour(random_sample, test_peptide, similarity.blosum62)
-        assert isclose(trie_solution[0][1], naive_solution[1], rel_tol=0.0001)
+        assert isclose(trie_solution[1], naive_solution[1], rel_tol=0.0001)
 
 
 def test_kmer_trie_creation():
@@ -114,7 +114,7 @@ def test_add_find_word_kmertrie(get_trie_data):
         assert trie.get_prefix(data[:2] + "XX") == data[:2]
 
 
-def test_k_nearest_neighbour(get_trie_data):
+def test_kmer_k_nearest_neighbour(get_trie_data):
     lengths = [3]
     trie = similarity.KmerTrie(lengths)
     trie.add(get_trie_data)
