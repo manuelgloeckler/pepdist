@@ -9,6 +9,8 @@ import warnings
 import gc
 import _pickle
 import copy
+from math import isclose
+
 
 
 # TODO EXCEPTIONS AND MATRICES
@@ -257,19 +259,20 @@ class Trie(object):
                         scc = sc[length] ** 2 / (s[length] * self_score[word_length])
 
                     # We found a new bound!
-                    if scc >= bound:
+                    if scc >= bound or isclose(scc,bound, rel_tol=0.001):
                         bound = scc
-                        bounds.append(scc)
+                        if bound not in bounds:
+                            bounds.append(scc)
                         best = seq
                         continue
                 # Continue the search in this branch!
                 nodes.extend(node.children.items())
-            bound = bounds.pop()
+
             if bound > 0:
                 if k == 1:
-                    results = (best, np.sqrt(abs(bound)))
+                    results = (best, np.sqrt(abs(bounds.pop())))
                 else:
-                    results.append((best, np.sqrt(abs(bound))))
+                    results.append((best, np.sqrt(abs(bounds.pop()))))
             else:
                 if bound == -np.inf:
                     if k == 1:
@@ -278,9 +281,9 @@ class Trie(object):
                         results.append(("", -1))
                 else:
                     if k == 1:
-                        results = (best, -np.sqrt(abs(bound)))
+                        results = (best, -np.sqrt(abs(bounds.pop())))
                     else:
-                        results.append((best, -np.sqrt(abs(bound))))
+                        results.append((best, -np.sqrt(abs(bounds.pop()))))
         # Return according to type defined.
         if score_only:
             if k == 1:
