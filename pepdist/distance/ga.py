@@ -4,6 +4,7 @@ from scipy.stats import ks_2samp
 import pandas as pd
 from pepdist.distance import Aaindex
 import random
+import multiprocess
 
 
 
@@ -48,16 +49,17 @@ class GeneticAlgorithm(object):
             score_data2.append(trie.query(data)[0])
 
         # TODO estimate distributions...
-        return ks_2samp(score_data1, score_data2)[0]
+        return ks_2samp(score_data1, score_data2)[1]
 
     def rank_population(self, fittnes_function=fittness_kl_div):
-        scores = []
-        for ind in self.population:
-            score = fittnes_function(self, ind)
-            scores.append(score)
+        pool = multiprocess.Pool(10)
+        scores = pool.map(lambda x: fittnes_function(self, x), self.population)
+
+        pool.close()
+        pool.join()
 
         self.population = [x for x,_ in sorted(zip(self.population, scores), key = lambda x: x[1])]
-        self.scores = sorted(self.scores)
+        self.scores = sorted(scores)
 
     def fitness_proportinate_selection(self, eliteSize):
         selection_result = []
@@ -70,11 +72,12 @@ class GeneticAlgorithm(object):
     def tournament_selection(self, selectionSize, tournamentSize):
         selection_result = []
         while len(selection_result) <= selectionSize:
-            # TODO ERROR
-            tournament = random.choice(list(zip(self.population, self.scores)), tournamentSize)
-            selection_result.append(max(tournament, key=lambda x:x[1]))
+            tournament = []
+            for i in range(tournamentSize):
+                tournament.append(random.choice(list(zip(self.population, self.scores))))
+            selection_result.append(min(tournament, key=lambda x: x[1]))
 
-        return selection_result
+        return list(map(lambda x: x[0],sorted(selection_result, key=lambda x: x[1])))
 
     def uniform_cross_over(self, individual1, individual2):
         child = []
@@ -96,40 +99,44 @@ class GeneticAlgorithm(object):
 
 
 
-    def breedPopulation(self, eliteSize, crossover_method=uniform_cross_over):
+    def breedPopulation(self, mating_pool, eliteSize):
         children = []
         length = len(self.population)-eliteSize
-        pool = np.random.choice(self.population, size=len(self.population), replace=False)
+        pool = random.sample(mating_pool, len(mating_pool))
 
         for i in range(0, eliteSize):
-            children.append(self.population[i])
+            children.append(mating_pool[i])
 
         for i in range(0,length):
-            child = crossover_method(pool[i], pool[len(pool)-i-1])
+            child = self.uniform_cross_over(pool[i], pool[len(pool)-i-1])
             children.append(child)
 
         return children
 
     def mutate(self, individual, mutationRate):
         mutated_individual = []
-        for i in range(individual):
+        for i in range(len(individual)):
             if np.random.rand() < mutationRate:
-                mutated_individual.append(np.random.choice(list(self.index_db.keys())))
+                mutated_individual.append(random.choice(list(self.index_db.keys())))
             else:
                 mutated_individual.append(individual[i])
         return mutated_individual
 
-    def mutatePopulation(self, population):
+    def mutatePopulation(self, population, mutationRate):
         mutated_population = []
         for individual in population:
-            mutated_population.append(self.mutate(individual))
+            mutated_population.append(self.mutate(individual, mutationRate))
         return mutated_population
 
-    def nextGeneration(self, eliteSize=None, crossover_method=tournament_selection):
+    def nextGeneration(self, tournament_size, eliteSize=0, mutation_rate = 0.01):
         n = len(self.population)
         if eliteSize is None:
             eliteSize = int(0.01*n)
 
         self.rank_population()
-        nextGeneration = self.breedPopulation(eliteSize, crossover_method=0)
+        mating_pool = self.tournament_selection(2*len(self.population), tournament_size)
+        next_generation = self.breedPopulation(mating_pool, eliteSize)
+        next_generation = self.mutatePopulation(next_generation, mutation_rate)
+
+        self.population = next_generation
 

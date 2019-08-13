@@ -86,7 +86,7 @@ class IndexDescriptor:
 
     def __init__(self, seqs: list, indices: list = [], norm_method=lambda x: x):
         self.sequences = seqs
-        self.descriptors = []
+        self.descriptor = []
         self.indices = indices
         self.__normalized_indices = []
         self.__norm_method = norm_method
@@ -101,10 +101,10 @@ class IndexDescriptor:
         """ Add sequences to the descriptor. They will be automatically described by..."""
         if isinstance(seqs, str):
             self.sequences.append(seqs)
-            self.descriptors.append(self.translate(seqs, self.__normalized_indices))
+            self.descriptor.append(self.translate(seqs, self.__normalized_indices))
         else:
             self.sequences.extend(seqs)
-            self.descriptors.extend(list(map(lambda x: self.translate(x, self.__normalized_indices), seqs)))
+            self.descriptor.extend(list(map(lambda x: self.translate(x, self.__normalized_indices), seqs)))
 
     def remove_seqs(self, seqs: list):
         """ Removes a sequence of multiple sequences from the descriptor class. """
@@ -112,12 +112,12 @@ class IndexDescriptor:
         if isinstance(seqs, str):
             index = self.sequences.index(seqs)
             del self.sequences[index]
-            del self.descriptors[index]
+            del self.descriptor[index]
         else:
             for seq in seqs:
                 index = self.sequences.index(seq)
                 del self.sequences[index]
-                del self.descriptors[index]
+                del self.descriptor[index]
 
     def add_indices(self, indices: list):
         """ Add another index that should also describe the sequence. The descriptors are automatically updated."""
@@ -152,7 +152,7 @@ class IndexDescriptor:
     def __normalize_all(self):
         """ Normalize all sequence by the defined method """
         for i in range(len(self.indices)):
-            if i > len(self.descriptors)-1:
+            if i > len(self.descriptor)-1:
                 self.__normalized_indices.append(self.__norm_method(self.indices[i]))
             else:
                 self.__normalized_indices[i] = self.__norm_method(self.indices[i])
@@ -160,10 +160,10 @@ class IndexDescriptor:
     def calculate_all(self):
         """ Translate all sequences by the defined indices. """
         for i in range(len(self.sequences)):
-            if i > len(self.descriptors)-1:
-                self.descriptors.append(self.translate(self.sequences[i], self.__normalized_indices))
+            if i > len(self.descriptor)-1:
+                self.descriptor.append(self.translate(self.sequences[i], self.__normalized_indices))
             else:
-                self.descriptors[i] = self.translate(self.sequences[i], self.__normalized_indices)
+                self.descriptor[i] = self.translate(self.sequences[i], self.__normalized_indices)
 
     @ staticmethod
     def translate(word: str, indices: list) -> np.array:

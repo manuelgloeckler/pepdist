@@ -98,6 +98,17 @@ class Aaindex():
 
     def values(self):
         """ Returns the indices of the AAIndex database """
+        return self.aaindex_dic.values()
+
+    def get(self, keys: list):
+        """ Returns a list of indices for all keys specified """
+        indices = []
+        for key in keys:
+            index = self.__getitem__(key)
+            indices.append(index)
+
+        return indices
+
 
     def __len__(self):
         return len(self.aaindex_dic)

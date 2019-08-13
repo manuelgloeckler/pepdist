@@ -46,11 +46,11 @@ def test_descriptor(get_test_data):
     indices = [get_random_index() for i in range(3)]
     dis = distance.IndexDescriptor(get_test_data, indices)
     assert dis.sequences == get_test_data
-    assert len(dis.descriptors) == len(get_test_data)
-    assert len(dis.descriptors[0]) == 12
+    assert len(dis.descriptor) == len(get_test_data)
+    assert len(dis.descriptor[0]) == 12
     dis.change_norm_method(distance.z_normalize)
     dis.change_norm_method(distance.max_normalize)
-    for desc in dis.descriptors:
+    for desc in dis.descriptor:
         assert (desc <= 1).all() and (desc >= 0).all()
     dis.change_norm_method(lambda x: x)
     dis.add_seqs(["GGGG"])
@@ -62,7 +62,7 @@ def test_descriptor(get_test_data):
 def test_naive_nearest_neighbour(get_test_data):
     dis = distance.IndexDescriptor(get_test_data, [get_random_index()])
     for i in range(len(get_test_data)):
-        assert distance.naive_nearest_neighbour(dis.sequences, dis.descriptors, dis.descriptors[i])[1] == 0.0
+        assert distance.naive_nearest_neighbour(dis.sequences, dis.descriptor, dis.descriptor[i])[1] == 0.0
         
 def test_hash_table(get_test_data):
     table = distance.HashTable(2,2,2)
@@ -76,9 +76,9 @@ def test_hash_table(get_test_data):
 def test_LSH(get_test_data):
     lsh = distance.LSH(4)
     dis = distance.IndexDescriptor(get_test_data, [get_random_index()])
-    lsh.add(dis.sequences, dis.descriptors)
+    lsh.add(dis.sequences, dis.descriptor)
     for i in range(len(get_test_data)):
-        assert lsh.nearest_neighbour(dis.descriptors[i])[1] == 0.0
+        assert lsh.nearest_neighbour(dis.descriptor[i])[1] == 0.0
  
         
 
