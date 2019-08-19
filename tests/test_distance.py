@@ -78,7 +78,7 @@ def test_LSH(get_test_data):
     dis = distance.IndexDescriptor(get_test_data, [get_random_index()])
     lsh.add(dis.sequences, dis.descriptor)
     for i in range(len(get_test_data)):
-        assert lsh.nearest_neighbour(dis.descriptor[i])[1] == 0.0
+        assert lsh.k_nearest_neighbour(dis.descriptor[i])[1] == 0.0
  
         
 

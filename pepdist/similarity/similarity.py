@@ -91,6 +91,7 @@ class Trie(object):
         self.root = TrieNode("", 0)
         self.alphabet = set()
         self.lengths = set()
+        self.len = 0
         if data is not None:
             self.add(data)
 
@@ -100,6 +101,7 @@ class Trie(object):
             words = [words]
 
         for word in words:
+            new_word = False
             self.lengths.add(len(word))
             node = self.root
             for i in range(len(word)):
@@ -112,11 +114,14 @@ class Trie(object):
                     new_node.add_maxdepth(len(word))
                     node.children[char] = new_node
                     node = new_node
+                    new_word = True
                 else:
                     new_node = node.children[char]
                     new_node.add_maxdepth(len(word))
                     node = new_node
             node.word_finished = True
+            if new_word:
+                self.len += 1
 
     def find_word(self, word: str) -> bool:
         """ Returns true if the word is in the Trie """
@@ -148,6 +153,7 @@ class Trie(object):
             word: str,
             score: dict,
             k: int = 1,
+            cut_off = None,
             weights: list = None,
             score_only: bool = False) -> list:
         """ Computes the k nearest neighbours of a given strings
@@ -161,6 +167,8 @@ class Trie(object):
             use the blosum62 matrix provided by this package.
         k
             Number of nearest neighbours that the method returns.
+        cut_off
+            Computes all nearest neighbors with a similarity creater than this cut off
         weights
             List of floats. Each float weight the corresponding position of the word. This list has to be the
             same length as the input word.
@@ -191,7 +199,7 @@ class Trie(object):
         word_length = len(word)
         results = []
 
-        self.__check_scoring_matrix(word, score)
+        #self.__check_scoring_matrix(word, score)
 
         # Set the weights if not specified
         if weights is None:
@@ -203,6 +211,11 @@ class Trie(object):
             self_score[i + 1] = self_score[i] + \
                                 weights[word_length - 1 - i] * \
                                 score[word[word_length - 1 - i], word[word_length - 1 - i]]
+
+        # Cutoff
+        if cut_off is not None:
+            k = self.len
+
         # Bounds are saved in a stack and reused if k > 1
         bounds = [-np.inf] * k
 
@@ -269,11 +282,15 @@ class Trie(object):
                 nodes.extend(node.children.items())
 
             if bound > 0:
+                if cut_off is not None and np.sqrt(bound) < cut_off:
+                    break
                 if k == 1:
                     results = (best, np.sqrt(abs(bounds.pop())))
                 else:
                     results.append((best, np.sqrt(abs(bounds.pop()))))
             else:
+                if cut_off is not None and -np.sqrt(abs(bound)) < cut_off:
+                    break
                 if bound == -np.inf:
                     if k == 1:
                         results = ("", -1)

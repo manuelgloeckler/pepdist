@@ -248,6 +248,9 @@ class HashTable:
     def keys(self):
         return self.__hash_table.keys()
 
+    def _get_by_key(self,key):
+        return self.__hash_table[key]
+
 
 class Bin:
     """ Hash Table bin"""
@@ -257,22 +260,36 @@ class Bin:
         self.vectors = []
         self.kdtree = None
 
+    def __len__(self):
+        return len(self.sequences)
+
     def create_kdtree(self):
         self.kdtree = cKDTree(self.vectors)
 
-    def nearest_neighbour(self, inp_vec):
+    def k_nearest_neighbour(self, inp_vec, k=1):
+        if len(self.sequences) == 0:
+            return [("", np.inf)]*k
         if self.kdtree is not None:
-            dist, label = self.kdtree.query(inp_vec)
-            return self.sequences[label], dist
+            dist, label = self.kdtree.query(inp_vec, k=k)
+            if k > 1:
+                result = []
+                for i in range(k):
+                    if label[i] < len(self.sequences):
+                        result.append((self.sequences[label[i]], dist[i]))
+                return result
+            else:
+                return [(self.sequences[label], dist)]
         else:
-            min_dist = np.inf
-            min_match = ""
+            results = []
             for i in range(len(self.sequences)):
                 dist = np.linalg.norm(self.vectors[i] - inp_vec)
-                if dist < min_dist:
-                    min_dist = dist
-                    min_match = self.sequences[i]
-            return min_match, min_dist
+                seq = self.sequences[i]
+                results.append((seq, dist))
+            sort_res = sorted(results, key = lambda x: x[1])
+            if len(sort_res) >= k:
+                return sort_res[:k]
+            else:
+                return sort_res
 
     def add(self, label, descriptor):
         self.sequences.append(label)
@@ -351,26 +368,47 @@ class LSH:
                 for bins in table.values():
                     bins.create_kdtree()
 
-    def nearest_neighbour(self, descriptor):
+    def k_nearest_neighbour(self, descriptor, k=1):
         """ Find the nearest_neighbour by hashing the inp_vec and find the nearest neighbour in the
             corresponding bin."""
         hash_bin = self.__getitem__(descriptor)
 
+        number_seqs = set([item for sublist in list(map(lambda x: x.sequences, hash_bin)) for item in sublist])
+
+        # If there are less sequences in the bins we have to collect more bins
+        if len(number_seqs) < k:
+            for table in self.hash_tables:
+                keys = list(table.keys())
+                query = table.generate_hash(descriptor)
+                needed_seqs = k-len(number_seqs)
+                found_seqs = 0
+                while found_seqs < needed_seqs:
+                    if keys == []:
+                        break
+                    min_key = min(keys, key=lambda x: abs(np.sum(np.array(x)-np.array(query))))
+                    keys.remove(min_key)
+                    bin = table._get_by_key(min_key)
+                    if bin not in hash_bin:
+                        hash_bin.append(bin)
+                        for seq in bin.sequences:
+                            if seq not in number_seqs:
+                                found_seqs += 1
+                    if found_seqs == needed_seqs:
+                        break
+                if found_seqs == needed_seqs:
+                    break
+
         results = []
         for bins in hash_bin:
-            results.append(bins.nearest_neighbour(np.asarray(descriptor)))
+            results.extend(bins.k_nearest_neighbour(np.asarray(descriptor), k=k))
 
-        if not results:
-            hash_bin = [item for sublist in self.hash_tables[0].values() for item in sublist]
-            for bins in hash_bin:
-                results.append(bins.nearest_neighbour(np.asarray(descriptor)))
-                results.append(bins.nearest_neighbour(np.asarray(descriptor)))
+        if k == 1:
+            minimum = min(results, key=lambda x: x[1])
+            return minimum
+        else:
+            sort_res = sorted(list(set(results)), key=lambda x: x[1])
+            return sort_res[:k]
 
-        minimum = min(results, key=lambda x: x[1])
-        min_match = minimum[0]
-        min_dist = minimum[1]
-
-        return min_match, min_dist
 
     @ staticmethod
     def p1(bin_width):
@@ -428,7 +466,7 @@ class LSH:
             times = []
             for sample in query_sample:
                 start_time = time.time()
-                self.nearest_neighbour(sample)
+                self.k_nearest_neighbour(sample)
                 times.append(time.time()-start_time)
             if np.mean(times) < best_time:
                 best_k = k
@@ -444,7 +482,7 @@ class LSH:
 
     @ staticmethod
     def load_lsh(self, path: str):
-        """ Load's a Trie structure from the given path."""
+        """ Load's the LSH from the given path."""
         # Garbage Collector slows down the loading significant and is
         # therefore excluded.
         gc.disable()
