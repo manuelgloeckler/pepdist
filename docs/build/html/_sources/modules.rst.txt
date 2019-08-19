@@ -5,5 +5,4 @@ pepdist
    :maxdepth: 4
 
    distance
-   plotting
    similarity

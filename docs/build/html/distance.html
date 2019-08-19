@@ -181,6 +181,24 @@ corresponding index, represented as a dictionary.</p>
 <p class="rubric">Notes</p>
 <p>A index with NA values is discarded, beacause they can’t be used
 for distance computation.</p>
+<dl class="method">
+<dt id="distance.aaindex.Aaindex.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>keys: list</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.aaindex.Aaindex.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a list of indices for all keys specified</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="distance.aaindex.Aaindex.keys">
+<code class="descname">keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#distance.aaindex.Aaindex.keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the IDs of the AAIndex database</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="distance.aaindex.Aaindex.values">
+<code class="descname">values</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#distance.aaindex.Aaindex.values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the indices of the AAIndex database</p>
+</dd></dl>
+
 </dd></dl>
 
 <dl class="data">
@@ -232,8 +250,8 @@ based on AAindex or other metrics.</p>
 <dd></dd></dl>
 
 <dl class="method">
-<dt id="distance.distance.Bin.nearest_neighbour">
-<code class="descname">nearest_neighbour</code><span class="sig-paren">(</span><em>inp_vec</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.Bin.nearest_neighbour" title="Permalink to this definition">¶</a></dt>
+<dt id="distance.distance.Bin.k_nearest_neighbour">
+<code class="descname">k_nearest_neighbour</code><span class="sig-paren">(</span><em>inp_vec</em>, <em>k=1</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.Bin.k_nearest_neighbour" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -445,10 +463,17 @@ created hash tables</p>
 <dd><p>L needed to have a probability smaller than fail_prob that nearest neighbor is not in the same bucket.</p>
 </dd></dl>
 
+<dl class="method">
+<dt id="distance.distance.LSH.k_nearest_neighbour">
+<code class="descname">k_nearest_neighbour</code><span class="sig-paren">(</span><em>descriptor</em>, <em>k=1</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH.k_nearest_neighbour" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the nearest_neighbour by hashing the inp_vec and find the nearest neighbour in the
+corresponding bin.</p>
+</dd></dl>
+
 <dl class="staticmethod">
 <dt id="distance.distance.LSH.load_lsh">
 <em class="property">static </em><code class="descname">load_lsh</code><span class="sig-paren">(</span><em>self</em>, <em>path: str</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH.load_lsh" title="Permalink to this definition">¶</a></dt>
-<dd><p>Load’s a Trie structure from the given path.</p>
+<dd><p>Load’s the LSH from the given path.</p>
 </dd></dl>
 
 <dl class="method">
@@ -461,13 +486,6 @@ created hash tables</p>
 <dt id="distance.distance.LSH.mean_buckets">
 <code class="descname">mean_buckets</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH.mean_buckets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the mean number of buckets in each hashtable</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="distance.distance.LSH.nearest_neighbour">
-<code class="descname">nearest_neighbour</code><span class="sig-paren">(</span><em>descriptor</em><span class="sig-paren">)</span><a class="headerlink" href="#distance.distance.LSH.nearest_neighbour" title="Permalink to this definition">¶</a></dt>
-<dd><p>Find the nearest_neighbour by hashing the inp_vec and find the nearest neighbour in the
-corresponding bin.</p>
 </dd></dl>
 
 <dl class="staticmethod">

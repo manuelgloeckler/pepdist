@@ -299,49 +299,8 @@ the Trie.</div></blockquote>
 </dd></dl>
 
 <dl class="method">
-<dt id="similarity.similarity.KmerTrie.compute_neighbours">
-<code class="descname">compute_neighbours</code><span class="sig-paren">(</span><em>words: list</em>, <em>score: dict</em>, <em>k: int = 1</em>, <em>cpu: int = 2</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; list<a class="headerlink" href="#similarity.similarity.KmerTrie.compute_neighbours" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes nearest neighbours in a multiprocessing way.
-.. attribute:: words</p>
-<blockquote>
-<div>List of query words.</div></blockquote>
-<dl class="attribute">
-<dt id="similarity.similarity.KmerTrie.score">
-<code class="descname">score</code><a class="headerlink" href="#similarity.similarity.KmerTrie.score" title="Permalink to this definition">¶</a></dt>
-<dd><p>Scoring matrix, it has to be symmetric so that for each key (i,j), also the key (j,i) exist. You can
-use the blosum62 matrix provided by this package.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="similarity.similarity.KmerTrie.k">
-<code class="descname">k</code><a class="headerlink" href="#similarity.similarity.KmerTrie.k" title="Permalink to this definition">¶</a></dt>
-<dd><p>Number of nearest neighbours that the method returns.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="similarity.similarity.KmerTrie.cpu">
-<code class="descname">cpu</code><a class="headerlink" href="#similarity.similarity.KmerTrie.cpu" title="Permalink to this definition">¶</a></dt>
-<dd><p>Number of cores that should be used.</p>
-</dd></dl>
-
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>list</strong> – List of ordered list of k near neighbours, represented as tuples of
-strings, corresponding to their sequence, and doubles,
-corresponding to their score.
-They are in the same order as the import words.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">[[(str, double)]]</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
 <dt id="similarity.similarity.KmerTrie.k_nearest_neighbour">
-<code class="descname">k_nearest_neighbour</code><span class="sig-paren">(</span><em>word: str</em>, <em>score: dict</em>, <em>k=1</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#similarity.similarity.KmerTrie.k_nearest_neighbour" title="Permalink to this definition">¶</a></dt>
+<code class="descname">k_nearest_neighbour</code><span class="sig-paren">(</span><em>word: str</em>, <em>score: dict</em>, <em>k: int = 1</em>, <em>score_only: bool = False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#similarity.similarity.KmerTrie.k_nearest_neighbour" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the nearest neighbour of a given strings</p>
 <dl class="attribute">
 <dt id="similarity.similarity.KmerTrie.word">
@@ -350,15 +309,21 @@ They are in the same order as the import words.</td>
 </dd></dl>
 
 <dl class="attribute">
-<dt>
-<code class="descname">score</code></dt>
+<dt id="similarity.similarity.KmerTrie.score">
+<code class="descname">score</code><a class="headerlink" href="#similarity.similarity.KmerTrie.score" title="Permalink to this definition">¶</a></dt>
 <dd><p>Scoring matrix, standard is blosum62 substitution matrix</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt>
-<code class="descname">k</code></dt>
+<dt id="similarity.similarity.KmerTrie.k">
+<code class="descname">k</code><a class="headerlink" href="#similarity.similarity.KmerTrie.k" title="Permalink to this definition">¶</a></dt>
 <dd><p>Number of nearest neighbours to find</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="similarity.similarity.KmerTrie.score_only">
+<code class="descname">score_only</code><a class="headerlink" href="#similarity.similarity.KmerTrie.score_only" title="Permalink to this definition">¶</a></dt>
+<dd><p>If True, only the scores are returned.</p>
 </dd></dl>
 
 <table class="docutils field-list" frame="void" rules="none">
@@ -462,13 +427,25 @@ to a real value.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="similarity.similarity.Trie.compute_neighbours">
-<code class="descname">compute_neighbours</code><span class="sig-paren">(</span><em>words: str</em>, <em>score: dict</em>, <em>k: int = 1</em>, <em>weights: list = None</em>, <em>cpu: int = 2</em><span class="sig-paren">)</span> &#x2192; list<a class="headerlink" href="#similarity.similarity.Trie.compute_neighbours" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes nearest neighbours in a multiprocessing way.</p>
+<dt id="similarity.similarity.Trie.find_word">
+<code class="descname">find_word</code><span class="sig-paren">(</span><em>word: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#similarity.similarity.Trie.find_word" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns true if the word is in the Trie</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="similarity.similarity.Trie.get_prefix">
+<code class="descname">get_prefix</code><span class="sig-paren">(</span><em>word: str</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#similarity.similarity.Trie.get_prefix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the common prefix of the word with the Trie</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="similarity.similarity.Trie.k_nearest_neighbour">
+<code class="descname">k_nearest_neighbour</code><span class="sig-paren">(</span><em>word: str</em>, <em>score: dict</em>, <em>k: int = 1</em>, <em>cut_off=None</em>, <em>weights: list = None</em>, <em>score_only: bool = False</em><span class="sig-paren">)</span> &#x2192; list<a class="headerlink" href="#similarity.similarity.Trie.k_nearest_neighbour" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes the k nearest neighbours of a given strings</p>
 <dl class="attribute">
-<dt id="similarity.similarity.Trie.words">
-<code class="descname">words</code><a class="headerlink" href="#similarity.similarity.Trie.words" title="Permalink to this definition">¶</a></dt>
-<dd><p>List of query words.</p>
+<dt id="similarity.similarity.Trie.word">
+<code class="descname">word</code><a class="headerlink" href="#similarity.similarity.Trie.word" title="Permalink to this definition">¶</a></dt>
+<dd><p>The query word</p>
 </dd></dl>
 
 <dl class="attribute">
@@ -485,6 +462,12 @@ use the blosum62 matrix provided by this package.</p>
 </dd></dl>
 
 <dl class="attribute">
+<dt id="similarity.similarity.Trie.cut_off">
+<code class="descname">cut_off</code><a class="headerlink" href="#similarity.similarity.Trie.cut_off" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes all nearest neighbors with a similarity creater than this cut off</p>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="similarity.similarity.Trie.weights">
 <code class="descname">weights</code><a class="headerlink" href="#similarity.similarity.Trie.weights" title="Permalink to this definition">¶</a></dt>
 <dd><p>List of floats. Each float weight the corresponding position of the word. This list has to be the
@@ -492,77 +475,22 @@ same length as the input word.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="similarity.similarity.Trie.cpu">
-<code class="descname">cpu</code><a class="headerlink" href="#similarity.similarity.Trie.cpu" title="Permalink to this definition">¶</a></dt>
-<dd><p>Number of cores that should be used.</p>
+<dt id="similarity.similarity.Trie.score_only">
+<code class="descname">score_only</code><a class="headerlink" href="#similarity.similarity.Trie.score_only" title="Permalink to this definition">¶</a></dt>
+<dd><p>Only the list of scores is returned</p>
 </dd></dl>
 
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>list</strong> – List of ordered list of k near neighbours, represented as tuples of
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><ul class="simple">
+<li><strong>list</strong> (<em>[(str, double)]</em>) – Ordered list of k near neighbours, represented as tuples of
 strings, corresponding to their sequence, and doubles,
-corresponding to their score.
-They are in the same order as the import words.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">[[(str, double)]]</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="similarity.similarity.Trie.find_word">
-<code class="descname">find_word</code><span class="sig-paren">(</span><em>word: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#similarity.similarity.Trie.find_word" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns true if the word is in the Trie</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="similarity.similarity.Trie.get_prefix">
-<code class="descname">get_prefix</code><span class="sig-paren">(</span><em>word: str</em><span class="sig-paren">)</span> &#x2192; str<a class="headerlink" href="#similarity.similarity.Trie.get_prefix" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the common prefix of the word with the Trie</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="similarity.similarity.Trie.k_nearest_neighbour">
-<code class="descname">k_nearest_neighbour</code><span class="sig-paren">(</span><em>word: str</em>, <em>score: dict</em>, <em>k: int = 1</em>, <em>weights: list = None</em><span class="sig-paren">)</span> &#x2192; list<a class="headerlink" href="#similarity.similarity.Trie.k_nearest_neighbour" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes the k nearest neighbours of a given strings</p>
-<dl class="attribute">
-<dt id="similarity.similarity.Trie.word">
-<code class="descname">word</code><a class="headerlink" href="#similarity.similarity.Trie.word" title="Permalink to this definition">¶</a></dt>
-<dd><p>The query word</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt>
-<code class="descname">score</code></dt>
-<dd><p>Scoring matrix, it has to be symmetric so that for each key (i,j), also the key (j,i) exist. You can
-use the blosum62 matrix provided by this package.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt>
-<code class="descname">k</code></dt>
-<dd><p>Number of nearest neighbours that the method returns.</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt>
-<code class="descname">weights</code></dt>
-<dd><p>List of floats. Each float weight the corresponding position of the word. This list has to be the
-same length as the input word.</p>
-</dd></dl>
-
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><strong>list</strong> – Ordered list of k near neighbours, represented as tuples of
-strings, corresponding to their sequence, and doubles,
-corresponding to their score.</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">[(str, double)]</td>
+corresponding to their score.</li>
+<li><strong>list</strong> (<em>[double]</em>) – If score_only is True, only the score is returned.</li>
+</ul>
+</td>
 </tr>
 </tbody>
 </table>
@@ -683,6 +611,37 @@ frequencies as values. If False, only all unique kmers a returned.</p>
 <dt id="similarity.similarity.load_trie">
 <code class="descclassname">similarity.similarity.</code><code class="descname">load_trie</code><span class="sig-paren">(</span><em>path: str</em><span class="sig-paren">)</span> &#x2192; similarity.similarity.Trie<a class="headerlink" href="#similarity.similarity.load_trie" title="Permalink to this definition">¶</a></dt>
 <dd><p>Loads a trie file at the given path and returns a Trie object.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="similarity.similarity.multiprocess_data">
+<code class="descclassname">similarity.similarity.</code><code class="descname">multiprocess_data</code><span class="sig-paren">(</span><em>data: list</em>, <em>func: callable</em>, <em>cpus: int = 1</em><span class="sig-paren">)</span><a class="headerlink" href="#similarity.similarity.multiprocess_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes nearest neighbours in a multiprocessing way.
+.. attribute:: data</p>
+<blockquote>
+<div>List of querys.</div></blockquote>
+<dl class="attribute">
+<dt id="similarity.similarity.func">
+<code class="descclassname">similarity.similarity.</code><code class="descname">func</code><a class="headerlink" href="#similarity.similarity.func" title="Permalink to this definition">¶</a></dt>
+<dd><p>function to multithread</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="similarity.similarity.cpus">
+<code class="descclassname">similarity.similarity.</code><code class="descname">cpus</code><a class="headerlink" href="#similarity.similarity.cpus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of cores that should be used.</p>
+</dd></dl>
+
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">For all d in data, a list [func(d)] is computed.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">list</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="function">
